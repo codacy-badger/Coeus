@@ -18,7 +18,6 @@ import bodyParser from 'body-parser';
 import { logger } from './utils/logger';
 import router from './app/routes';
 import {InitMongo} from './core/db';
-
 import loaders from './app/graphql/loaders';
 import schema from './app/graphql/schema';
 import resolvers from './app/graphql/resolvers';
