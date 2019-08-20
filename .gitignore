@@ -1,0 +1,8 @@
+# I am on MacOS
+.DS_Store
+# Dependency directory
+node_modules
+# Not my .env conf
+.env
+# Not production ready files
+dist
