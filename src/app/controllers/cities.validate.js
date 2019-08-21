@@ -1,5 +1,5 @@
-import { check } from 'express-validator';
-import { theValidationResult } from '../middleware/utils';
+const { validationResult } = require('../middleware/utils')
+const { check } = require('express-validator')
 
 /**
  * Validates create new item request
@@ -13,7 +13,7 @@ exports.createItem = [
     .withMessage('IS_EMPTY')
     .trim(),
   (req, res, next) => {
-    theValidationResult(req, res, next)
+    validationResult(req, res, next)
   }
 ]
 
@@ -34,7 +34,7 @@ exports.updateItem = [
     .isEmpty()
     .withMessage('IS_EMPTY'),
   (req, res, next) => {
-    theValidationResult(req, res, next)
+    validationResult(req, res, next)
   }
 ]
 
@@ -49,7 +49,7 @@ exports.getItem = [
     .isEmpty()
     .withMessage('IS_EMPTY'),
   (req, res, next) => {
-    theValidationResult(req, res, next)
+    validationResult(req, res, next)
   }
 ]
 
@@ -64,6 +64,6 @@ exports.deleteItem = [
     .isEmpty()
     .withMessage('IS_EMPTY'),
   (req, res, next) => {
-    theValidationResult(req, res, next)
+    validationResult(req, res, next)
   }
 ]

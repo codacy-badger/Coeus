@@ -1,9 +1,5 @@
-import { check } from 'express-validator';
-import { theValidationResult } from '../middleware/utils';
-
-
-
-
+const { validationResult } = require('../middleware/utils')
+const { check } = require('express-validator')
 
 /**
  * Validates register request
@@ -34,7 +30,7 @@ exports.register = [
     })
     .withMessage('PASSWORD_TOO_SHORT_MIN_5'),
   (req, res, next) => {
-    theValidationResult(req, res, next)
+    validationResult(req, res, next)
   }
 ]
 
@@ -61,7 +57,7 @@ exports.login = [
     })
     .withMessage('PASSWORD_TOO_SHORT_MIN_5'),
   (req, res, next) => {
-    theValidationResult(req, res, next)
+    validationResult(req, res, next)
   }
 ]
 
@@ -76,7 +72,7 @@ exports.verify = [
     .isEmpty()
     .withMessage('IS_EMPTY'),
   (req, res, next) => {
-    theValidationResult(req, res, next)
+    validationResult(req, res, next)
   }
 ]
 
@@ -93,7 +89,7 @@ exports.forgotPassword = [
     .isEmail()
     .withMessage('EMAIL_IS_NOT_VALID'),
   (req, res, next) => {
-    theValidationResult(req, res, next)
+    validationResult(req, res, next)
   }
 ]
 
@@ -118,6 +114,6 @@ exports.resetPassword = [
     })
     .withMessage('PASSWORD_TOO_SHORT_MIN_5'),
   (req, res, next) => {
-    theValidationResult(req, res, next)
+    validationResult(req, res, next)
   }
 ]

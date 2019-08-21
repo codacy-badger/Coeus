@@ -1,15 +1,16 @@
 import 'dotenv/config';
 const passport = require('passport')
+const JwtStrategy = require('passport-jwt').Strategy
 const User = require('../app/models/user')
 const auth = require('../app/middleware/auth')
-const JwtStrategy = require('passport-jwt').Strategy
+
 
 /**
  * Extracts token from: header, body or query
  * @param {Object} req - request object
  * @returns {string} token - decrypted token
  */
-const jwtExtractor = req => {
+export const jwtExtractor = req => {
   let token = null
   if (req.headers.authorization) {
     token = req.headers.authorization.replace('Bearer ', '').trim()
@@ -22,7 +23,7 @@ const jwtExtractor = req => {
     // Decrypts token
     token = auth.decrypt(token)
   }
-  return token
+  return { authenticated: false }
 }
 
 /**

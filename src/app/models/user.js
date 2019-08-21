@@ -116,4 +116,7 @@ UserSchema.methods.comparePassword = function(passwordAttempt, cb) {
   )
 }
 UserSchema.plugin(mongoosePaginate)
-module.exports = mongoose.model('User', UserSchema)
+
+const User = mongoose.model('User', UserSchema);
+
+export default User;

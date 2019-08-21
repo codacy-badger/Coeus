@@ -1,6 +1,5 @@
 const model = require('../models/city')
 const { matchedData } = require('express-validator')
-import { itemAlreadyExists, handleError } from '../middleware/utils';
 const utils = require('../middleware/utils')
 const db = require('../middleware/db')
 
@@ -41,7 +40,7 @@ const cityExists = async name => {
         name
       },
       (err, item) => {
-        itemAlreadyExists(err, item, reject, 'CITY_ALREADY_EXISTS')
+        utils.itemAlreadyExists(err, item, reject, 'CITY_ALREADY_EXISTS')
         resolve(false)
       }
     )
@@ -84,7 +83,7 @@ exports.getAllItems = async (req, res) => {
   try {
     res.status(200).json(await getAllItemsFromDB())
   } catch (error) {
-    handleError(res, error)
+    utils.handleError(res, error)
   }
 }
 
@@ -98,7 +97,7 @@ exports.getItems = async (req, res) => {
     const query = await db.checkQueryString(req.query)
     res.status(200).json(await db.getItems(req, model, query))
   } catch (error) {
-    handleError(res, error)
+    utils.handleError(res, error)
   }
 }
 
@@ -113,7 +112,7 @@ exports.getItem = async (req, res) => {
     const id = await utils.isIDGood(req.id)
     res.status(200).json(await db.getItem(id, model))
   } catch (error) {
-    handleError(res, error)
+    utils.handleError(res, error)
   }
 }
 
@@ -131,7 +130,7 @@ exports.updateItem = async (req, res) => {
       res.status(200).json(await db.updateItem(id, model, req))
     }
   } catch (error) {
-    handleError(res, error)
+    utils.handleError(res, error)
   }
 }
 
@@ -148,7 +147,7 @@ exports.createItem = async (req, res) => {
       res.status(201).json(await db.createItem(req, model))
     }
   } catch (error) {
-    handleError(res, error)
+    utils.handleError(res, error)
   }
 }
 
@@ -163,6 +162,6 @@ exports.deleteItem = async (req, res) => {
     const id = await utils.isIDGood(req.id)
     res.status(200).json(await db.deleteItem(id, model))
   } catch (error) {
-    handleError(res, error)
+    utils.handleError(res, error)
   }
 }

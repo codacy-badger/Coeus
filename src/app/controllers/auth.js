@@ -1,4 +1,3 @@
-import 'dotenv/config';
 const jwt = require('jsonwebtoken')
 const User = require('../models/user')
 const UserAccess = require('../models/userAccess')
@@ -34,7 +33,7 @@ const generateToken = user => {
         },
         exp: expiration
       },
-      process.env.MAIN_JWT_SECRET
+      process.env.JWT_SECRET
     )
   )
 }
@@ -425,7 +424,7 @@ const checkPermissions = async (data, next) => {
 const getUserIdFromToken = async token => {
   return new Promise((resolve, reject) => {
     // Decrypts, verifies and decode token
-    jwt.verify(auth.decrypt(token), process.env.MAIN_JWT_SECRET, (err, decoded) => {
+    jwt.verify(auth.decrypt(token), process.env.JWT_SECRET, (err, decoded) => {
       if (err) {
         reject(utils.buildErrObject(409, 'BAD_TOKEN'))
       }
