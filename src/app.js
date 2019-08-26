@@ -12,11 +12,12 @@ import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import history from 'express-history-api-fallback';
 import router from './app/routes';
+import conf from './core/config'
 
 const MongoStore = require('connect-mongo')(session);
 
-const RATE_LIMIT = process.env.RATE_LIMIT || 0;
-const STATIC_FILES = process.env.STATIC_FILES || 'public';
+const RATE_LIMIT = conf.get('RATE_LIMIT') || 0;
+const STATIC_FILES = conf.get('STATIC_FILES') || 'public';
 const root = join(__dirname, `../${STATIC_FILES}`);
 
 const app = express();

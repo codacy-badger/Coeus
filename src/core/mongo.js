@@ -5,7 +5,6 @@ import TheModels from '../app/models';
 
 const DB_URL = process.env.MONGODB_URI || 'mongodb://localhost:27017/a98sd7fa89sd7fa98s7df980a';
 
-mongoose.Promise = global.Promise;
 mongoose.connect(
   DB_URL,
   {

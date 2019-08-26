@@ -2,7 +2,9 @@
 .DS_Store
 # Dependency directory
 node_modules
-# Not my .env conf
+# Not my .env config
 .env
+# Not my config.js
+config.js
 # Not production ready files
 dist
