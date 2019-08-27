@@ -1,38 +1,37 @@
-import 'dotenv/config';
-import { join } from 'path';
-import express from 'express';
-import session from 'express-session';
-import helmet from 'helmet';
-import cors from 'cors';
-import passport from'passport';
-import rateLimit from 'express-rate-limit';
-import compression from 'compression';
-import morgan from 'morgan';
-import mongoose from 'mongoose';
-import bodyParser from 'body-parser';
-import history from 'express-history-api-fallback';
-import router from './app/routes';
+import 'dotenv/config'
+import { join } from 'path'
+import express from 'express'
+import session from 'express-session'
+import helmet from 'helmet'
+import cors from 'cors'
+import passport from 'passport'
+import rateLimit from 'express-rate-limit'
+import compression from 'compression'
+import morgan from 'morgan'
+import mongoose from 'mongoose'
+import bodyParser from 'body-parser'
+// import history from 'express-history-api-fallback'
+import router from './app/routes'
 import conf from './core/config'
+import {log} from './utils/logger'
 
-const MongoStore = require('connect-mongo')(session);
+const MongoStore = require('connect-mongo')(session)
 
-const RATE_LIMIT = conf.get('RATE_LIMIT') || 0;
-const STATIC_FILES = conf.get('STATIC_FILES') || 'public';
-const root = join(__dirname, `../${STATIC_FILES}`);
+const RATE_LIMIT = conf.get('RATE_LIMIT') || 0
 
-const app = express();
+const app = express()
 // Middlewares.
-app.use(helmet());
-app.use(cors(
-  {
-          origin: '*',
-          allowMethods: ['GET', 'HEAD', 'PUT', 'POST', 'DELETE', 'PATCH'],
-          allowHeaders: ['Content-Type', 'Authorization'],
-          exposeHeaders: ['Content-Length', 'Date', 'X-Request-Id']
-        }
-))
-app.use(rateLimit({ max: Number(RATE_LIMIT), windowMs: 15 * 60 * 1000 }));
-app.use(compression());
+app.use(helmet())
+app.use(
+  cors({
+    origin: '*',
+    allowMethods: ['GET', 'HEAD', 'PUT', 'POST', 'DELETE', 'PATCH'],
+    allowHeaders: ['Content-Type', 'Authorization'],
+    exposeHeaders: ['Content-Length', 'Date', 'X-Request-Id']
+  })
+)
+app.use(rateLimit({ max: Number(RATE_LIMIT), windowMs: 15 * 60 * 1000 }))
+app.use(compression())
 app.use(
   session({
     store: new MongoStore({ mongooseConnection: mongoose.connection }),
@@ -45,18 +44,22 @@ app.use(
       maxAge: parseInt(process.env.SESSION_MAX_AGE, 10),
       sameSite: true,
       httpOnly: true,
-      secure: !process.env.NODE_ENV === 'development'
+      secure: conf.get('IS_PROD')
     }
   })
-);
-app.use(passport.initialize());
-app.use(passport.session());
-if (process.env.NODE_ENV !== 'production') {
-  app.use(morgan('dev'))
+)
+
+app.use(passport.initialize())
+app.use(passport.session())
+if (conf.get('IS_PROD')) {
+  app.use(morgan('combined'))
 } else {
   app.use(
-    morgan('combined', {
-//      skip: (req, res) => req.url === HEALTH_CHECK_URL && res.statusCode === 200
+    morgan('dev', {
+      skip(req, res) {
+        return res.statusCode >= 400
+      },
+      stream: { write: message => log.access(message) }
     })
   )
 }
@@ -65,16 +68,22 @@ app.use(
   bodyParser.json({
     limit: '20mb'
   })
-);
+)
 // for parsing application/x-www-form-urlencoded
 app.use(
   bodyParser.urlencoded({
     limit: '20mb',
     extended: true
   })
-);
+)
 
-app.get('/', (req, res) => res.send('Hello World!'))
-app.use('/__', router);
+app.get('/', (req, res) =>
+  res.json({ 
+    service: 'Coeus API',
+    version: conf.get('VERSION')
+  }).status(200)
+)
 
-export default app;
+app.use('/__', router)
+
+export default app

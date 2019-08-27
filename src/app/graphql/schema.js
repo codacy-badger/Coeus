@@ -48,61 +48,14 @@ const Root = /* GraphQL */ `
 
 const resolvers = merge(
   {},
-  //queries
-  ThreadQueries,
-  channelQueries,
-  communityQueries,
-  messageQueries,
-  userQueries,
-  directMessageThreadQueries,
-  reactionQueries,
-  notificationQueries,
-  metaQueries,
-  searchQueries,
-  communityMemberQueries,
-  communitySlackSettingsQueries,
-  channelSlackSettingsQueries,
-  // mutations
-  messageMutations,
-  threadMutations,
-  directMessageThreadMutations,
-  reactionMutations,
-  communityMutations,
-  channelMutations,
-  notificationMutations,
   userMutations,
-  metaMutations,
-  communityMemberMutations,
-  fileMutations,
-  // subscriptions
-  messageSubscriptions,
-  notificationSubscriptions,
-  directMessageThreadSubscriptions,
-  threadSubscriptions,
-  communitySubscriptions
+
 );
 
 
 export const schema = makeExecutableSchema({
   typeDefs: [
-    scalars.typeDefs,
-    generalTypes,
-    Root,
-    Community,
-    CommunitySlackSettings,
-    CommunityMember,
-    Channel,
-    ChannelSlackSettings,
-    Thread,
-    ThreadParticipant,
-    Message,
-    Reaction,
     User,
-    DirectMessageThread,
-    Notification,
-    Meta,
-    Invoice,
-    Search,
   ],
   resolvers,
   schemaDirectives: IS_PROD

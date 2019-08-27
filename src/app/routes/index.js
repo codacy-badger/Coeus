@@ -1,7 +1,6 @@
 import express from 'express';
-import chalk from 'chalk';
-import moment from 'moment';
 import { removeExtensionFromFile } from '../middleware/utils';
+import { log } from '../../utils/logger'
 
 const router = express.Router()
 const fs = require('fs')
@@ -9,13 +8,13 @@ const fs = require('fs')
 const routesPath = `${__dirname}/`;
 
 /*
- * Load routes statically and/or dynamically
- */
+ * A router function example
+
  router.use(function timeLog (req, res, next) {
-   console.log(chalk.hex('#71E3D3')('🕝', moment().format('LLL')));
-   next()
+  log.access('A Access')
+  next()
  })
- 
+  */
 // Load Auth route
 router.use('/', require('./auth'))
 
@@ -25,15 +24,8 @@ fs.readdirSync(routesPath).filter(file => {
   const routeFile = removeExtensionFromFile(file)
   // Prevents loading of this file and auth file
   return routeFile !== 'index' && routeFile !== 'auth'
-    ? router.use(`/${routeFile}`, require(`./${routeFile}`))
+    ? router.use(`/${routeFile}`, require(`./${routeFile}`)) // eslint-disable-line 
     : ''
-})
-
-/*
- * Setup routes for index
- */
-router.get('/', (req, res) => {
-  res.render('index')
 })
 
 /*

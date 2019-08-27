@@ -8,3 +8,7 @@ node_modules
 config.js
 # Not production ready files
 dist
+# Not my logs
+*.log
+# No locks too
+yarn.lock

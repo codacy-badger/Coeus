@@ -1,5 +1,7 @@
-const jwt = require('jsonwebtoken')
-const User = require('../models/user')
+import jwt from 'jsonwebtoken'
+import User from '../models/user'
+import conf from '../../core/config'
+
 const UserAccess = require('../models/userAccess')
 const ForgotPassword = require('../models/forgotPassword')
 const utils = require('../middleware/utils')
@@ -33,7 +35,7 @@ const generateToken = user => {
         },
         exp: expiration
       },
-      process.env.JWT_SECRET
+      conf.get('MAIN_JWT_SECRET')
     )
   )
 }

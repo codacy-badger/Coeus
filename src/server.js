@@ -5,14 +5,14 @@ import socket from 'socket.io'
 import app from './app'
 import mongoose from './core/mongo'
 import conf from './core/config'
-
+import { log } from './utils/logger'
 
 const port = conf.get('PORT') || 3000
 const server = http.Server(app)
 const debug = require('debug')('api')
 
 debug('Server starting...')
-mongoose.Promise = global.Promise
+mongoose.Promise = require('bluebird')
 
 // apolloServer.installSubscriptionHandlers(server)
 //apolloServer.applyMiddleware({
@@ -35,18 +35,25 @@ io.on('connection', connSocket => {
 })
 
 mongoose.connection.once('open', () => {
-  console.log(chalk.hex('#F7BF63')(` 🍐  Mongo  has connected.`))
+  log.info(`Mongoose has connected`)
   server.listen(port, () =>
-    console.log(chalk.hex('#F7BF63')(` ✅  Server has started at ${port}.`))
+    log.info(`Server has started at ${port}`)
   )
 })
 
-process.on('unhandledRejection', error => {
-  process.exit(1)
+server.on('error', err => {
+  log.error('error', err, {
+    isExpressError: true
+  })
 })
 
-process.on('exit', code => {
-  console.log(`Exiting with code: ${code}`)
+server.on('close', () => {
+  log.info('Server has been closed by Admin')
+})
+
+process.on('SIGINT', () => {
+  mongoose.connection.close()
+  server.close()
 })
 
 export default server
