@@ -3,7 +3,7 @@ import conf from '../../core/config';
 const crypto = require('crypto');
 
 const algorithm = 'aes-256-cbc' 
-const secret = conf.get('MAIN_JWT_SECRET') // Must be 256 bits (32 characters)
+const secret = conf.get('JWT_SECRET') // Must be 256 bits (32 characters)
 const iv = crypto.randomBytes(16); // Initialization vector.
 
 module.exports = {
@@ -32,7 +32,7 @@ module.exports = {
    * @param {string} text - text to encrypt
    */
   encrypt(text) {
-    const cipher = crypto.createCipheriv(algorithm, Buffer.from(secret), iv )
+    const cipher = crypto.createCipheriv(algorithm, secret, iv )
     let crypted = cipher.update(text, 'utf8', 'hex')
     crypted += cipher.final('hex')
     return crypted
@@ -43,7 +43,7 @@ module.exports = {
    * @param {string} text - text to decrypt
    */
   decrypt(text) {
-    const decipher = crypto.createDecipheriv(algorithm, Buffer.from(secret), iv)
+    const decipher = crypto.createDecipheriv(algorithm, secret, iv)
     try {
       let dec = decipher.update(text, 'hex', 'utf8')
       dec += decipher.final('utf8')

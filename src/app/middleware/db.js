@@ -45,7 +45,7 @@ const listInitOptions = async req => {
   })
 }
 
-export default {
+module.exports = {
   /**
    * Checks the query string for filtering records
    * query.filter should be the text to search (string)

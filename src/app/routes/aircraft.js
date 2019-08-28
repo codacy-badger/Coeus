@@ -41,8 +41,8 @@ router.get('/all', getAllAircrafts)
  */
 router.get(
   '/find',
-  //  requireAuth,
-  //  AuthController.roleAuthorization(['admin']),
+  requireAuth,
+  AuthController.roleAuthorization(['admin']),
   trimRequest.all,
   getAllItems
 )
@@ -52,8 +52,8 @@ router.get(
  */
 router.get(
   '/',
-  //  requireAuth,
-  //  AuthController.roleAuthorization(['admin']),
+  requireAuth,
+  AuthController.roleAuthorization(['admin']),
   trimRequest.all,
   getItems
 )
@@ -63,8 +63,8 @@ router.get(
  */
 router.post(
   '/',
-  //  requireAuth,
-  //  AuthController.roleAuthorization(['admin']),
+  requireAuth,
+  AuthController.roleAuthorization(['admin']),
   trimRequest.all,
   createCheck,
   createAircraft
@@ -87,8 +87,8 @@ router.get(
  */
 router.patch(
   '/',
-//  requireAuth,
-//  AuthController.roleAuthorization(['admin']),
+  requireAuth,
+  AuthController.roleAuthorization(['admin']),
   trimRequest.all,
   updateCheck,
   updateItem

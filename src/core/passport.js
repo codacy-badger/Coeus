@@ -1,18 +1,16 @@
-import conf from './config'
+import User from '../app/models/user'
 
 const passport = require('passport')
-const JwtStrategy = require('passport-jwt').Strategy
-const User = require('../app/models/user')
+
 const auth = require('../app/middleware/auth')
-
-
+const JwtStrategy = require('passport-jwt').Strategy
 
 /**
  * Extracts token from: header, body or query
  * @param {Object} req - request object
  * @returns {string} token - decrypted token
  */
-export const jwtExtractor = req => {
+const jwtExtractor = req => {
   let token = null
   if (req.headers.authorization) {
     token = req.headers.authorization.replace('Bearer ', '').trim()
@@ -25,7 +23,7 @@ export const jwtExtractor = req => {
     // Decrypts token
     token = auth.decrypt(token)
   }
-  return { authenticated: false }
+  return token
 }
 
 /**
@@ -33,7 +31,7 @@ export const jwtExtractor = req => {
  */
 const jwtOptions = {
   jwtFromRequest: jwtExtractor,
-  secretOrKey: conf.get('MAIN_JWT_SECRET')
+  secretOrKey: process.env.JWT_SECRET
 }
 
 /**

@@ -9,9 +9,7 @@ import { log } from './utils/logger'
 
 const port = conf.get('PORT') || 3000
 const server = http.Server(app)
-const debug = require('debug')('api')
 
-debug('Server starting...')
 mongoose.Promise = require('bluebird')
 
 // apolloServer.installSubscriptionHandlers(server)
