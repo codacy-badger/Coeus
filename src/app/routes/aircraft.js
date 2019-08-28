@@ -3,6 +3,7 @@ import passport from 'passport'
 import trimRequest from 'trim-request'
 import {
   getAllItems,
+  getAllAircrafts,
   getItems,
   createAircraft,
   getAircraft,
@@ -32,7 +33,19 @@ export const router = express.Router()
 /*
  * Get all aircrafts with pagination
  */
-router.get('/all', getAllItems)
+router.get('/all', getAllAircrafts)
+
+
+/*
+ * Aircraft/s data with query
+ */
+router.get(
+  '/find',
+  //  requireAuth,
+  //  AuthController.roleAuthorization(['admin']),
+  trimRequest.all,
+  getAllItems
+)
 
 /*
  * Aircraft/s data with query
@@ -62,8 +75,8 @@ router.post(
  */
 router.get(
   '/get',
-  //   requireAuth,
-  //   AuthController.roleAuthorization(['admin']),
+  requireAuth,
+  AuthController.roleAuthorization(['admin']),
   trimRequest.all,
   getCheck,
   getAircraft

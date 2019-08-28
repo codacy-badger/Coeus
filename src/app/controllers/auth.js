@@ -24,7 +24,7 @@ const LOGIN_ATTEMPTS = 5
 const generateToken = user => {
   // Gets expiration time
   const expiration =
-    Math.floor(Date.now() / 1000) + 60 * process.env.JWT_EXPIRATION_IN_MINUTES
+    Math.floor(Date.now() / 1000) + 60 * conf.get('JWT_EXPIRATION_IN_MINUTES')
 
   // returns signed and encrypted token
   return auth.encrypt(
@@ -53,7 +53,7 @@ const setUserInfo = req => {
     verified: req.verified
   }
   // Adds verification for testing purposes
-  if (process.env.NODE_ENV !== 'production') {
+  if (conf.get('IS_DEV')) {
     user = {
       ...user,
       verification: req.verification

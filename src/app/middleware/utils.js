@@ -50,6 +50,7 @@ export const handleError = (res, err) => {
   }
   // To client
   res.status(err.code).json({
+    success: false,
     errors: {
       msg: err.message
     }
@@ -63,6 +64,7 @@ export const handleError = (res, err) => {
  */
 export const buildErrObject = (code, message) => {
   return {
+    success: false,
     code,
     message
   }
@@ -72,9 +74,10 @@ export const buildErrObject = (code, message) => {
  * Builds success object
  * @param {string} message - success text
  */
-export const buildSuccObject = message => {
+export const buildSuccObject = result => {
   return {
-    msg: message
+    success: true,
+    data: result
   }
 }
 
@@ -92,7 +95,7 @@ export const theValidationResult = (req, res, next) => {
     }
     return next()
   } catch (err) {
-    return handleError(res, buildSuccObject(422, err.array()))
+    return handleError(res, buildErrObject(422, err.array()))
   }
 }
 
@@ -140,21 +143,5 @@ export const itemAlreadyExists = (err, item, reject, message) => {
   }
   if (item) {
     reject(buildErrObject(422, message))
-  }
-}
-
-/**
- * Item already to update
- * @param {Object} err - error object
- * @param {Object} item - item result object
- * @param {Object} reject - reject object
- * @param {string} message - message
- */
-export const itemReadyToUpdate = (err, item) => {
-  if (err) {
-    return false
-  }
-  if (item) {
-    return true
   }
 }

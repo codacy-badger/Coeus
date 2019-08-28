@@ -23,6 +23,8 @@ const cleanPaginationID = result => {
 /**
  * Builds initial options for query
  * @param {Object} query - query object
+ * @TODO For now need "populate" option but we have not...
+ * @SEE for more option passing https://github.com/WebGangster/mongoose-paginate-v2#readme
  */
 const listInitOptions = async req => {
   return new Promise(resolve => {

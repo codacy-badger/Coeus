@@ -1,8 +1,10 @@
-import 'dotenv/config';
+import conf from './config'
+
 const passport = require('passport')
 const JwtStrategy = require('passport-jwt').Strategy
 const User = require('../app/models/user')
 const auth = require('../app/middleware/auth')
+
 
 
 /**
@@ -31,7 +33,7 @@ export const jwtExtractor = req => {
  */
 const jwtOptions = {
   jwtFromRequest: jwtExtractor,
-  secretOrKey: process.env.MAIN_JWT_SECRET
+  secretOrKey: conf.get('MAIN_JWT_SECRET')
 }
 
 /**

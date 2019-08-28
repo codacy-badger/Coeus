@@ -3,6 +3,7 @@ import Aircraft from '../models/aircraft'
 import {
   handleError,
   buildErrObject,
+  buildSuccObject,
   itemAlreadyExists,
 	isIDGood
 } from '../middleware/utils'
@@ -30,7 +31,7 @@ const aircraftExists = async registration => {
 /**
  * Gets all items from database
  */
-const getAllAircrafts = async () => {
+export const getAllAircrafts = async (req, res) => {
   return new Promise((resolve, reject) => {
     Aircraft.find(
       {},
@@ -44,7 +45,7 @@ const getAllAircrafts = async () => {
         if (err) {
           reject(buildErrObject(422, err.message))
         }
-        resolve(items)
+        res.status(200).json(buildSuccObject(items))
       }
     )
   })
@@ -53,7 +54,7 @@ const getAllAircrafts = async () => {
 export const getAllItems = async (req, res) => {
   try {
     const query = await db.checkQueryString(req.query)
-    res.status(200).json(await db.getAllItems(req, Aircraft, query))
+    res.status(200).json(buildSuccObject(await db.getAllItems(req, Aircraft, query)))
   } catch (error) {
     handleError(res, error)
   }
@@ -66,7 +67,7 @@ export const getAllItems = async (req, res) => {
  */
 export const getItems = async (req, res) => {
   try {
-    res.status(200).json(await db.getItems(req, Aircraft, req.query))
+    res.status(200).json(buildSuccObject(await db.getItems(req, Aircraft, req.query)))
   } catch (error) {
     handleError(res, error)
   }
@@ -80,7 +81,7 @@ export const getItems = async (req, res) => {
 export const getAircraft = async (req, res) => {
   try {
     const id = await isIDGood(req.body.id)
-    res.status(200).json(await db.getItem(id, Aircraft))
+    res.status(200).json(buildSuccObject(await db.getItem(id, Aircraft)))
   } catch (error) {
     handleError(res, error)
   }
@@ -94,7 +95,7 @@ export const getAircraft = async (req, res) => {
 export const updateItem = async (req, res) => {
   try {
     const id = await isIDGood(req.body.id)
-      res.status(200).json(await db.updateItem(id, Aircraft, req.body))
+      res.status(200).json(buildSuccObject(await db.updateItem(id, Aircraft, req.body)))
   } catch (error) {
     handleError(res, error)
   }
@@ -109,7 +110,7 @@ export const createAircraft = async (req, res) => {
   try {
     const doesAircraftExists = await aircraftExists(req.body.registration)
     if (!doesAircraftExists) {
-      res.status(201).json(await db.createItem(req, Aircraft))
+      res.status(201).json(buildSuccObject(await db.createItem(req, Aircraft)))
     }
   } catch (error) {
     handleError(res, error)

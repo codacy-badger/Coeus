@@ -12,3 +12,5 @@ dist
 *.log
 # No locks too
 yarn.lock
+# No locks too
+yarn-error.log
