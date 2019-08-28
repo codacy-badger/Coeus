@@ -1,9 +1,5 @@
-const {
-  buildSuccObject,
-  buildErrObject,
-  itemNotFound
-} = require('../middleware/utils')
-
+import { buildSuccObject, buildErrObject, itemNotFound, parser } from './utils'
+import {log} from '../../utils/logger'
 /**
  * Builds sorting
  * @param {string} sort - field to sort from
@@ -30,12 +26,14 @@ const cleanPaginationID = result => {
  */
 const listInitOptions = async req => {
   return new Promise(resolve => {
+    const select = req.query.select || ''
     const order = req.query.order || -1
     const sort = req.query.sort || 'createdAt'
     const sortBy = buildSort(sort, order)
     const page = parseInt(req.query.page, 10) || 1
     const limit = parseInt(req.query.limit, 10) || 5
     const options = {
+      select,
       sort: sortBy,
       lean: true,
       page,
@@ -45,7 +43,7 @@ const listInitOptions = async req => {
   })
 }
 
-module.exports = {
+export default {
   /**
    * Checks the query string for filtering records
    * query.filter should be the text to search (string)
@@ -66,12 +64,13 @@ module.exports = {
           // Takes fields param and builds an array by splitting with ','
           const arrayFields = query.fields.split(',')
           // Adds SQL Like %word% with regex
-          arrayFields.map(item => {
-            array.push({
+          arrayFields.map( item => {
+            return array.push({
               [item]: {
                 $regex: new RegExp(query.filter, 'i')
               }
             })
+            
           })
           // Puts array result in data
           data.$or = array
@@ -80,7 +79,6 @@ module.exports = {
           resolve({})
         }
       } catch (err) {
-        console.log(err.message)
         reject(buildErrObject(422, 'ERROR_WITH_FILTER'))
       }
     })
@@ -91,8 +89,10 @@ module.exports = {
    * @param {Object} req - request object
    * @param {Object} query - query object
    */
-  async getItems(req, model, query) {
+  async getAllItems(req, model, query) {
     const options = await listInitOptions(req)
+    log.info(query)
+    log.info(options)
     return new Promise((resolve, reject) => {
       model.paginate(query, options, (err, items) => {
         if (err) {
@@ -100,6 +100,31 @@ module.exports = {
         }
         resolve(cleanPaginationID(items))
       })
+    })
+  },
+
+  /**
+   * Gets items from database
+   * @param {Object} req - request object
+   * @param {Object} query - query object
+   * Now supports find and select
+   * @TODO We also need population, limit etc.
+   * @SEE https://github.com/leodinas-hao/mongoose-query-parser#readme
+   */
+  async getItems(req, model, query) {
+    const { filter, select } = parser.parse(
+      query
+    )
+    return new Promise((resolve, reject) => {
+      model
+        .find(filter)
+        .select(select)
+        .exec((err, result) => {
+          if (err) {
+            reject(buildErrObject(422, err.message))
+          }
+          resolve(result)
+        })
     })
   },
 
@@ -122,7 +147,7 @@ module.exports = {
    */
   async createItem(req, model) {
     return new Promise((resolve, reject) => {
-      model.create(req, (err, item) => {
+      model.create(req.body, (err, item) => {
         if (err) {
           reject(buildErrObject(422, err.message))
         }
@@ -143,7 +168,8 @@ module.exports = {
         req,
         {
           new: true,
-          runValidators: true
+          runValidators: true,
+          context: 'query'
         },
         (err, item) => {
           itemNotFound(err, item, reject, 'NOT_FOUND')

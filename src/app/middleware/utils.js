@@ -1,5 +1,11 @@
 import requestIp from 'request-ip';
+import { MongooseQueryParser } from 'mongoose-query-parser';
 import { validationResult } from 'express-validator';
+import { log } from '../../utils/logger'
+import conf from '../../core/config'
+
+
+export const parser = new MongooseQueryParser()
 
 /**
  * Removes extension from file
@@ -17,19 +23,19 @@ export const removeExtensionFromFile = file => {
  * Gets IP from user
  * @param {*} req - request object
  */
-exports.getIP = req => requestIp.getClientIp(req)
+export const getIP = req => requestIp.getClientIp(req)
 
 /**
  * Gets browser info from user
  * @param {*} req - request object
  */
-exports.getBrowserInfo = req => req.headers['user-agent']
+export const getBrowserInfo = req => req.headers['user-agent']
 
 /**
  * Gets country from user using CloudFlare header 'cf-ipcountry'
  * @param {*} req - request object
  */
-exports.getCountry = req =>
+export const getCountry = req =>
   req.headers['cf-ipcountry'] ? req.headers['cf-ipcountry'] : 'XX'
 
 /**
@@ -38,11 +44,11 @@ exports.getCountry = req =>
  * @param {Object} err - error object
  */
 export const handleError = (res, err) => {
-  // Prints error in console
-  if (process.env.NODE_ENV === 'development') {
-    console.log(err)
+  // To Winston...
+  if (conf.get('IS_DEV')) {
+    log.error(err)
   }
-  // Sends error to user
+  // To client
   res.status(err.code).json({
     errors: {
       msg: err.message
@@ -66,7 +72,7 @@ export const buildErrObject = (code, message) => {
  * Builds success object
  * @param {string} message - success text
  */
-const buildSuccObject = message => {
+export const buildSuccObject = message => {
   return {
     msg: message
   }
@@ -134,5 +140,21 @@ export const itemAlreadyExists = (err, item, reject, message) => {
   }
   if (item) {
     reject(buildErrObject(422, message))
+  }
+}
+
+/**
+ * Item already to update
+ * @param {Object} err - error object
+ * @param {Object} item - item result object
+ * @param {Object} reject - reject object
+ * @param {string} message - message
+ */
+export const itemReadyToUpdate = (err, item) => {
+  if (err) {
+    return false
+  }
+  if (item) {
+    return true
   }
 }

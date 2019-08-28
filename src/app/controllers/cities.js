@@ -1,5 +1,6 @@
+import { matchedData } from 'express-validator'
 const model = require('../models/city')
-const { matchedData } = require('express-validator')
+
 const utils = require('../middleware/utils')
 const db = require('../middleware/db')
 
