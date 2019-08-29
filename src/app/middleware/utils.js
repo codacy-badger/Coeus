@@ -14,7 +14,7 @@ export const generateToken = verificationString => {
     jwt.sign(
       {
         data: {
-          CoeusVerificationString: verificationString
+          _id: verificationString
         },
         exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 * conf.get('JWT_EXPIRATION_IN_DAYS'))
       },
@@ -52,7 +52,7 @@ export const getBrowserInfo = req => req.headers['user-agent']
  * @param {*} req - request object
  */
 export const getCountry = req =>
-  req.headers['cf-ipcountry'] ? req.headers['cf-ipcountry'] : 'XX'
+  req.headers['cf-ipcountry'] ? req.headers['cf-ipcountry'] : 'CoeusAPI'
 
 /**
  * Handles error by printing to console in development env and builds and sends an error response
@@ -160,4 +160,20 @@ export const itemAlreadyExists = (err, item, reject, message) => {
   if (item) {
     reject(buildErrObject(422, message))
   }
+}
+
+/**
+ * Gets verification string from encrypted token
+ * @param {string} token - Encrypted and encoded token
+ */
+export const verifyTheToken = async token => {
+  return new Promise((resolve, reject) => {
+    // Decrypts, verifies and decode token
+    jwt.verify(auth.decrypt(token), conf.get('JWT_SECRET'), (err, decoded) => {
+      if (err) {
+        reject(buildErrObject(409, 'BAD_TOKEN'))
+      }
+      resolve(decoded.data._id)
+    })
+  })
 }

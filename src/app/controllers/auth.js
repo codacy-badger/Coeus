@@ -1,4 +1,3 @@
-import jwt from 'jsonwebtoken'
 import User from '../models/user'
 import conf from '../../core/config'
 import {
@@ -10,16 +9,19 @@ import {
   handleError,
   buildSuccObject,
   getIP,
-  generateToken
+  generateToken,
+  verifyTheToken
 } from '../middleware/utils'
-import db from '../middleware/db'
+import { log } from '../../utils/logger'
+
+const { matchedData } = require('express-validator')
+const uuid = require('uuid')
+const { addHours } = require('date-fns')
 
 const UserAccess = require('../models/userAccess')
 const ForgotPassword = require('../models/forgotPassword')
 
-const uuid = require('uuid')
-const { addHours } = require('date-fns')
-const { matchedData } = require('express-validator')
+
 const auth = require('../middleware/auth')
 const emailer = require('../middleware/emailer')
 
@@ -66,6 +68,7 @@ const saveUserAccessAndReturnToken = async (req, user) => {
         reject(buildErrObject(422, err.message))
       }
       const userInfo = setUserInfo(user)
+      log.access(`Logged as ${userInfo.name} (${user.email}) - IP: ${getIP(req)} Browser: ${getBrowserInfo(req)} Location: ${getCountry(req)}`)
       // Returns data with access token
       resolve({
         token: generateToken(user._id),
@@ -81,7 +84,7 @@ const saveUserAccessAndReturnToken = async (req, user) => {
  */
 const blockUser = async user => {
   return new Promise((resolve, reject) => {
-    user.blockExpires = addHours(new Date(), HOURS_TO_BLOCK)
+    user.blockExpires = addHours(new Date(), HOURS_TO_BLOCK) //eslint-disable-line
     user.save((err, result) => {
       if (err) {
         reject(buildErrObject(422, err.message))
@@ -304,7 +307,7 @@ const forgotPasswordResponse = item => {
     msg: 'RESET_EMAIL_SENT',
     email: item.email
   }
-  if (process.env.NODE_ENV !== 'production') {
+  if (conf.get('IS_DEV')) {
     data = {
       ...data,
       verification: item.verification
@@ -326,22 +329,6 @@ const checkPermissions = async (data, next) => {
         return resolve(next())
       }
       return reject(buildErrObject(401, 'UNAUTHORIZED ACCESS'))
-    })
-  })
-}
-
-/**
- * Gets user id from token
- * @param {string} token - Encrypted and encoded token
- */
-const getUserIdFromToken = async token => {
-  return new Promise((resolve, reject) => {
-    // Decrypts, verifies and decode token
-    jwt.verify(auth.decrypt(token), conf.get('JWT_SECRET'), (err, decoded) => {
-      if (err) {
-        reject(buildErrObject(409, 'BAD_TOKEN'))
-      }
-      resolve(decoded.data._id)
     })
   })
 }
@@ -423,7 +410,7 @@ export const getRefreshToken = async (req, res) => {
     const tokenEncrypted = req.headers.authorization
       .replace('Bearer ', '')
       .trim()
-    let userId = await getUserIdFromToken(tokenEncrypted)
+    let userId = await verifyTheToken(tokenEncrypted)
     userId = await isIDGood(userId)
     const user = await findUserById(userId)
     const token = await saveUserAccessAndReturnToken(req, user)

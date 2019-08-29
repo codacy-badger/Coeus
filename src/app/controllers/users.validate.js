@@ -6,18 +6,6 @@ const { theValidationResult } = require('../middleware/utils')
  * Validates verify request
  */
 export const checkVerify = [
-  check('email')
-    .exists()
-    .withMessage('MISSING')
-    .not()
-    .isEmpty()
-    .withMessage('IS_EMPTY'),
-  check('id')
-    .exists()
-    .withMessage('MISSING')
-    .not()
-    .isEmpty()
-    .withMessage('IS_EMPTY'),
   check('token')
     .exists()
     .withMessage('MISSING')

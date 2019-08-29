@@ -1,26 +1,20 @@
 import winston, { createLogger, format, transports } from 'winston'
 import conf from '../core/config'
 
-
-
-
 require('winston-mongodb')
 require('express-async-errors')
 
-const MONGO_URL =
-  conf.get('MONGODB_URI') ||
-  'mongodb://localhost:27017/a98sd7fa89sd7fa98s7df980a'
-
   const config = {
     levels: {
-      error: 0,
-      debug: 1,
-      warn: 2,
-      data: 3,
-      info: 4,
-      verbose: 5,
-      silly: 6,
-      access: 0
+      access: 0,
+      error: 1,
+      debug: 2,
+      warn: 3,
+      data: 4,
+      info: 5,
+      verbose: 6,
+      silly: 7,
+
     },
     colors: {
       error: 'red',
@@ -55,16 +49,20 @@ export const log = createLogger({
       json: true,
       maxsize: 5242880, // 5MB
       maxFiles: 5,
-      colorize: false
+      colorize: false,
+      zippedArchive: true,
+      options: { encoding: 'utf8' }
     }),
     new transports.File({
       filename: 'access.log',
       level: 'access',
-      handleExceptions: true,
-      json: true,
+      handleExceptions: false,
+      json: false,
       maxsize: 5242880, // 5MB
-      maxFiles: 5,
-      colorize: false
+      maxFiles: 10,
+      colorize: false,
+      zippedArchive: true,
+      options: { encoding: 'utf8' }
     }),
     new transports.File({ filename: 'logfile.log' }),
 //    new transports.MongoDB({ db: MONGO_URL })

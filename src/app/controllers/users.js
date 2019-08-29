@@ -1,4 +1,3 @@
-import jwt from 'jsonwebtoken'
 import User from '../models/user'
 import {
   buildErrObject,
@@ -6,12 +5,11 @@ import {
   isIDGood,
   buildSuccObject,
   itemNotFound,
-  generateToken
+  generateToken,
+  verifyTheToken
 } from '../middleware/utils'
-import conf from '../../core/config'
 
 const cryptoRandomString = require('crypto-random-string')
-const auth = require('../middleware/auth')
 const db = require('../middleware/db')
 const emailer = require('../middleware/emailer')
 
@@ -65,22 +63,6 @@ const returnRegisterToken = item => {
     token: generateToken(item.verification),
   }
   return data
-}
-
-/**
- * Gets user id from token
- * @param {string} token - Encrypted and encoded token
- */
-const verifyTheToken = async token => {
-  return new Promise((resolve, reject) => {
-    // Decrypts, verifies and decode token
-    jwt.verify(auth.decrypt(token), conf.get('JWT_SECRET'), (err, decoded) => {
-      if (err) {
-        reject(buildErrObject(409, 'BAD_TOKEN'))
-      }
-      resolve(decoded.data._id)
-    })
-  })
 }
 
 /**

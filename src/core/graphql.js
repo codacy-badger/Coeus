@@ -1,4 +1,3 @@
-import 'dotenv/config'
 import { ApolloServer, AuthenticationError } from 'apollo-server-express'
 import { PubSub } from 'graphql-subscriptions'
 import Redis from 'ioredis'
@@ -10,17 +9,17 @@ import { mergeTypes, fileLoader } from 'merge-graphql-schemas'
 import { resolve } from 'path'
 import DataLoader from 'dataloader'
 import { jwtExtractor } from './passport'
+import conf from './config'
 
 import schema from '../app/graphql/schema';
 
 
 
-const config =
-  process.env.NODE_ENV === 'production' && !process.env.FORCE_DEV
+const config = conf.get('IS_PROD')
     ? {
-        port: process.env.REDIS_CACHE_PORT,
-        host: process.env.REDIS_CACHE_URL,
-        password: process.env.REDIS_CACHE_PASSWORD,
+        port: conf.get('REDIS_CACHE_PORT'),
+        host: conf.get('REDIS_CACHE_URL'),
+        password: conf.get('REDIS_CACHE_PASSWORD'),
       }
     : undefined;
 
@@ -34,7 +33,7 @@ export const pubsub = new PubSub()
 
 export default new ApolloServer({
   schema,
-  introspection: process.env.NODE_ENV !== 'production',
+  introspection: conf.get('IS_DEV'),
   formatError: error => {
     // remove the internal sequelize error message
     // leave only the important validation error
@@ -50,7 +49,7 @@ export default new ApolloServer({
   context: async () => {},
   schemaDirectives: {},
   playground:
-    process.env.NODE_ENV.trim() !== 'development'
+    conf.get('IS_PROD')
       ? false
       : {
           settings: {
