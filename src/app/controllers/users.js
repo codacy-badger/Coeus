@@ -1,7 +1,20 @@
-const model = require('../models/user')
+import jwt from 'jsonwebtoken'
+import User from '../models/user'
+import {
+  buildErrObject,
+  handleError,
+  isIDGood,
+  buildSuccObject,
+  itemNotFound
+} from '../middleware/utils'
+import conf from '../../core/config'
+
+const crypto = require('crypto')
+const cryptoRandomString = require('crypto-random-string')
 const uuid = require('uuid')
 const { matchedData } = require('express-validator')
-const utils = require('../middleware/utils')
+
+const auth = require('../middleware/auth')
 const db = require('../middleware/db')
 const emailer = require('../middleware/emailer')
 
@@ -9,38 +22,124 @@ const emailer = require('../middleware/emailer')
  * Private functions *
  *********************/
 
+const generateToken = verificationString => {
+  return auth.encrypt(
+    jwt.sign(
+      {
+        data: {
+          CoeusVerificationString: verificationString
+        },
+        exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 * conf.get('JWT_EXPIRATION_IN_DAYS'))
+      },
+      conf.get('JWT_SECRET')
+    )
+  )
+}
+
 /**
  * Creates a new item in database
  * @param {Object} req - request object
  */
 const createItem = async req => {
   return new Promise((resolve, reject) => {
-    const user = new model({
-      name: req.name,
-      email: req.email,
-      password: req.password,
-      role: req.role,
-      phone: req.phone,
-      city: req.city,
-      country: req.country,
-      verification: uuid.v4()
+    User.create(
+      {
+        name: req.name,
+        email: req.email,
+        password: req.password,
+        country: req.country,
+        phone: req.phone,
+        role: req.role,
+        city: req.city,
+        verification: cryptoRandomString({length: 32, type: 'base64'})
+      },
+      (err, item) => {
+        if (err) {
+          reject(buildErrObject(422, err.message))
+        }
+        const removeProperties = ({
+          // eslint-disable-next-line no-unused-vars
+          password,
+          // eslint-disable-next-line no-unused-vars
+          blockExpires,
+          // eslint-disable-next-line no-unused-vars
+          loginAttempts,
+          ...rest
+        }) => rest
+        resolve(removeProperties(item.toObject()))
+      }
+    )
+  })
+}
+
+/**
+ * Builds the registration token
+ * @param {Object} item - user object that contains created id
+ * @param {Object} userInfo - user object
+ */
+const returnRegisterToken = item => {
+  const data = {
+    id: item._id,
+    name: item.name,
+    email: item.email,
+    verified: item.verified,
+    token: generateToken(item.verification),
+  }
+  return data
+}
+
+/**
+ * Gets user id from token
+ * @param {string} token - Encrypted and encoded token
+ */
+const verifyTheToken = async token => {
+  return new Promise((resolve, reject) => {
+    // Decrypts, verifies and decode token
+    jwt.verify(auth.decrypt(token), conf.get('JWT_SECRET'), (err, decoded) => {
+      if (err) {
+        reject(buildErrObject(409, 'BAD_TOKEN'))
+      }
+      resolve(decoded.data._id)
     })
+  })
+}
+
+/**
+ * Verifies an user
+ * @param {Object} user - user object
+ */
+const verify = async user => {
+  return new Promise((resolve, reject) => {
+    user.verified = true
     user.save((err, item) => {
       if (err) {
-        reject(utils.buildErrObject(422, err.message))
+        reject(buildErrObject(422, err.message))
       }
-      // Removes properties with rest operator
-      const removeProperties = ({
-        // eslint-disable-next-line no-unused-vars
-        password,
-        // eslint-disable-next-line no-unused-vars
-        blockExpires,
-        // eslint-disable-next-line no-unused-vars
-        loginAttempts,
-        ...rest
-      }) => rest
-      resolve(removeProperties(item.toObject()))
+      resolve({
+        email: item.email,
+        verified: item.verified,
+      })
     })
+  })
+}
+
+/**
+ * Checks if verification id exists for user
+ * @param {string} id - verification id
+ */
+const verificationExists = async verification => {
+  return new Promise((resolve, reject) => {
+    User.findOne(
+      {
+        verification
+      },
+      (err, user) => {
+        if (err) {
+          itemNotFound(err, user, reject, 'NOT_FOUND_OR_ALREADY_VERIFIED')
+        }
+        resolve(user)
+      }
+    )
   })
 }
 
@@ -53,12 +152,12 @@ const createItem = async req => {
  * @param {Object} req - request object
  * @param {Object} res - response object
  */
-exports.getItems = async (req, res) => {
+export const getUsers = async (req, res) => {
   try {
     const query = await db.checkQueryString(req.query)
-    res.status(200).json(await db.getItems(req, model, query))
+    res.status(200).json(await db.getItems(req, User, query))
   } catch (error) {
-    utils.handleError(res, error)
+    handleError(res, error)
   }
 }
 
@@ -67,13 +166,12 @@ exports.getItems = async (req, res) => {
  * @param {Object} req - request object
  * @param {Object} res - response object
  */
-exports.getItem = async (req, res) => {
+export const getUser = async (req, res) => {
   try {
-    req = matchedData(req)
-    const id = await utils.isIDGood(req.id)
-    res.status(200).json(await db.getItem(id, model))
+    const id = await isIDGood(req.id)
+    res.status(200).json(await db.getItem(id, User))
   } catch (error) {
-    utils.handleError(res, error)
+    handleError(res, error)
   }
 }
 
@@ -82,19 +180,18 @@ exports.getItem = async (req, res) => {
  * @param {Object} req - request object
  * @param {Object} res - response object
  */
-exports.updateItem = async (req, res) => {
+export const updateUser = async (req, res) => {
   try {
-    req = matchedData(req)
-    const id = await utils.isIDGood(req.id)
+    const id = await isIDGood(req.id)
     const doesEmailExists = await emailer.emailExistsExcludingMyself(
       id,
       req.email
     )
     if (!doesEmailExists) {
-      res.status(200).json(await db.updateItem(id, model, req))
+      res.status(200).json(await db.updateItem(id, User, req))
     }
   } catch (error) {
-    utils.handleError(res, error)
+    handleError(res, error)
   }
 }
 
@@ -103,19 +200,35 @@ exports.updateItem = async (req, res) => {
  * @param {Object} req - request object
  * @param {Object} res - response object
  */
-exports.createItem = async (req, res) => {
+export const createNewUser = async (req, res) => {
   try {
     // Gets locale from header 'Accept-Language'
-    const locale = req.getLocale()
-    req = matchedData(req)
-    const doesEmailExists = await emailer.emailExists(req.email)
+    const doesEmailExists = await emailer.emailExists(req.body.email)
     if (!doesEmailExists) {
-      const item = await createItem(req)
-      emailer.sendRegistrationEmailMessage(locale, item)
-      res.status(201).json(item)
+      const item = await createItem(req.body)
+      const response = returnRegisterToken(item)
+      res.status(201).json(buildSuccObject(response))
     }
   } catch (error) {
-    utils.handleError(res, error)
+    handleError(res, error)
+  }
+}
+
+/**
+ * Verify function called by route
+ * @param {Object} req - request object
+ * @param {Object} res - response object
+ */
+export const verifyUser = async (req, res) => {
+  try {
+    const verifiedToken = await verifyTheToken(req.body.token)
+    const user = await verificationExists(verifiedToken)
+    if (verifiedToken && user.verification === verifiedToken) {
+      const verifiedUser = await verify(user)
+      res.status(200).json(verifiedUser)
+    }
+  } catch (error) {
+    handleError(res, error)
   }
 }
 
@@ -124,12 +237,11 @@ exports.createItem = async (req, res) => {
  * @param {Object} req - request object
  * @param {Object} res - response object
  */
-exports.deleteItem = async (req, res) => {
+export const deleteUser = async (req, res) => {
   try {
-    req = matchedData(req)
-    const id = await utils.isIDGood(req.id)
-    res.status(200).json(await db.deleteItem(id, model))
+    const id = await isIDGood(req.id)
+    res.status(200).json(await db.deleteItem(id, User))
   } catch (error) {
-    utils.handleError(res, error)
+    handleError(res, error)
   }
 }

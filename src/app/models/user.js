@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const bcrypt = require('bcrypt-nodejs')
+const bcrypt = require('bcrypt')
 const validator = require('validator')
 const mongoosePaginate = require('mongoose-paginate-v2')
 
@@ -45,25 +45,8 @@ const UserSchema = new mongoose.Schema(
     country: {
       type: String
     },
-    urlTwitter: {
-      type: String,
-      validate: {
-        validator(v) {
-          return v === '' ? true : validator.isURL(v)
-        },
-        message: 'NOT_A_VALID_URL'
-      },
-      lowercase: true
-    },
-    urlGitHub: {
-      type: String,
-      validate: {
-        validator(v) {
-          return v === '' ? true : validator.isURL(v)
-        },
-        message: 'NOT_A_VALID_URL'
-      },
-      lowercase: true
+    baseStation: {
+      type: String
     },
     loginAttempts: {
       type: Number,
@@ -83,7 +66,7 @@ const UserSchema = new mongoose.Schema(
 )
 
 const hash = (user, salt, next) => {
-  bcrypt.hash(user.password, salt, null, (error, newHash) => {
+  bcrypt.hash(user.password, salt, (error, newHash) => {
     if (error) {
       return next(error)
     }
@@ -92,22 +75,14 @@ const hash = (user, salt, next) => {
   })
 }
 
-const genSalt = (user, SALT_FACTOR, next) => {
-  bcrypt.genSalt(SALT_FACTOR, (err, salt) => {
-    if (err) {
-      return next(err)
-    }
-    return hash(user, salt, next)
-  })
-}
-
 UserSchema.pre('save', function(next) {
   const that = this
-  const SALT_FACTOR = 5
+  const SALT_FACTOR = 10
   if (!that.isModified('password')) {
     return next()
   }
-  return genSalt(that, SALT_FACTOR, next)
+  return hash(that, SALT_FACTOR, next)
+  
 })
 
 UserSchema.methods.comparePassword = function(passwordAttempt, cb) {
@@ -115,6 +90,7 @@ UserSchema.methods.comparePassword = function(passwordAttempt, cb) {
     err ? cb(err) : cb(null, isMatch)
   )
 }
+
 UserSchema.plugin(mongoosePaginate)
 
 const User = mongoose.model('User', UserSchema);

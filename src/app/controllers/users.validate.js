@@ -1,6 +1,33 @@
-const { validationResult } = require('../middleware/utils')
+const { theValidationResult } = require('../middleware/utils')
 const validator = require('validator')
 const { check } = require('express-validator')
+
+/**
+ * Validates verify request
+ */
+exports.verify = [
+  check('email')
+    .exists()
+    .withMessage('MISSING')
+    .not()
+    .isEmpty()
+    .withMessage('IS_EMPTY'),
+  check('id')
+    .exists()
+    .withMessage('MISSING')
+    .not()
+    .isEmpty()
+    .withMessage('IS_EMPTY'),
+  check('token')
+    .exists()
+    .withMessage('MISSING')
+    .not()
+    .isEmpty()
+    .withMessage('IS_EMPTY'),
+  (req, res, next) => {
+    theValidationResult(req, res, next)
+  }
+]
 
 /**
  * Validates create new item request
@@ -68,7 +95,7 @@ exports.createItem = [
     .custom(v => (v === '' ? true : validator.isURL(v)))
     .withMessage('NOT_A_VALID_URL'),
   (req, res, next) => {
-    validationResult(req, res, next)
+    theValidationResult(req, res, next)
   }
 ]
 
@@ -130,7 +157,7 @@ exports.updateItem = [
     .isEmpty()
     .withMessage('IS_EMPTY'),
   (req, res, next) => {
-    validationResult(req, res, next)
+    theValidationResult(req, res, next)
   }
 ]
 
@@ -145,7 +172,7 @@ exports.getItem = [
     .isEmpty()
     .withMessage('IS_EMPTY'),
   (req, res, next) => {
-    validationResult(req, res, next)
+    theValidationResult(req, res, next)
   }
 ]
 
@@ -160,6 +187,6 @@ exports.deleteItem = [
     .isEmpty()
     .withMessage('IS_EMPTY'),
   (req, res, next) => {
-    validationResult(req, res, next)
+    theValidationResult(req, res, next)
   }
 ]

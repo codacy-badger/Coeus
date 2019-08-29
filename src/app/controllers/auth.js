@@ -11,6 +11,7 @@ import {
   buildSuccObject,
   getIP
 } from '../middleware/utils'
+import db from '../middleware/db'
 
 const UserAccess = require('../models/userAccess')
 const ForgotPassword = require('../models/forgotPassword')
@@ -34,9 +35,6 @@ const generateToken = user => {
   // Gets expiration time
   const expiration =
     Math.floor(Date.now() / 1000) + 60 * conf.get('JWT_EXPIRATION_IN_MINUTES')
-
-  console.log(conf.get('JWT_SECRET'))
-  console.log(conf.get('JWT_EXPIRATION_IN_MINUTES'))
 
   // returns signed and encrypted token
   return auth.encrypt(
@@ -230,81 +228,6 @@ const passwordsDoNotMatch = async user => {
 }
 
 /**
- * Registers a new user in database
- * @param {Object} req - request object
- */
-const registerUser = async req => {
-  return new Promise((resolve, reject) => {
-    const user = new User({
-      name: req.name,
-      email: req.email,
-      password: req.password,
-      verification: uuid.v4()
-    })
-    user.save((err, item) => {
-      if (err) {
-        reject(buildErrObject(422, err.message))
-      }
-      resolve(item)
-    })
-  })
-}
-
-/**
- * Builds the registration token
- * @param {Object} item - user object that contains created id
- * @param {Object} userInfo - user object
- */
-const returnRegisterToken = (item, userInfo) => {
-  if (process.env.NODE_ENV !== 'production') {
-    userInfo.verification = item.verification
-  }
-  const data = {
-    token: generateToken(item._id),
-    user: userInfo
-  }
-  return data
-}
-
-/**
- * Checks if verification id exists for user
- * @param {string} id - verification id
- */
-const verificationExists = async id => {
-  return new Promise((resolve, reject) => {
-    User.findOne(
-      {
-        verification: id,
-        verified: false
-      },
-      (err, user) => {
-        itemNotFound(err, user, reject, 'NOT_FOUND_OR_ALREADY_VERIFIED')
-        resolve(user)
-      }
-    )
-  })
-}
-
-/**
- * Verifies an user
- * @param {Object} user - user object
- */
-const verifyUser = async user => {
-  return new Promise((resolve, reject) => {
-    user.verified = true
-    user.save((err, item) => {
-      if (err) {
-        reject(buildErrObject(422, err.message))
-      }
-      resolve({
-        email: item.email,
-        verified: item.verified
-      })
-    })
-  })
-}
-
-/**
  * Marks a request to reset password as used
  * @param {Object} req - request object
  * @param {Object} forgot - forgot object
@@ -426,7 +349,7 @@ const checkPermissions = async (data, next) => {
       if (data.roles.indexOf(result.role) > -1) {
         return resolve(next())
       }
-      return reject(buildErrObject(401, 'UNAUTHORIZED'))
+      return reject(buildErrObject(401, 'UNAUTHORIZED ACCESS'))
     })
   })
 }
@@ -471,44 +394,6 @@ exports.login = async (req, res) => {
       await saveLoginAttemptsToDB(user)
       res.status(200).json(await saveUserAccessAndReturnToken(req, user))
     }
-  } catch (error) {
-    handleError(res, error)
-  }
-}
-
-/**
- * Register function called by route
- * @param {Object} req - request object
- * @param {Object} res - response object
- */
-exports.register = async (req, res) => {
-  try {
-    // Gets locale from header 'Accept-Language'
-    const locale = req.getLocale()
-    req = matchedData(req)
-    const doesEmailExists = await emailer.emailExists(req.email)
-    if (!doesEmailExists) {
-      const item = await registerUser(req)
-      const userInfo = setUserInfo(item)
-      const response = returnRegisterToken(item, userInfo)
-      emailer.sendRegistrationEmailMessage(locale, item)
-      res.status(201).json(response)
-    }
-  } catch (error) {
-    handleError(res, error)
-  }
-}
-
-/**
- * Verify function called by route
- * @param {Object} req - request object
- * @param {Object} res - response object
- */
-exports.verify = async (req, res) => {
-  try {
-    req = matchedData(req)
-    const user = await verificationExists(req.id)
-    res.status(200).json(await verifyUser(user))
   } catch (error) {
     handleError(res, error)
   }

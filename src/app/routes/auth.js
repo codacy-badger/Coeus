@@ -21,21 +21,6 @@ const requireAuth = passport.authenticate('jwt', {
  */
 
 /*
- * Register route
- */
-router.post(
-  '/register',
-  trimRequest.all,
-  validate.register,
-  controller.register
-)
-
-/*
- * Verify route
- */
-router.post('/verify', trimRequest.all, validate.verify, controller.verify)
-
-/*
  * Forgot password route
  */
 router.post(

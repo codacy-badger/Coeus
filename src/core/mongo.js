@@ -11,7 +11,6 @@ mongoose.connect(
   {
     keepAlive: true,
     reconnectTries: Number.MAX_VALUE,
-    useNewUrlParser: true,
     useUnifiedTopology: true
   },
   err => {
@@ -21,8 +20,9 @@ mongoose.connect(
   }
 );
 
-mongoose.set('useCreateIndex', true);
+mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
 
 TheModels();
 

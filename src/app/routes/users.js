@@ -1,7 +1,15 @@
-const express = require('express');
-const passport = require('passport');
-const trimRequest = require('trim-request');
-const controller = require('../controllers/users')
+import {
+  getUsers,
+  getUser,
+  createNewUser,
+  verifyUser,
+  deleteUser,
+  updateUser
+} from '../controllers/users'
+
+const express = require('express')
+const passport = require('passport')
+const trimRequest = require('trim-request')
 const validate = require('../controllers/users.validate')
 const AuthController = require('../controllers/auth')
 
@@ -11,7 +19,6 @@ require('../../core/passport')
 const requireAuth = passport.authenticate('jwt', {
   session: false
 })
-
 
 /*
  * Users routes
@@ -25,7 +32,7 @@ router.get(
   requireAuth,
   AuthController.roleAuthorization(['admin']),
   trimRequest.all,
-  controller.getItems
+  getUsers
 )
 
 /*
@@ -37,8 +44,13 @@ router.post(
   AuthController.roleAuthorization(['admin']),
   trimRequest.all,
   validate.createItem,
-  controller.createItem
+  createNewUser
 )
+
+/*
+ * Verify route
+ */
+router.post('/verify', trimRequest.all, validate.verify, verifyUser)
 
 /*
  * Get item route
@@ -49,7 +61,7 @@ router.get(
   AuthController.roleAuthorization(['admin']),
   trimRequest.all,
   validate.getItem,
-  controller.getItem
+  getUser
 )
 
 /*
@@ -61,7 +73,7 @@ router.patch(
   AuthController.roleAuthorization(['admin']),
   trimRequest.all,
   validate.updateItem,
-  controller.updateItem
+  updateUser
 )
 
 /*
@@ -73,7 +85,7 @@ router.delete(
   AuthController.roleAuthorization(['admin']),
   trimRequest.all,
   validate.deleteItem,
-  controller.deleteItem
+  deleteUser
 )
 
 module.exports = router

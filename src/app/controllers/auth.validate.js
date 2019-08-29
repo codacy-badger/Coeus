@@ -62,21 +62,6 @@ exports.login = [
 ]
 
 /**
- * Validates verify request
- */
-exports.verify = [
-  check('id')
-    .exists()
-    .withMessage('MISSING')
-    .not()
-    .isEmpty()
-    .withMessage('IS_EMPTY'),
-  (req, res, next) => {
-    theValidationResult(req, res, next)
-  }
-]
-
-/**
  * Validates forgot password request
  */
 exports.forgotPassword = [
