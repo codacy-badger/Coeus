@@ -32,7 +32,7 @@
     "max-len": "off",
     "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
     "no-underscore-dangle": "off",
-    "object-curly-newline": ["error", { "consistent": true }],
+    "object-curly-newline": "off",
     "consistent-return": "off",
   }
 }
