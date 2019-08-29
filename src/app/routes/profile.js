@@ -1,15 +1,17 @@
+import { onlyCanUse } from '../controllers/auth'
+
 const express = require('express');
 const passport = require('passport');
 const trimRequest = require('trim-request');
 const controller = require('../controllers/profile')
 const validate = require('../controllers/profile.validate')
-const AuthController = require('../controllers/auth')
+
 require('../../core/passport');
 
 const router = express.Router()
 
 
-const requireAuth = passport.authenticate('jwt', {
+const secureIt = passport.authenticate('jwt', {
   session: false
 })
 
@@ -23,8 +25,8 @@ const requireAuth = passport.authenticate('jwt', {
  */
 router.get(
   '/',
-  requireAuth,
-  AuthController.roleAuthorization(['user', 'admin']),
+  secureIt,
+  onlyCanUse(['user', 'admin']),
   trimRequest.all,
   controller.getProfile
 )
@@ -34,8 +36,8 @@ router.get(
  */
 router.patch(
   '/',
-  requireAuth,
-  AuthController.roleAuthorization(['user', 'admin']),
+  secureIt,
+  onlyCanUse(['user', 'admin']),
   trimRequest.all,
   validate.updateProfile,
   controller.updateProfile
@@ -46,8 +48,8 @@ router.patch(
  */
 router.post(
   '/changePassword',
-  requireAuth,
-  AuthController.roleAuthorization(['user', 'admin']),
+  secureIt,
+  onlyCanUse(['user', 'admin']),
   trimRequest.all,
   validate.changePassword,
   controller.changePassword

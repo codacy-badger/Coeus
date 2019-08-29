@@ -1,11 +1,27 @@
 import requestIp from 'request-ip';
+import jwt from 'jsonwebtoken'
 import { MongooseQueryParser } from 'mongoose-query-parser';
 import { validationResult } from 'express-validator';
 import { log } from '../../utils/logger'
 import conf from '../../core/config'
 
+const auth = require('../middleware/auth')
 
 export const parser = new MongooseQueryParser()
+
+export const generateToken = verificationString => {
+  return auth.encrypt(
+    jwt.sign(
+      {
+        data: {
+          CoeusVerificationString: verificationString
+        },
+        exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 * conf.get('JWT_EXPIRATION_IN_DAYS'))
+      },
+      conf.get('JWT_SECRET')
+    )
+  )
+}
 
 /**
  * Removes extension from file

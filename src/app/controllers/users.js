@@ -5,36 +5,15 @@ import {
   handleError,
   isIDGood,
   buildSuccObject,
-  itemNotFound
+  itemNotFound,
+  generateToken
 } from '../middleware/utils'
 import conf from '../../core/config'
 
-const crypto = require('crypto')
 const cryptoRandomString = require('crypto-random-string')
-const uuid = require('uuid')
-const { matchedData } = require('express-validator')
-
 const auth = require('../middleware/auth')
 const db = require('../middleware/db')
 const emailer = require('../middleware/emailer')
-
-/*********************
- * Private functions *
- *********************/
-
-const generateToken = verificationString => {
-  return auth.encrypt(
-    jwt.sign(
-      {
-        data: {
-          CoeusVerificationString: verificationString
-        },
-        exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 * conf.get('JWT_EXPIRATION_IN_DAYS'))
-      },
-      conf.get('JWT_SECRET')
-    )
-  )
-}
 
 /**
  * Creates a new item in database
@@ -110,7 +89,7 @@ const verifyTheToken = async token => {
  */
 const verify = async user => {
   return new Promise((resolve, reject) => {
-    user.verified = true
+    user.verified = true // eslint-disable-line
     user.save((err, item) => {
       if (err) {
         reject(buildErrObject(422, err.message))

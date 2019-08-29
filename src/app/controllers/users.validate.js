@@ -1,11 +1,11 @@
-const { theValidationResult } = require('../middleware/utils')
 const validator = require('validator')
 const { check } = require('express-validator')
+const { theValidationResult } = require('../middleware/utils')
 
 /**
  * Validates verify request
  */
-exports.verify = [
+export const checkVerify = [
   check('email')
     .exists()
     .withMessage('MISSING')
@@ -32,7 +32,7 @@ exports.verify = [
 /**
  * Validates create new item request
  */
-exports.createItem = [
+export const checkNewUser = [
   check('name')
     .exists()
     .withMessage('MISSING')
@@ -102,7 +102,7 @@ exports.createItem = [
 /**
  * Validates update item request
  */
-exports.updateItem = [
+export const checkUpdateUser = [
   check('name')
     .exists()
     .withMessage('MISSING')
@@ -164,7 +164,7 @@ exports.updateItem = [
 /**
  * Validates get item request
  */
-exports.getItem = [
+export const checkGetUser = [
   check('id')
     .exists()
     .withMessage('MISSING')
@@ -179,7 +179,7 @@ exports.getItem = [
 /**
  * Validates delete item request
  */
-exports.deleteItem = [
+export const checkDeleteUser = [
   check('id')
     .exists()
     .withMessage('MISSING')

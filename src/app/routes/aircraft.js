@@ -10,17 +10,18 @@ import {
   updateItem,
   deleteItem
 } from '../controllers/aircraft'
+import { onlyCanUse } from '../controllers/auth'
 import {
-  createCheck,
-  updateCheck,
-  getCheck,
-  deleteCheck
+  checkCreateAircraft,
+  checkAircraftUpdate,
+  checkGetAircraft,
+  checkDeleteAircraft
 } from '../controllers/aircraft.validate'
-import AuthController from '../controllers/auth'
+
 
 require('../../core/passport')
 
-const requireAuth = passport.authenticate('jwt', {
+const secureIt = passport.authenticate('jwt', {
   session: false
 })
 
@@ -41,8 +42,8 @@ router.get('/all', getAllAircrafts)
  */
 router.get(
   '/find',
-  requireAuth,
-  AuthController.roleAuthorization(['admin']),
+  secureIt,
+  onlyCanUse(['admin']),
   trimRequest.all,
   getAllItems
 )
@@ -52,8 +53,8 @@ router.get(
  */
 router.get(
   '/',
-  requireAuth,
-  AuthController.roleAuthorization(['admin']),
+  secureIt,
+  onlyCanUse(['admin']),
   trimRequest.all,
   getItems
 )
@@ -63,10 +64,10 @@ router.get(
  */
 router.post(
   '/',
-  requireAuth,
-  AuthController.roleAuthorization(['admin']),
+  secureIt,
+  onlyCanUse(['admin']),
   trimRequest.all,
-  createCheck,
+  checkCreateAircraft,
   createAircraft
 )
 
@@ -75,10 +76,10 @@ router.post(
  */
 router.get(
   '/get',
-  requireAuth,
-  AuthController.roleAuthorization(['admin']),
+  secureIt,
+  onlyCanUse(['admin']),
   trimRequest.all,
-  getCheck,
+  checkGetAircraft,
   getAircraft
 )
 
@@ -87,10 +88,10 @@ router.get(
  */
 router.patch(
   '/',
-  requireAuth,
-  AuthController.roleAuthorization(['admin']),
+  secureIt,
+  onlyCanUse(['admin']),
   trimRequest.all,
-  updateCheck,
+  checkAircraftUpdate,
   updateItem
 )
 
@@ -99,10 +100,10 @@ router.patch(
  */
 router.delete(
   '/:id',
-  requireAuth,
-  AuthController.roleAuthorization(['admin']),
+  secureIt,
+  onlyCanUse(['admin']),
   trimRequest.all,
-  deleteCheck,
+  checkDeleteAircraft,
   deleteItem
 )
 

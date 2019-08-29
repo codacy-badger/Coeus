@@ -29,7 +29,6 @@
     "import/prefer-default-export": "off",
     "prettier/prettier": "off",
     "no-console": "off",
-    "no-multi-spaces": ["error", { "ignoreEOLComments": true }],
     "max-len": "off",
     "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
     "no-underscore-dangle": "off",

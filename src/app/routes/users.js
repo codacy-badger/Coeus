@@ -1,3 +1,6 @@
+import express from 'express'
+import passport from 'passport'
+import trimRequest from 'trim-request'
 import {
   getUsers,
   getUser,
@@ -6,17 +9,19 @@ import {
   deleteUser,
   updateUser
 } from '../controllers/users'
-
-const express = require('express')
-const passport = require('passport')
-const trimRequest = require('trim-request')
-const validate = require('../controllers/users.validate')
-const AuthController = require('../controllers/auth')
+import {
+   checkVerify,
+   checkNewUser,
+   checkUpdateUser,
+   checkGetUser,
+   checkDeleteUser
+  } from '../controllers/users.validate'
+import { onlyCanUse } from '../controllers/auth'
 
 const router = express.Router()
 require('../../core/passport')
 
-const requireAuth = passport.authenticate('jwt', {
+const secureIt = passport.authenticate('jwt', {
   session: false
 })
 
@@ -25,12 +30,12 @@ const requireAuth = passport.authenticate('jwt', {
  */
 
 /*
- * Get items route
+ * Get users route
  */
 router.get(
   '/',
-  requireAuth,
-  AuthController.roleAuthorization(['admin']),
+  secureIt,
+  onlyCanUse(['admin']),
   trimRequest.all,
   getUsers
 )
@@ -40,27 +45,27 @@ router.get(
  */
 router.post(
   '/',
-  requireAuth,
-  AuthController.roleAuthorization(['admin']),
+  secureIt,
+  onlyCanUse(['admin']),
   trimRequest.all,
-  validate.createItem,
+  checkNewUser,
   createNewUser
 )
 
 /*
  * Verify route
  */
-router.post('/verify', trimRequest.all, validate.verify, verifyUser)
+router.post('/verify', trimRequest.all, checkVerify, verifyUser)
 
 /*
  * Get item route
  */
 router.get(
   '/:id',
-  requireAuth,
-  AuthController.roleAuthorization(['admin']),
+  secureIt,
+  onlyCanUse(['admin']),
   trimRequest.all,
-  validate.getItem,
+  checkGetUser,
   getUser
 )
 
@@ -69,10 +74,10 @@ router.get(
  */
 router.patch(
   '/:id',
-  requireAuth,
-  AuthController.roleAuthorization(['admin']),
+  secureIt,
+  onlyCanUse(['admin']),
   trimRequest.all,
-  validate.updateItem,
+  checkUpdateUser,
   updateUser
 )
 
@@ -81,10 +86,10 @@ router.patch(
  */
 router.delete(
   '/:id',
-  requireAuth,
-  AuthController.roleAuthorization(['admin']),
+  secureIt,
+  onlyCanUse(['admin']),
   trimRequest.all,
-  validate.deleteItem,
+  checkDeleteUser,
   deleteUser
 )
 

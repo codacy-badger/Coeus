@@ -9,46 +9,22 @@ import {
   isIDGood,
   handleError,
   buildSuccObject,
-  getIP
+  getIP,
+  generateToken
 } from '../middleware/utils'
 import db from '../middleware/db'
 
 const UserAccess = require('../models/userAccess')
 const ForgotPassword = require('../models/forgotPassword')
+
 const uuid = require('uuid')
 const { addHours } = require('date-fns')
 const { matchedData } = require('express-validator')
 const auth = require('../middleware/auth')
 const emailer = require('../middleware/emailer')
+
 const HOURS_TO_BLOCK = 2
 const LOGIN_ATTEMPTS = 5
-
-/*********************
- * Private functions *
- *********************/
-
-/**
- * Generates a token
- * @param {Object} user - user object
- */
-const generateToken = user => {
-  // Gets expiration time
-  const expiration =
-    Math.floor(Date.now() / 1000) + 60 * conf.get('JWT_EXPIRATION_IN_MINUTES')
-
-  // returns signed and encrypted token
-  return auth.encrypt(
-    jwt.sign(
-      {
-        data: {
-          _id: user
-        },
-        exp: expiration
-      },
-      conf.get('JWT_SECRET')
-    )
-  )
-}
 
 /**
  * Creates an object with user info
@@ -66,7 +42,7 @@ const setUserInfo = req => {
   if (conf.get('IS_DEV')) {
     user = {
       ...user,
-      verification: req.verification
+      verification: true
     }
   }
   return user
@@ -149,7 +125,7 @@ const checkLoginAttemptsAndBlockExpires = async user => {
   return new Promise((resolve, reject) => {
     // Let user try to login again after blockexpires, resets user loginAttempts
     if (blockIsExpired(user)) {
-      user.loginAttempts = 0
+      user.loginAttempts = 0  // eslint-disable-line
       user.save((err, result) => {
         if (err) {
           reject(buildErrObject(422, err.message))
@@ -215,7 +191,7 @@ const findUserById = async userId => {
  * @param {Object} user - user object
  */
 const passwordsDoNotMatch = async user => {
-  user.loginAttempts += 1
+  user.loginAttempts += 1 //eslint-disable-line
   await saveLoginAttemptsToDB(user)
   return new Promise((resolve, reject) => {
     if (user.loginAttempts <= LOGIN_ATTEMPTS) {
@@ -234,10 +210,10 @@ const passwordsDoNotMatch = async user => {
  */
 const markResetPasswordAsUsed = async (req, forgot) => {
   return new Promise((resolve, reject) => {
-    forgot.used = true
-    forgot.ipChanged = getIP(req)
-    forgot.browserChanged = getBrowserInfo(req)
-    forgot.countryChanged = getCountry(req)
+    forgot.used = true //eslint-disable-line
+    forgot.ipChanged = getIP(req) //eslint-disable-line
+    forgot.browserChanged = getBrowserInfo(req) //eslint-disable-line
+    forgot.countryChanged = getCountry(req) //eslint-disable-line
     forgot.save((err, item) => {
       itemNotFound(err, item, reject, 'NOT_FOUND')
       resolve(buildSuccObject('PASSWORD_CHANGED'))
@@ -252,7 +228,7 @@ const markResetPasswordAsUsed = async (req, forgot) => {
  */
 const updatePassword = async (password, user) => {
   return new Promise((resolve, reject) => {
-    user.password = password
+    user.password = password //eslint-disable-line
     user.save((err, item) => {
       itemNotFound(err, item, reject, 'NOT_FOUND')
       resolve(item)
@@ -361,7 +337,7 @@ const checkPermissions = async (data, next) => {
 const getUserIdFromToken = async token => {
   return new Promise((resolve, reject) => {
     // Decrypts, verifies and decode token
-    jwt.verify(auth.decrypt(token), process.env.JWT_SECRET, (err, decoded) => {
+    jwt.verify(auth.decrypt(token), conf.get('JWT_SECRET'), (err, decoded) => {
       if (err) {
         reject(buildErrObject(409, 'BAD_TOKEN'))
       }
@@ -379,8 +355,9 @@ const getUserIdFromToken = async token => {
  * @param {Object} req - request object
  * @param {Object} res - response object
  */
-exports.login = async (req, res) => {
+export const login = async (req, res) => {
   try {
+    console.log(req.rawHeaders[3])
     const data = matchedData(req)
     const user = await findUser(data.email)
     await userIsBlocked(user)
@@ -404,7 +381,7 @@ exports.login = async (req, res) => {
  * @param {Object} req - request object
  * @param {Object} res - response object
  */
-exports.forgotPassword = async (req, res) => {
+export const forgotPassword = async (req, res) => {
   try {
     // Gets locale from header 'Accept-Language'
     const locale = req.getLocale()
@@ -423,13 +400,13 @@ exports.forgotPassword = async (req, res) => {
  * @param {Object} req - request object
  * @param {Object} res - response object
  */
-exports.resetPassword = async (req, res) => {
+export const resetPassword = async (req, res) => {
   try {
     const data = matchedData(req)
-    const forgotPassword = await findForgotPassword(data.id)
+    const theForgotPassword = await findForgotPassword(data.id)
     const user = await findUserToResetPassword(forgotPassword.email)
     await updatePassword(data.password, user)
-    const result = await markResetPasswordAsUsed(req, forgotPassword)
+    const result = await markResetPasswordAsUsed(req, theForgotPassword)
     res.status(200).json(result)
   } catch (error) {
     handleError(res, error)
@@ -441,7 +418,7 @@ exports.resetPassword = async (req, res) => {
  * @param {Object} req - request object
  * @param {Object} res - response object
  */
-exports.getRefreshToken = async (req, res) => {
+export const getRefreshToken = async (req, res) => {
   try {
     const tokenEncrypted = req.headers.authorization
       .replace('Bearer ', '')
@@ -462,7 +439,7 @@ exports.getRefreshToken = async (req, res) => {
  * Roles authorization function called by route
  * @param {Array} roles - roles specified on the route
  */
-exports.roleAuthorization = roles => async (req, res, next) => {
+export const onlyCanUse = roles => async (req, res, next) => {
   try {
     const data = {
       id: req.user._id,

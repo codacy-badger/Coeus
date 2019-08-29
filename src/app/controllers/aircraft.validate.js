@@ -2,11 +2,10 @@ import { check } from 'express-validator'
 import { theValidationResult } from '../middleware/utils'
 
 
-
 /**
  * Validates create new item request
  */
-export const createCheck = [
+export const checkCreateAircraft = [
   check('registration')
     .exists()
     .withMessage('MISSING')
@@ -22,7 +21,7 @@ export const createCheck = [
 /**
  * Validates update item request
  */
-export const updateCheck = [
+export const checkAircraftUpdate = [
   check('id')
     .exists()
     .withMessage('MISSING')
@@ -37,7 +36,7 @@ export const updateCheck = [
 /**
  * Validates get item request
  */
-export const getCheck = [
+export const checkGetAircraft = [
   check('id')
     .exists()
     .withMessage('MISSING')
@@ -52,7 +51,7 @@ export const getCheck = [
 /**
  * Validates delete item request
  */
-export const deleteCheck = [
+export const checkDeleteAircraft = [
   check('id')
     .exists()
     .withMessage('MISSING')

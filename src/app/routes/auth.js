@@ -1,17 +1,24 @@
-const express = require('express');
-const passport = require('passport');
-const trimRequest = require('trim-request');
-const controller = require('../controllers/auth')
-const validate = require('../controllers/auth.validate')
-const AuthController = require('../controllers/auth')
+import express from 'express'
+import passport from 'passport'
+import trimRequest from 'trim-request'
+import {
+  login,
+  forgotPassword,
+  resetPassword,
+  getRefreshToken,
+  onlyCanUse
+} from '../controllers/auth'
 
-
+import {
+  CheckLogin,
+  CheckForgotPassword,
+  CheckResetPassword
+} from '../controllers/auth.validate'
 
 const router = express.Router()
 require('../../core/passport')
 
-
-const requireAuth = passport.authenticate('jwt', {
+const secureIt = passport.authenticate('jwt', {
   session: false
 })
 
@@ -26,8 +33,8 @@ const requireAuth = passport.authenticate('jwt', {
 router.post(
   '/forgot',
   trimRequest.all,
-  validate.forgotPassword,
-  controller.forgotPassword
+  CheckForgotPassword,
+  forgotPassword
 )
 
 /*
@@ -36,8 +43,8 @@ router.post(
 router.post(
   '/reset',
   trimRequest.all,
-  validate.resetPassword,
-  controller.resetPassword
+  CheckResetPassword,
+  resetPassword
 )
 
 /*
@@ -45,15 +52,15 @@ router.post(
  */
 router.get(
   '/token',
-  requireAuth,
-  AuthController.roleAuthorization(['user', 'admin']),
+  secureIt,
+  onlyCanUse(['user', 'admin']),
   trimRequest.all,
-  controller.getRefreshToken
+  getRefreshToken
 )
 
 /*
  * Login route
  */
-router.post('/login', trimRequest.all, validate.login, controller.login)
+router.post('/login', trimRequest.all, CheckLogin, login)
 
 module.exports = router
