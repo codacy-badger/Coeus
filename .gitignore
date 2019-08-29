@@ -16,4 +16,4 @@ yarn.lock
 yarn-error.log
 # No nyc
 .nyc_output
-*.gz
+*.log.gz
