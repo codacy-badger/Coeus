@@ -1,6 +1,7 @@
 import http from 'http'
 import chalk from 'chalk'
 import socket from 'socket.io'
+
 //import apolloServer from './core/graphql'
 import app from './app'
 import mongoose from './core/mongo'
@@ -54,4 +55,4 @@ process.on('SIGINT', () => {
   server.close()
 })
 
-export default server
+module.exports = app

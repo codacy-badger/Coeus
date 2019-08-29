@@ -5,7 +5,7 @@ node_modules
 # Not my .env config
 .env
 # Not my config.js
-config.js
+config.json
 # Not production ready files
 dist
 # Not my logs
@@ -14,3 +14,5 @@ dist
 yarn.lock
 # No locks too
 yarn-error.log
+# No nyc
+.nyc_output

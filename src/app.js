@@ -1,5 +1,3 @@
-import 'dotenv/config'
-import { join } from 'path'
 import express from 'express'
 import session from 'express-session'
 import helmet from 'helmet'
@@ -20,6 +18,7 @@ const MongoStore = require('connect-mongo')(session)
 const RATE_LIMIT = conf.get('RATE_LIMIT') || 0
 
 const app = express()
+
 // Middlewares.
 app.use(helmet())
 app.use(
@@ -35,20 +34,19 @@ app.use(compression())
 app.use(
   session({
     store: new MongoStore({ mongooseConnection: mongoose.connection }),
-    name: process.env.SESSION_NAME,
-    secret: process.env.SESSION_SECRET,
+    name: conf.get('SESSION_NAME'),
+    secret: conf.get('EXPRESS_SESSION_SECRET'),
     resave: true,
     rolling: true,
-    saveUninitialized: false,
+    saveUninitialized: true,
     cookie: {
-      maxAge: parseInt(process.env.SESSION_MAX_AGE, 10),
+      maxAge: parseInt(1440, 10),
       sameSite: true,
       httpOnly: true,
       secure: conf.get('IS_PROD')
     }
   })
 )
-
 app.use(passport.initialize())
 app.use(passport.session())
 if (conf.get('IS_PROD')) {
@@ -86,4 +84,4 @@ app.get('/', (req, res) =>
 
 app.use('/__', router)
 
-export default app
+module.exports = app
