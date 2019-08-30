@@ -75,7 +75,7 @@ app.use(
   })
 )
 
-app.get('/', (req, res) =>
+app.get('/healthcheck', (req, res) =>
   res.json({ 
     service: 'Coeus API',
     version: conf.get('VERSION')
@@ -84,4 +84,4 @@ app.get('/', (req, res) =>
 
 app.use('/__', router)
 
-module.exports = app
+export default app
