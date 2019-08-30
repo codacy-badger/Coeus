@@ -122,14 +122,6 @@ export const checkUpdateUser = [
     .isEmpty()
     .withMessage('IS_EMPTY')
     .trim(),
-  check('urlTwitter')
-    .optional()
-    .custom(v => (v === '' ? true : validator.isURL(v)))
-    .withMessage('NOT_A_VALID_URL'),
-  check('urlGitHub')
-    .optional()
-    .custom(v => (v === '' ? true : validator.isURL(v)))
-    .withMessage('NOT_A_VALID_URL'),
   check('id')
     .exists()
     .withMessage('MISSING')

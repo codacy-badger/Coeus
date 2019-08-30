@@ -1,14 +1,13 @@
-import 'dotenv/config';
+import conf from '../../src/core/config'
 import { Seeder } from 'mongo-seeding';
 
 const path = require('path');
 
 const config = {
-  database: process.env.MONGODB_URI,
+  database: conf.get('IS_TEST') ? conf.get('MONGODB_TEST_URI') : conf.get('MONGODB_URI'),
   inputPath: path.resolve(__dirname, './tools/seeder/data'),
-  dropDatabase: false
+  dropDatabase: true
 }
-console.log(config);
 const seeder = new Seeder(config);
 const collections = seeder.readCollectionsFromPath(path.resolve('./tools/seeder/data'));
 

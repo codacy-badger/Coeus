@@ -4,13 +4,13 @@ import TheModels from '../app/models';
 import conf from './config'
 import { log } from '../utils/logger'
 
-const DB_URL = conf.get('MONGODB_URI') || 'mongodb://localhost:27017/a98sd7fa89sd7fa98s7df980a';
+const DB_URL = conf.get('IS_TEST') ? conf.get('MONGODB_TEST_URI') : conf.get('MONGODB_URI');
 
 mongoose.connect(
   DB_URL,
   {
     keepAlive: true,
-    reconnectTries: Number.MAX_VALUE,
+    reconnectTries: 10,
     useUnifiedTopology: true
   },
   err => {

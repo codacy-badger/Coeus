@@ -37,7 +37,7 @@ mongoose.connection.once('open', () => {
   log.info(`Mongoose has connected`)
 })
 
-// I Have refactor it for Mocha-Chai Tests
+// I have to refactor it for Mocha-Chai Tests
 export const Application = server.listen(port, () =>
   log.info(`Server has started at ${port}`)
 )
@@ -48,12 +48,6 @@ server.on('error', err => {
   })
 })
 
-// To Mocha-Chai Tests
-export const stop = () => {
-  mongoose.connection.close()
-  server.close();
-}
-
 server.on('close', () => {
   log.info('Server has been closed by Admin')
 })
@@ -62,4 +56,10 @@ process.on('SIGINT', () => {
   mongoose.connection.close()
   server.close()
 })
+
+// To Mocha-Chai Tests
+export const stop = () => {
+  mongoose.connection.close()
+  server.close();
+}
 

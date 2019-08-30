@@ -200,7 +200,8 @@ export const verifyUser = async (req, res) => {
  */
 export const deleteUser = async (req, res) => {
   try {
-    const id = await isIDGood(req.id)
+//    console.log(req.body.id)
+    const id = await isIDGood(req.params.id)
     res.status(200).json(await db.deleteItem(id, User))
   } catch (error) {
     handleError(res, error)
