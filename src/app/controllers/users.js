@@ -116,7 +116,7 @@ const verificationExists = async verification => {
 export const getUsers = async (req, res) => {
   try {
     const query = await db.checkQueryString(req.query)
-    res.status(200).json(await db.getItems(req, User, query))
+    res.status(200).json(buildSuccObject(await db.getItems(req, User, query)))
   } catch (error) {
     handleError(res, error)
   }
@@ -130,7 +130,7 @@ export const getUsers = async (req, res) => {
 export const getUser = async (req, res) => {
   try {
     const id = await isIDGood(req.id)
-    res.status(200).json(await db.getItem(id, User))
+    res.status(200).json(buildSuccObject(await db.getItem(id, User)))
   } catch (error) {
     handleError(res, error)
   }

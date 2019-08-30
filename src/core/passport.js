@@ -1,5 +1,5 @@
 import User from '../app/models/user'
-
+import conf from './config'
 const passport = require('passport')
 
 const auth = require('../app/middleware/auth')
@@ -31,7 +31,7 @@ const jwtExtractor = req => {
  */
 const jwtOptions = {
   jwtFromRequest: jwtExtractor,
-  secretOrKey: process.env.JWT_SECRET
+  secretOrKey: conf.get('JWT_SECRET')
 }
 
 /**

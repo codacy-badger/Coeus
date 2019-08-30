@@ -142,7 +142,7 @@ export const itemNotFound = (err, item, reject, message) => {
     reject(buildErrObject(422, err.message))
   }
   if (!item) {
-    reject(buildErrObject(404, message))
+    reject(buildErrObject(401, message))
   }
 }
 
@@ -174,6 +174,7 @@ export const verifyTheToken = async token => {
         reject(buildErrObject(409, 'BAD_TOKEN'))
       }
       resolve(decoded.data._id)
+      console.log(decoded.data._id)
     })
   })
 }

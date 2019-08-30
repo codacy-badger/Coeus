@@ -344,7 +344,7 @@ const checkPermissions = async (data, next) => {
  */
 export const login = async (req, res) => {
   try {
-    console.log(req.rawHeaders[3])
+
     const data = matchedData(req)
     const user = await findUser(data.email)
     await userIsBlocked(user)
