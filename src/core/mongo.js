@@ -5,9 +5,9 @@ import conf from './config'
 import { log } from '../utils/logger'
 
 const DB_URL = conf.get('IS_TEST') ? conf.get('MONGODB_TEST_URI') : conf.get('MONGODB_URI');
-
+console.log(DB_URL)
 mongoose.connect(
-  DB_URL,
+  conf.get('MONGODB_URI'),
   {
     keepAlive: true,
     reconnectTries: 10,

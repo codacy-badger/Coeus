@@ -6,7 +6,6 @@ const PATH_TO_CONFIG = join(resolve(__dirname, '../../config.json'));
 
 conf
   .argv()
-  .env()
   .file({
     file: PATH_TO_CONFIG
   })

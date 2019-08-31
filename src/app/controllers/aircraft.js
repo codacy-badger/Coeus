@@ -8,7 +8,7 @@ import {
 	isIDGood
 } from '../middleware/utils'
 import db from '../middleware/db'
-import { log } from '../../utils/logger'
+import { log } from '~/utils/logger'
 
 /**
  * Checks if a city already exists in database
@@ -52,9 +52,6 @@ export const getAllAircrafts = async (req, res) => {
 }
 
 export const getAllItems = async (req, res) => {
-  console.log(req.query)
-  console.log(req.params)
-  console.log(req.body)
   try {
     const query = await db.checkQueryString(req.query)
     res.status(200).json(buildSuccObject(await db.getAllItems(req, Aircraft, query)))
@@ -69,11 +66,8 @@ export const getAllItems = async (req, res) => {
  * @param {Object} res - response object
  */
 export const getItems = async (req, res) => {
-  console.log(req.query)
-  console.log(req.params)
-  console.log(req.body)
   try {
-    res.status(200).json(await db.getItems(req, Aircraft, req.query))
+    res.status(200).json(buildSuccObject(await db.getItems(req, Aircraft, req.query)))
   } catch (error) {
     handleError(res, error)
   }

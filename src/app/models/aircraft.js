@@ -12,8 +12,8 @@ export const AircraftManufacturers = [
 const AircraftSchema = new mongoose.Schema({
   registration: {
     type: String,
-    required: true,
-    unique: true,
+    required: false,
+    unique: true
   },
   manufacturer: {
     type: String,
@@ -55,7 +55,6 @@ const AircraftSchema = new mongoose.Schema({
 })
 
 AircraftSchema.plugin(mongoosePaginate)
-AircraftSchema.plugin(uniqueValidator)
 
 const Aircraft = mongoose.model('Aircraft', AircraftSchema)
 

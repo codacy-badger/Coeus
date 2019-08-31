@@ -1,9 +1,5 @@
-[33maccess[39m: [33mLogged as Super Administrator (admin@admin.com) - IP: ::1 Browser: PostmanRuntime/7.16.3 Location: CoeusAPI[39m {"timestamp":"2019-08-30 22:59:44"}
-[33maccess[39m: [33m[0mPOST /__/login [32m200 [0m265.677 ms - 544[0m[39m
-[33m[39m {"timestamp":"2019-08-30 22:59:44"}
-[33maccess[39m: [33m[0mGET /__/aircraft/find?filter=2017&fields=&page=1&limit=900&sort=totalFlightCycle&order=-1&select=operator%20year [32m200 [0m25.012 ms - 175[0m[39m
-[33m[39m {"timestamp":"2019-08-30 22:59:52"}
-[33maccess[39m: [33m[0mGET /__/aircraft/find?filter=2017&fields=&page=1&limit=900&sort=totalFlightCycle&order=-1&select=operator%20year [32m200 [0m8.620 ms - 175[0m[39m
-[33m[39m {"timestamp":"2019-08-30 22:59:53"}
-[33maccess[39m: [33m[0mGET /__/aircraft/find?filter=2017&fields=&page=1&limit=900&sort=totalFlightCycle&order=-1&select=operator%20year [32m200 [0m12.699 ms - 175[0m[39m
-[33m[39m {"timestamp":"2019-08-30 22:59:54"}
+[33maccess[39m: [33mLogged as Super Administrator (admin@admin.com) - IP: ::1 Browser: PostmanRuntime/7.16.3 Location: CoeusAPI[39m {"timestamp":"2019-08-31 18:04:30"}
+[33maccess[39m: [33m[0mPOST /__/login [32m200 [0m148.193 ms - 544[0m[39m
+[33m[39m {"timestamp":"2019-08-31 18:04:30"}
+[33maccess[39m: [33m[0mPOST /__/aircraft [32m201 [0m28.818 ms - 338[0m[39m
+[33m[39m {"timestamp":"2019-08-31 18:04:44"}

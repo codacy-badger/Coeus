@@ -93,8 +93,6 @@ module.exports = {
    */
   async getAllItems(req, model, query) {
     const options = await listInitOptions(req)
-    log.info(query)
-    log.info(options)
     return new Promise((resolve, reject) => {
       model.paginate(query, options, (err, items) => {
         if (err) {
@@ -117,6 +115,7 @@ module.exports = {
     const { filter, select } = parser.parse(
       query
     )
+    console.log('you are here')
     return new Promise((resolve, reject) => {
       model
         .find(filter)
@@ -148,9 +147,12 @@ module.exports = {
    * @param {Object} req - request object
    */
   async createItem(req, model) {
+    console.log(req)
+    console.log(model)
     return new Promise((resolve, reject) => {
       model.create(req.body, (err, item) => {
         if (err) {
+          console.log(err)
           reject(buildErrObject(422, err.message))
         }
         resolve(item)
