@@ -1,17 +1,21 @@
-import User from '../app/models/user'
+import User from '~/app/main/user/user.model'
 import conf from './config'
+
 const passport = require('passport')
 
-const auth = require('../app/middleware/auth')
 const JwtStrategy = require('passport-jwt').Strategy
 
+const auth = require('~/middleware/auth')
 /**
  * Extracts token from: header, body or query
  * @param {Object} req - request object
  * @returns {string} token - decrypted token
  */
-const jwtExtractor = req => {
+export const jwtExtractor = req => {
   let token = null
+  if (req.signedCookies) {
+    token = req.signedCookies.COEUS_JWT
+  }
   if (req.headers.authorization) {
     token = req.headers.authorization.replace('Bearer ', '').trim()
   } else if (req.body.token) {
@@ -46,6 +50,10 @@ const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
   })
 })
 
+
+
+passport.use(jwtLogin)
+
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
@@ -59,5 +67,3 @@ passport.deserializeUser((id, done) => {
       console.log(`Error: ${error}`);
     });
 });
-
-passport.use(jwtLogin)

@@ -10,11 +10,11 @@ import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 // import history from 'express-history-api-fallback'
-import router from './app/routes'
 import conf from './core/config'
-import { log } from './utils/logger'
+import { log } from './core/logger'
 const uuid = require('uuid/v4')
 const MongoStore = require('connect-mongo')(session)
+import routes from './app/routes'
 
 const RATE_LIMIT = conf.get('RATE_LIMIT') || 0
 
@@ -48,8 +48,6 @@ app.use(
     }
   })
 )
-app.use(passport.initialize())
-app.use(passport.session())
 
 // for parsing json
 app.use(
@@ -75,8 +73,8 @@ const sendReq = (req, res) => {
 }
 
 morgan.token('user', (req, res) => {
-  //  sendReq(req, res)
-  return req.user.name
+  sendReq(req, res)
+  return req.user
 })
 
 if (conf.get('IS_PROD')) {
@@ -92,6 +90,10 @@ if (conf.get('IS_PROD')) {
   )
 }
 
+app.use(passport.initialize())
+app.use(passport.session())
+
+
 app.get('/healthcheck', (req, res) =>
   res
     .json({
@@ -106,6 +108,6 @@ app.get('/clear_cookie', (req, res) => {
   res.send('COEUS_JWT removed')
 })
 
-app.use('/__', router)
+app.use('/__', routes)
 
 export default app

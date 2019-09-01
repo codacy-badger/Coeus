@@ -8,18 +8,19 @@ import {
   verifyUser,
   deleteUser,
   updateUser
-} from '../controllers/users'
+} from './user.controller'
 import {
    checkVerify,
    checkNewUser,
    checkUpdateUser,
    checkGetUser,
    checkDeleteUser
-  } from '../controllers/users.validate'
-import { onlyCanUse } from '../controllers/auth'
+ } from './user.validate'
+ 
+import { onlyCanUse } from '../auth/auth.controller'
 
 const router = express.Router()
-require('../../core/passport')
+require('~/core/passport')
 
 const secureIt = passport.authenticate('jwt', {
   session: false
@@ -34,8 +35,8 @@ const secureIt = passport.authenticate('jwt', {
  */
 router.get(
   '/',
-  secureIt,
-  onlyCanUse(['admin']),
+//  secureIt,
+//  onlyCanUse(['admin']),
   trimRequest.all,
   getUsers
 )
@@ -92,5 +93,7 @@ router.delete(
   checkDeleteUser,
   deleteUser
 )
+
+export const routeName = 'user'
 
 module.exports = router

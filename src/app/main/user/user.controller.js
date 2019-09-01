@@ -1,4 +1,4 @@
-import User from '../models/user'
+import User from './user.model'
 import {
   buildErrObject,
   handleError,
@@ -7,11 +7,11 @@ import {
   itemNotFound,
   generateToken,
   verifyTheToken
-} from '../middleware/utils'
+} from '~/middleware/utils'
 
 const cryptoRandomString = require('crypto-random-string')
-const db = require('../middleware/db')
-const emailer = require('../middleware/emailer')
+const db = require('~/middleware/db')
+const emailer = require('~/middleware/emailer')
 
 /**
  * Creates a new item in database

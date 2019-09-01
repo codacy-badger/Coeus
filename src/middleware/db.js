@@ -1,5 +1,5 @@
 import { buildSuccObject, buildErrObject, itemNotFound, parser } from './utils'
-import {log} from '~/utils/logger'
+import {log} from '~/core/logger'
 /**
  * Builds sorting
  * @param {string} sort - field to sort from

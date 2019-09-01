@@ -1,5 +1,5 @@
-import User from '../models/user'
-import conf from '../../core/config'
+import User from '../user/user.model'
+import conf from '~/core/config'
 import {
   itemNotFound,
   buildErrObject,
@@ -11,18 +11,18 @@ import {
   getIP,
   generateToken,
   verifyTheToken
-} from '../middleware/utils'
-import { log } from '../../utils/logger'
+} from '~/middleware/utils'
+import { log } from '~/core/logger'
 
 const { matchedData } = require('express-validator')
 const uuid = require('uuid')
 const { addHours } = require('date-fns')
 
-const UserAccess = require('../models/userAccess')
-const ForgotPassword = require('../models/forgotPassword')
+const UserAccess = require('../user/userAccess.model')
+const ForgotPassword = require('./forgotPassword.model')
 
-const auth = require('../middleware/auth')
-const emailer = require('../middleware/emailer')
+const auth = require('~/middleware/auth')
+const emailer = require('~/middleware/emailer')
 
 const HOURS_TO_BLOCK = 2
 const LOGIN_ATTEMPTS = 5

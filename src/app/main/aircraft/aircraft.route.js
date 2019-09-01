@@ -9,20 +9,20 @@ import {
   getAircraft,
   updateItem,
   deleteItem
-} from '../controllers/aircraft'
-import { onlyCanUse } from '../controllers/auth'
+} from './aircraft.controller'
+import { onlyCanUse } from '../auth/auth.controller'
 import {
   checkCreateAircraft,
   checkAircraftUpdate,
   checkGetAircraft,
   checkDeleteAircraft
-} from '../controllers/aircraft.validate'
+} from './aircraft.validate'
 
 
-require('../../core/passport')
+require('~/core/passport')
 
 const secureIt = passport.authenticate('jwt', {
-  session: true
+  session: false
 })
 
 export const router = express.Router()
@@ -59,9 +59,37 @@ router.get(
   getItems
 )
 
-/*
- * Create new item route
- */
+/**
+* @api {post} /__/aircraft Create a Aircraft
+* @apiVersion 1.0.0
+* @apiName Create
+* @apiGroup Aircraft
+* @apiPermission authenticated user
+*
+* @apiParam (Request body) {String} name The task name
+*
+* @apiExample {js} Example usage:
+* const data = {
+*   "name": "Do the dishes"
+* }
+*
+* $http.defaults.headers.common["Authorization"] = token;
+* $http.post(url, data)
+*   .success((res, status) => doSomethingHere())
+*   .error((err, status) => doSomethingHere());
+*
+* @apiSuccess (Success 201) {String} message Task saved successfully!
+* @apiSuccess (Success 201) {String} id The campaign id
+*
+* @apiSuccessExample {json} Success response:
+*     HTTPS 201 OK
+*     {
+*      "message": "Task saved successfully!",
+*      "id": "57e903941ca43a5f0805ba5a"
+*    }
+*
+* @apiUse UnauthorizedError
+*/
 router.post(
   '/',
   secureIt,
@@ -106,5 +134,7 @@ router.delete(
   checkDeleteAircraft,
   deleteItem
 )
+
+export const routeName = 'aircraft'
 
 module.exports = router

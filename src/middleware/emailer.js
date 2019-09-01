@@ -1,10 +1,10 @@
-import User from '../models/user'
+import User from '~/app/main/user/user.model'
 
 const nodemailer = require('nodemailer')
 const mg = require('nodemailer-mailgun-transport')
 const i18n = require('i18n')
 
-const { itemAlreadyExists } = require('../middleware/utils')
+const { itemAlreadyExists } = require('~/middleware/utils')
 
 /**
  * Sends email

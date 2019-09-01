@@ -7,19 +7,19 @@ import {
   resetPassword,
   getRefreshToken,
   onlyCanUse
-} from '../controllers/auth'
+} from './auth.controller'
 
 import {
   CheckLogin,
   CheckForgotPassword,
   CheckResetPassword
-} from '../controllers/auth.validate'
+} from './auth.validate'
 
 const router = express.Router()
-require('../../core/passport')
+require('~/core/passport')
 
 const secureIt = passport.authenticate('jwt', {
-  session: false
+  session: true
 })
 
 
@@ -62,5 +62,7 @@ router.get(
  * Login route
  */
 router.post('/login', trimRequest.all, CheckLogin, login)
+
+export const routeName = 'auth'
 
 module.exports = router

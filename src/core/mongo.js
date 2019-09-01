@@ -1,8 +1,7 @@
-import 'dotenv/config';
 import mongoose from 'mongoose';
-import TheModels from '../app/models';
+import models from '~/app/models';
 import conf from './config'
-import { log } from '../utils/logger'
+import { log } from '~/core/logger'
 
 const DB_URL = conf.get('IS_TEST') ? conf.get('MONGODB_TEST_URI') : conf.get('MONGODB_URI');
 mongoose.connect(
@@ -22,6 +21,6 @@ mongoose.connect(
   }
 );
 
-TheModels();
+models();
 
 export default mongoose;

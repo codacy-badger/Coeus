@@ -6,7 +6,7 @@ import socket from 'socket.io'
 import app from './app'
 import mongoose from './core/mongo'
 import conf from './core/config'
-import { log } from './utils/logger'
+import { log } from './core/logger'
 
 const port = conf.get('PORT') || 3000
 const server = http.Server(app)

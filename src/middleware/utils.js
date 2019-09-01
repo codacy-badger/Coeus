@@ -2,7 +2,7 @@ import requestIp from 'request-ip';
 import jwt from 'jsonwebtoken'
 import { MongooseQueryParser } from 'mongoose-query-parser';
 import { validationResult } from 'express-validator';
-import { log } from '~/utils/logger'
+import { log } from '~/core/logger'
 import conf from '~/core/config'
 
 const auth = require('../middleware/auth')

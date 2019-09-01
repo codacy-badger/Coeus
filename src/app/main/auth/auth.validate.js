@@ -1,5 +1,5 @@
 const { check } = require('express-validator')
-const { theValidationResult } = require('../middleware/utils')
+const { theValidationResult } = require('~/middleware/utils')
 
 /**
  * Validates login request

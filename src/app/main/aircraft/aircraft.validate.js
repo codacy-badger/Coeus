@@ -1,5 +1,5 @@
 import { check } from 'express-validator'
-import { theValidationResult } from '../middleware/utils'
+import { theValidationResult } from '~/middleware/utils'
 
 
 /**

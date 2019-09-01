@@ -1,14 +1,14 @@
 import { matchedData } from 'express-validator'
-import Aircraft from '../models/aircraft'
+import Aircraft from './aircraft.model'
 import {
   handleError,
   buildErrObject,
   buildSuccObject,
   itemAlreadyExists,
 	isIDGood
-} from '../middleware/utils'
-import db from '../middleware/db'
-import { log } from '~/utils/logger'
+} from '~/middleware/utils'
+import db from '~/middleware/db'
+import { log } from '~/core/logger'
 
 /**
  * Checks if a city already exists in database

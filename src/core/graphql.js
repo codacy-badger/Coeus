@@ -9,6 +9,7 @@ import { mergeTypes, fileLoader } from 'merge-graphql-schemas'
 import { resolve } from 'path'
 import DataLoader from 'dataloader'
 import { jwtExtractor } from './passport'
+import { verifyTheToken } from '~/app/middleware/utils'
 import conf from './config'
 
 import schema from '../app/graphql/schema';
@@ -46,7 +47,15 @@ export default new ApolloServer({
       message
     }
   },
-  context: async () => {},
+  context: async ({ req }) => {
+    try {
+      await verifyTheToken(jwtExtractor(req))
+    } catch (e) {
+        throw new AuthenticationError(
+            'Authentication token is invalid, please log in'
+        )
+    }
+},
   schemaDirectives: {},
   playground:
     conf.get('IS_PROD')

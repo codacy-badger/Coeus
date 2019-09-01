@@ -1,4 +1,4 @@
-import conf from '../../core/config';
+import conf from '~/core/config';
 
 const crypto = require('crypto');
 

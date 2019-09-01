@@ -1,7 +1,0 @@
-[33maccess[39m: [33mSigned in:  Super Administrator (admin@admin.com)[39m {"timestamp":"2019-09-01 17:01:27"}
-[33maccess[39m: [33mPOST /__/login 200 138.085 ms - User: Super Administrator[39m
-[33m[39m {"timestamp":"2019-09-01 17:01:27"}
-[33maccess[39m: [33mGET /__/aircraft/find?select=operator%20year&filter 200 16.506 ms - User: Super Administrator[39m
-[33m[39m {"timestamp":"2019-09-01 17:01:29"}
-[33maccess[39m: [33mGET /__/aircraft/?select=registration,model,manufacturer&manufacturer=Boeing 200 32.922 ms - User: Super Administrator[39m
-[33m[39m {"timestamp":"2019-09-01 17:01:31"}

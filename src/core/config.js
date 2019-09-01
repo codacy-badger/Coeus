@@ -1,6 +1,9 @@
-const conf = require('nconf');
-import { version } from '../../package.json'
 import { join, resolve } from 'path'
+import { version } from '../../package.json'
+
+const conf = require('nconf');
+
+
 
 const PATH_TO_CONFIG = join(resolve(__dirname, '../../config.json'));
 
