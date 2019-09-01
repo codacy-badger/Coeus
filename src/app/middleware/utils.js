@@ -91,7 +91,6 @@ export const buildErrObject = (code, message) => {
  * @param {string} message - success text
  */
 export const buildSuccObject = data => {
-  console.log(data)
   return {
     success: true,
     data
@@ -175,7 +174,6 @@ export const verifyTheToken = async token => {
         reject(buildErrObject(409, 'BAD_TOKEN'))
       }
       resolve(decoded.data._id)
-      console.log(decoded.data._id)
     })
   })
 }

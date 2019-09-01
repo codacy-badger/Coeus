@@ -5,13 +5,15 @@ import conf from './config'
 import { log } from '../utils/logger'
 
 const DB_URL = conf.get('IS_TEST') ? conf.get('MONGODB_TEST_URI') : conf.get('MONGODB_URI');
-console.log(DB_URL)
 mongoose.connect(
-  conf.get('MONGODB_URI'),
+  DB_URL,
   {
     keepAlive: true,
     reconnectTries: 10,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+    useFindAndModify:true,
+    useCreateIndex:true
   },
   err => {
     if (err) {
@@ -19,10 +21,6 @@ mongoose.connect(
     }
   }
 );
-
-mongoose.set('useNewUrlParser', true);
-mongoose.set('useFindAndModify', false);
-mongoose.set('useCreateIndex', true);
 
 TheModels();
 

@@ -62,7 +62,7 @@ export default new ApolloServer({
     onDisconnect: () => {}
   },
   maxFileSize: 25 * 1024 * 1024, // 25MB
-  debug: process.env.NODE_ENV !== 'production',
+  debug: conf.get('IS_DEV'),
   engine: false,
   tracing: false,
   validationRules: [

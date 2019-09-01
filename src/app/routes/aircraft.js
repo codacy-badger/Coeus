@@ -22,7 +22,7 @@ import {
 require('../../core/passport')
 
 const secureIt = passport.authenticate('jwt', {
-  session: false
+  session: true
 })
 
 export const router = express.Router()

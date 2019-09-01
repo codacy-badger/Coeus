@@ -21,7 +21,6 @@ const { addHours } = require('date-fns')
 const UserAccess = require('../models/userAccess')
 const ForgotPassword = require('../models/forgotPassword')
 
-
 const auth = require('../middleware/auth')
 const emailer = require('../middleware/emailer')
 
@@ -68,7 +67,7 @@ const saveUserAccessAndReturnToken = async (req, user) => {
         reject(buildErrObject(422, err.message))
       }
       const userInfo = setUserInfo(user)
-      log.access(`Logged as ${userInfo.name} (${user.email}) - IP: ${getIP(req)} Browser: ${getBrowserInfo(req)} Location: ${getCountry(req)}`)
+      log.access(`Signed in:  ${userInfo.name} (${user.email})`)
       // Returns data with access token
       resolve({
         token: generateToken(user._id),
@@ -128,7 +127,7 @@ const checkLoginAttemptsAndBlockExpires = async user => {
   return new Promise((resolve, reject) => {
     // Let user try to login again after blockexpires, resets user loginAttempts
     if (blockIsExpired(user)) {
-      user.loginAttempts = 0  // eslint-disable-line
+      user.loginAttempts = 0 // eslint-disable-line
       user.save((err, result) => {
         if (err) {
           reject(buildErrObject(422, err.message))
@@ -344,7 +343,6 @@ const checkPermissions = async (data, next) => {
  */
 export const login = async (req, res) => {
   try {
-
     const data = matchedData(req)
     const user = await findUser(data.email)
     await userIsBlocked(user)
@@ -354,9 +352,11 @@ export const login = async (req, res) => {
       handleError(res, await passwordsDoNotMatch(user))
     } else {
       // all ok, register access and return token
+      const result = await saveUserAccessAndReturnToken(req, user)
       user.loginAttempts = 0
       await saveLoginAttemptsToDB(user)
-      res.status(200).json(await saveUserAccessAndReturnToken(req, user))
+      res.cookie('COEUS_JWT', result.token, {signed:true, maxAge: 1000*60*60*24*conf.get('COOKIE_EXPIRATION_IN_DAYS'), httpOnly: true});      
+      res.status(200).json(buildSuccObject(result))
     }
   } catch (error) {
     handleError(res, error)

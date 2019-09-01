@@ -8,11 +8,12 @@ import compression from 'compression'
 import morgan from 'morgan'
 import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
+import cookieParser from 'cookie-parser'
 // import history from 'express-history-api-fallback'
 import router from './app/routes'
 import conf from './core/config'
-import {log} from './utils/logger'
-
+import { log } from './utils/logger'
+const uuid = require('uuid/v4')
 const MongoStore = require('connect-mongo')(session)
 
 const RATE_LIMIT = conf.get('RATE_LIMIT') || 0
@@ -40,7 +41,7 @@ app.use(
     rolling: true,
     saveUninitialized: true,
     cookie: {
-      maxAge: parseInt(1440, 10),
+      maxAge: 1000 * 60 * 60 * 24 * conf.get('COOKIE_EXPIRATION_IN_DAYS'),
       sameSite: true,
       httpOnly: true,
       secure: conf.get('IS_PROD')
@@ -49,18 +50,7 @@ app.use(
 )
 app.use(passport.initialize())
 app.use(passport.session())
-if (conf.get('IS_PROD')) {
-  app.use(morgan('combined'))
-} else {
-  app.use(
-    morgan('dev', {
-      skip(req, res) {
-        return res.statusCode >= 400
-      },
-      stream: { write: message => log.access(message) }
-    })
-  )
-}
+
 // for parsing json
 app.use(
   bodyParser.json({
@@ -75,12 +65,46 @@ app.use(
   })
 )
 
+app.use(cookieParser(conf.get('COOKIE_SECRET')))
+
+const sendReq = (req, res) => {
+  console.log(req)
+  console.log(res)
+  console.log('Cookies: ', req.cookies)
+  console.log('Signed Cookies: ', req.signedCookies)
+}
+
+morgan.token('user', (req, res) => {
+  //  sendReq(req, res)
+  return req.user.name
+})
+
+if (conf.get('IS_PROD')) {
+  app.use(morgan('combined'))
+} else {
+  app.use(
+    morgan(':method :url :status :response-time ms - User: :user', {
+      skip(req, res) {
+        return res.statusCode >= 400
+      },
+      stream: { write: message => log.access(message) }
+    })
+  )
+}
+
 app.get('/healthcheck', (req, res) =>
-  res.json({ 
-    service: 'Coeus API',
-    version: conf.get('VERSION')
-  }).status(200)
+  res
+    .json({
+      service: 'Coeus API',
+      version: conf.get('VERSION')
+    })
+    .status(200)
 )
+
+app.get('/clear_cookie', (req, res) => {
+  res.clearCookie('COEUS_JWT')
+  res.send('COEUS_JWT removed')
+})
 
 app.use('/__', router)
 
