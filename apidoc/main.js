@@ -108,9 +108,9 @@ require([
     //
     var newList = [];
     var umlauts = { 'ä': 'ae', 'ü': 'ue', 'ö': 'oe', 'ß': 'ss' }; // TODO: remove in version 1.0 id:36
-// - <https://github.com/stevenselcuk/Coeus/issues/19>
-// Steven J. Selcuk
-// stevenjselcuk@gmail.com
+                                                                  // - <https://github.com/stevenselcuk/Coeus/issues/19>
+                                                                  // Steven J. Selcuk
+                                                                  // stevenjselcuk@gmail.com
     $.each (apiByGroupAndName, function(index, groupEntries) {
         // get titles from the first entry of group[].name[] (name has versioning)
         var titles = [];
@@ -354,9 +354,9 @@ require([
                     title = entry.groupTitle;
 
                 // TODO: make groupDescription compareable with older versions (not important for the moment) id:39
-// - <https://github.com/stevenselcuk/Coeus/issues/20>
-// Steven J. Selcuk
-// stevenjselcuk@gmail.com
+                // - <https://github.com/stevenselcuk/Coeus/issues/20>
+                // Steven J. Selcuk
+                // stevenjselcuk@gmail.com
                 if (entry.groupDescription)
                     description = entry.groupDescription;
 
@@ -607,9 +607,9 @@ require([
 
             // add unique id
             // TODO: replace all group-name-version in template with id. id:44
-// - <https://github.com/stevenselcuk/Coeus/issues/23>
-// Steven J. Selcuk
-// stevenjselcuk@gmail.com
+            // - <https://github.com/stevenselcuk/Coeus/issues/23>
+            // Steven J. Selcuk
+            // stevenjselcuk@gmail.com
             fields.article.id = fields.article.group + '-' + fields.article.name + '-' + fields.article.version;
             fields.article.id = fields.article.id.replace(/\./g, '_');
 
@@ -654,9 +654,9 @@ require([
 
             $root.remove();
             // TODO: on change main version or select the highest version re-render id:42
-// - <https://github.com/stevenselcuk/Coeus/issues/22>
-// Steven J. Selcuk
-// stevenjselcuk@gmail.com
+            // - <https://github.com/stevenselcuk/Coeus/issues/22>
+            // Steven J. Selcuk
+            // stevenjselcuk@gmail.com
         }
 
         initDynamic();
@@ -720,9 +720,9 @@ require([
     function addArticleSettings(fields, entry) {
         // add unique id
         // TODO: replace all group-name-version in template with id. id:40
-// - <https://github.com/stevenselcuk/Coeus/issues/21>
-// Steven J. Selcuk
-// stevenjselcuk@gmail.com
+        // - <https://github.com/stevenselcuk/Coeus/issues/21>
+        // Steven J. Selcuk
+        // stevenjselcuk@gmail.com
         fields.id = fields.article.group + '-' + fields.article.name + '-' + fields.article.version;
         fields.id = fields.id.replace(/\./g, '_');
 
