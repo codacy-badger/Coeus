@@ -2,8 +2,8 @@
 import chai, { expect } from 'chai'
 import faker from 'faker'
 import chaiHttp from 'chai-http'
-import { Application, stop } from '../../src/server'
-import User from '../../src/app/models/user'
+import { Application, stop } from '~/server'
+import User from '~/app/main/user/user.model'
 
 const request = require('supertest')(Application)
 // Configure chai
@@ -17,9 +17,10 @@ let theToken = ''
 let verificationToken = ''
 
 const userCredentials = {
-  email: 'admin@admin.com',
+  email: 'admin@admin.com', 
   password: '12345'
 }
+
 
 // This is seperated cuz We have a test about that.
 const email = faker.internet.email()
@@ -45,11 +46,11 @@ describe('User tests', () => {
     it('Must gives back token', done => {
       chai
         .request(Application)
-        .post('/__/login')
+        .post('/__/auth/login')
         .send(userCredentials)
         .then(res => {
           res.should.have.status(200)
-          theToken = res.body.token
+          theToken = res.body.data.token
           done()
         })
     })
@@ -67,7 +68,7 @@ describe('User tests', () => {
     it('must give users list', done => {
       chai
         .request(Application)
-        .get('/__/users')
+        .get('/__/user')
         .set('Authorization', `Bearer ${theToken}`)
         .end((error, response) => {
           response.should.have.status(200)
@@ -85,11 +86,11 @@ describe('User tests', () => {
 	// Must be auth
 	// Must have correct credentials (see for details controllers/users.validate)
 
-  describe('[POST] /__/users/ Create a new user', () => {
+  describe('[POST] /__/user/ Create a new user', () => {
     it('must give back the new users credentials', done => {
       chai
         .request(Application)
-        .post('/__/users')
+        .post('/__/user')
         .set('Authorization', `Bearer ${theToken}`)
         .send(newUser)
         .end((error, response) => {
@@ -115,7 +116,7 @@ describe('User tests', () => {
     it('must give back a positive vibe 😐', done => {
       chai
         .request(Application)
-        .post('/__/users/verify')
+        .post('/__/user/verify')
         .send({ token: verificationToken })
         .end((error, response) => {
           response.should.have.status(200)
@@ -133,11 +134,11 @@ describe('User tests', () => {
 	// Must be auth
 	// Must have new user credentials on body
 
-  describe('[POST] /__/users Try to create new user with same e-mail', () => {
+  describe('[POST] /__/user Try to create new user with same e-mail', () => {
     it('must intercept this shitty situation', done => {
       chai
         .request(Application)
-        .post('/__/users')
+        .post('/__/user')
         .set('Authorization', `Bearer ${theToken}`)
         .send(newUser)
         .end((error, response) => {
@@ -156,11 +157,11 @@ describe('User tests', () => {
 	// Must be auth.
 	// Must have id on param
 
-  describe('[DELETE] /__/users Try to delete user with given user ID', () => {
+  describe('[DELETE] /__/user Try to delete user with given user ID', () => {
     it('must be delete the user successfully', done => {
       chai
         .request(Application)
-        .delete(`/__/users/${userID}`)
+        .delete(`/__/user/${userID}`)
 				.set('Authorization', `Bearer ${theToken}`)
         .send(userCredentials)
 				.end((error, response) => {

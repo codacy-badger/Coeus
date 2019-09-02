@@ -1,7 +1,7 @@
 // Import the dependencies for testing
 import chai, { expect } from 'chai'
 import chaiHttp from 'chai-http'
-import { Application, stop } from '../../src/server'
+import { Application, stop } from '~/server'
 
 // Configure chai
 chai.use(chaiHttp)
@@ -23,10 +23,12 @@ describe('Auth tests', () => {
     it('must give a object with token', done => {
       chai
         .request(Application)
-        .post('/__/login')
+        .post('/__/auth/login')
         .send(userCredentials)
         .end((err, res) => {
           res.should.have.status(200)
+          // console.log(res.body.data.token)
+          // TODO: Must adding a validation for token.
           res.body.should.be.a('object')
           done()
         })
@@ -37,7 +39,7 @@ describe('Auth tests', () => {
     it('must return an object which includes USER_DOES_NOT_EXIST msg', done => {
       chai
         .request(Application)
-        .post('/__/login')
+        .post('/__/auth/login')
         .send(wrongUserCredentials)
         .end((err, res) => {
           res.should.have.status(401)

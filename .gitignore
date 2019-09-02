@@ -20,3 +20,5 @@ yarn-error.log
 iamdone-help.md
 error.log.gz
 access.log.gz
+# No coverage reports too
+coverage

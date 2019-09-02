@@ -1,7 +1,7 @@
 // Import the dependencies for testing
 import chai, { expect } from 'chai'
 import chaiHttp from 'chai-http'
-import { Application, stop } from '../../src/server'
+import { Application, stop } from '~/server'
 
 // Configure chai
 chai.use(chaiHttp)
