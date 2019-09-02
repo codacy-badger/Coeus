@@ -17,3 +17,4 @@ yarn-error.log
 # No nyc
 .nyc_output
 *.log.gz
+iamdone-help.md
