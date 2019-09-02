@@ -9,14 +9,9 @@ import morgan from 'morgan'
 import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
-// import history from 'express-history-api-fallback'
-//
 import routes from './core/express'
 import conf from './core/config'
 import { log } from './core/logger'
-import User from '~/app/main/user/user.model'
-
-const uuid = require('uuid/v4')
 
 const MongoStore = require('connect-mongo')(session)
 
@@ -24,19 +19,7 @@ const RATE_LIMIT = conf.get('RATE_LIMIT') || 0
 
 const app = express()
 
-// Middlewares.
-
-/**
- * This is a testing comment
- *
- * DONE:10 A task with a descrption looks like this. id:5
-* - A list item
-* - Another list item
-* - <https://github.com/stevenselcuk/Coeus/issues/6>
-* Steven J. Selcuk
-* stevenjselcuk@gmail.com
- */
-
+// Middlewares
 app.use(helmet())
 app.use(
   cors({
