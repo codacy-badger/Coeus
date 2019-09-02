@@ -18,3 +18,5 @@ yarn-error.log
 .nyc_output
 *.log.gz
 iamdone-help.md
+error.log.gz
+access.log.gz
