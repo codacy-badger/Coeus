@@ -22,6 +22,7 @@
 		"apollo-server": "^2.8.1",
 		"apollo-server-cache-redis": "^1.1.1",
 		"apollo-server-express": "^2.8.1",
+		"apollo-server-plugin-response-cache": "^0.3.4",
 		"bcrypt": "^3.0.6",
 		"bluebird": "^3.5.5",
 		"body-parser": "^1.19.0",

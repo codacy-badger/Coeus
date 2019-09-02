@@ -1,24 +1,25 @@
 import { ApolloServer, AuthenticationError } from 'apollo-server-express'
 import { PubSub } from 'graphql-subscriptions'
 import Redis from 'ioredis'
-import { RedisCache } from 'apollo-server-cache-redis';
-import depthLimit from 'graphql-depth-limit';
+import { RedisCache } from 'apollo-server-cache-redis'
+import responseCachePlugin from 'apollo-server-plugin-response-cache'
+import depthLimit from 'graphql-depth-limit'
 import { jwtExtractor } from './passport'
 import { verifyTheToken } from '~/middleware/utils'
 import User from '~/app/main/user/user.model'
 import conf from './config'
 
-import schema from '~/app/schema';
+import schema from '~/app/schema'
 
 const config = conf.get('IS_PROD')
-    ? {
-        port: conf.get('REDIS_CACHE_PORT'),
-        host: conf.get('REDIS_CACHE_URL'),
-        password: conf.get('REDIS_CACHE_PASSWORD'),
-      }
-    : undefined;
+  ? {
+      port: conf.get('REDIS_CACHE_PORT'),
+      host: conf.get('REDIS_CACHE_URL'),
+      password: conf.get('REDIS_CACHE_PASSWORD')
+    }
+  : undefined
 
-const redisCache = new Redis(config);
+const redisCache = new Redis(config)
 
 export const pubsub = new PubSub()
 
@@ -58,31 +59,34 @@ export default new ApolloServer({
         return console.log(user)
       })
     } catch (e) {
-        throw new AuthenticationError(
-            'Authentication token is invalid, please log in'
-        )
+      throw new AuthenticationError(
+        'Authentication token is invalid, please log in'
+      )
     }
-},
+  },
   schemaDirectives: {},
-  playground:
-    conf.get('IS_PROD')
-      ? false
-      : {
-          settings: {
-            'request.credentials': 'include',
-            'schema.polling.enable': false
-          }
-        },
- //  subscriptions: {
- //    onConnect: () => {},
- //    onDisconnect: () => {}
- //  },
+  playground: conf.get('IS_PROD')
+    ? false
+    : {
+        settings: {
+          'request.credentials': 'include',
+          'schema.polling.enable': false
+        }
+      },
+  //  subscriptions: {
+  //    onConnect: () => {},
+  //    onDisconnect: () => {}
+  //  },
   maxFileSize: 25 * 1024 * 1024, // 25MB
   debug: conf.get('IS_DEV'),
   engine: false,
   tracing: false,
-  validationRules: [
-    depthLimit(10),
+  validationRules: [depthLimit(10)],
+  plugins: [
+    responseCachePlugin({
+      sessionId: requestContext =>
+        requestContext.request.http.headers.get('sessionid') || null
+    })
   ],
   cacheControl: {
     calculateHttpHeaders: false,

@@ -92,12 +92,12 @@ if (conf.get('IS_DEV') && !conf.get('IS_TEST')) {
 
 export const handleException = async exc => {
   await log.error(exc.message || 'No msg field')
-  // TODO: send me an email id:7
+  // DONE:0 send me an email id:7
   // Something bad happened, kill the process and then restart fresh
   // - <https://github.com/stevenselcuk/Coeus/issues/3>
   // Steven J. Selcuk
   // stevenjselcuk@gmail.com
-  // TODO: use other winston transports id:6
+  // DONE:10 use other winston transports id:6
 // - <https://github.com/stevenselcuk/Coeus/issues/2>
 // Steven J. Selcuk
 // stevenjselcuk@gmail.com

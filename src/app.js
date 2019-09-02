@@ -10,7 +10,7 @@ import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 // import history from 'express-history-api-fallback'
-// 
+//
 import routes from './core/express'
 import conf from './core/config'
 import { log } from './core/logger'
@@ -20,12 +20,23 @@ const uuid = require('uuid/v4')
 
 const MongoStore = require('connect-mongo')(session)
 
-
 const RATE_LIMIT = conf.get('RATE_LIMIT') || 0
 
 const app = express()
 
 // Middlewares.
+
+/**
+ * This is a testing comment
+ *
+ * @TODO This must be an issue form github
+ * @body An this will show on issue...
+ * TODO: A task with a descrption looks like this.
+ * - A list item
+ * - Another list item
+ */
+
+
 app.use(helmet())
 app.use(
   cors({
@@ -71,21 +82,31 @@ app.use(
 app.use(cookieParser(conf.get('COOKIE_SECRET')))
 
 const sendReq = (req, res) => {
-  console.log(req)
-  console.log(res)
-  console.log('Cookies: ', req.cookies)
-  console.log('Signed Cookies: ', req.signedCookies)
-  console.log(req.session)
+  console.log('-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+')
+  console.log('-+-+-+-+-+-+-+-+-+       REQ        -+-+-+-+-+-+-+-+-+-+')
+  console.log('-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+')
+  log.info(req)
+  console.log('-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+')
+  console.log('-+-+-+-+-+-+-+-+-+       RES        -+-+-+-+-+-+-+-+-+-+')
+  console.log('-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+')
+  log.info(res)
+  console.log('-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+')
+  console.log('-+-+-+-+-+-+-+-+-+       MSC        -+-+-+-+-+-+-+-+-+-+')
   
-  
+  console.log('-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+')
+  log.info('Cookies: ', req.cookies)
+  log.info('Signed Cookies: ', req.signedCookies)
+  log.info(req.session)
+  console.log('-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+')
+  console.log('-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+')
 }
 
 morgan.token('user', (req, res) => {
-//  sendReq(req, res)
-  if(req.user) {
+  sendReq(req, res)
+  if (req.user) {
     return req.user.name
   }
-  return 'ANONYMOUS PERSONEL'
+  return 'Anonymous request'
 })
 
 if (conf.get('IS_PROD')) {
@@ -103,22 +124,6 @@ if (conf.get('IS_PROD')) {
 
 app.use(passport.initialize())
 app.use(passport.session())
-
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
-
-
-passport.deserializeUser((id, done) => {
-  User.findById(id)
-    .then((user) => {
-      done(null, user);
-    })
-    .catch((error) => {
-      console.log(`Error: ${error}`);
-    });
-});
-
 
 app.get('/healthcheck', (req, res) =>
   res
