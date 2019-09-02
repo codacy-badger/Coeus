@@ -97,10 +97,10 @@ export const handleException = async exc => {
   // - <https://github.com/stevenselcuk/Coeus/issues/3>
   // Steven J. Selcuk
   // stevenjselcuk@gmail.com
-  // DONE:10 use other winston transports id:6
-// - <https://github.com/stevenselcuk/Coeus/issues/2>
-// Steven J. Selcuk
-// stevenjselcuk@gmail.com
+  // DONE: use other winston transports id:6
+  // - <https://github.com/stevenselcuk/Coeus/issues/2>
+  // Steven J. Selcuk
+  // stevenjselcuk@gmail.com
   process.exit(1)
 }
 
