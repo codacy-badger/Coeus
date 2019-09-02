@@ -29,16 +29,13 @@ const app = express()
 /**
  * This is a testing comment
  *
- * @TODO This must be an issue form github
- * @body An this will show on issue...
- * TODO: A task with a descrption looks like this. id:5
-* - A list item
-* - Another list item
-* - <https://github.com/stevenselcuk/Coeus/issues/6>
-* Steven J. Selcuk
-* stevenjselcuk@gmail.com
+ * DONE:0 A task with a descrption looks like this. id:5
+ * - A list item
+ * - Another list item
+ * - <https://github.com/stevenselcuk/Coeus/issues/6>
+ * Steven J. Selcuk
+ * stevenjselcuk@gmail.com
  */
-
 
 app.use(helmet())
 app.use(
@@ -95,7 +92,7 @@ const sendReq = (req, res) => {
   log.info(res)
   console.log('-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+')
   console.log('-+-+-+-+-+-+-+-+-+       MSC        -+-+-+-+-+-+-+-+-+-+')
-  
+
   console.log('-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+')
   log.info('Cookies: ', req.cookies)
   log.info('Signed Cookies: ', req.signedCookies)
