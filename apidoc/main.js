@@ -653,7 +653,7 @@ require([
             $('#sidenav li[data-group=\'' + group + '\'][data-name=\'' + name + '\'][data-version=\'' + currentVersion + '\']').addClass('has-modifications');
 
             $root.remove();
-            // TODO: on change main version or select the highest version re-render id:42
+            // DONE: on change main version or select the highest version re-render id:42
             // - <https://github.com/stevenselcuk/Coeus/issues/22>
             // Steven J. Selcuk
             // stevenjselcuk@gmail.com
