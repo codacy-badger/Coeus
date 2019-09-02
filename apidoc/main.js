@@ -353,7 +353,7 @@ require([
                 if (entry.groupTitle)
                     title = entry.groupTitle;
 
-                // TODO: make groupDescription compareable with older versions (not important for the moment) id:39
+                // DONE: make groupDescription compareable with older versions (not important for the moment) id:39
                 // - <https://github.com/stevenselcuk/Coeus/issues/20>
                 // Steven J. Selcuk
                 // stevenjselcuk@gmail.com
