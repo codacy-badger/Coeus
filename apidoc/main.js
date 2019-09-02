@@ -606,7 +606,7 @@ require([
             };
 
             // add unique id
-            // TODO: replace all group-name-version in template with id. id:44
+            // DONE: replace all group-name-version in template with id. id:44
             // - <https://github.com/stevenselcuk/Coeus/issues/23>
             // Steven J. Selcuk
             // stevenjselcuk@gmail.com
