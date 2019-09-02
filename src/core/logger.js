@@ -92,7 +92,7 @@ if (conf.get('IS_DEV') && !conf.get('IS_TEST')) {
 
 export const handleException = async exc => {
   await log.error(exc.message || 'No msg field')
-  // DONE:0 send me an email id:7
+  // DONE: send me an email id:7
   // Something bad happened, kill the process and then restart fresh
   // - <https://github.com/stevenselcuk/Coeus/issues/3>
   // Steven J. Selcuk
