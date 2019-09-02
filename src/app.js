@@ -31,9 +31,12 @@ const app = express()
  *
  * @TODO This must be an issue form github
  * @body An this will show on issue...
- * TODO: A task with a descrption looks like this.
- * - A list item
- * - Another list item
+ * TODO: A task with a descrption looks like this. id:5
+* - A list item
+* - Another list item
+* - <https://github.com/stevenselcuk/Coeus/issues/6>
+* Steven J. Selcuk
+* stevenjselcuk@gmail.com
  */
 
 
