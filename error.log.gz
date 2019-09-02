@@ -1,0 +1,49 @@
+[33maccess[39m: [33mSigned in:  Super Administrator (admin@admin.com)[39m {"timestamp":"2019-09-02 13:00:42"}
+[33maccess[39m: [33mPOST /__/auth/login 200 151.080 ms - User: ANONYMOUS PERSONEL[39m
+[33m[39m {"timestamp":"2019-09-02 13:00:42"}
+[33maccess[39m: [33mPOST /graphql 200 57.906 ms - User: ANONYMOUS PERSONEL[39m
+[33m[39m {"timestamp":"2019-09-02 13:00:52"}
+[33maccess[39m: [33mPOST /graphql 200 42.685 ms - User: ANONYMOUS PERSONEL[39m
+[33m[39m {"timestamp":"2019-09-02 13:00:52"}
+[33maccess[39m: [33mPOST /graphql 200 35.113 ms - User: ANONYMOUS PERSONEL[39m
+[33m[39m {"timestamp":"2019-09-02 13:00:53"}
+[33maccess[39m: [33mGET /graphql 200 36.437 ms - User: ANONYMOUS PERSONEL[39m
+[33m[39m {"timestamp":"2019-09-02 13:00:57"}
+[33maccess[39m: [33mPOST /graphql 200 16.763 ms - User: ANONYMOUS PERSONEL[39m
+[33m[39m {"timestamp":"2019-09-02 13:00:58"}
+[33maccess[39m: [33mPOST /graphql 200 32.498 ms - User: ANONYMOUS PERSONEL[39m
+[33m[39m {"timestamp":"2019-09-02 13:01:25"}
+[33maccess[39m: [33mPOST /graphql 200 29.021 ms - User: ANONYMOUS PERSONEL[39m
+[33m[39m {"timestamp":"2019-09-02 13:01:25"}
+[33maccess[39m: [33mPOST /graphql 200 185.805 ms - User: ANONYMOUS PERSONEL[39m
+[33m[39m {"timestamp":"2019-09-02 13:01:56"}
+[33maccess[39m: [33mPOST /graphql 200 4.345 ms - User: ANONYMOUS PERSONEL[39m
+[33m[39m {"timestamp":"2019-09-02 13:14:21"}
+[33maccess[39m: [33mGET /__/aircraft/find?select=operator%20year&filter 200 12.559 ms - User: Super Administrator[39m
+[33m[39m {"timestamp":"2019-09-02 13:14:33"}
+[33maccess[39m: [33mPOST /graphql 200 8.192 ms - User: ANONYMOUS PERSONEL[39m
+[33m[39m {"timestamp":"2019-09-02 13:14:42"}
+[33maccess[39m: [33mPOST /graphql 200 3.325 ms - User: ANONYMOUS PERSONEL[39m
+[33m[39m {"timestamp":"2019-09-02 13:14:43"}
+[33maccess[39m: [33mPOST /graphql 200 3.630 ms - User: ANONYMOUS PERSONEL[39m
+[33m[39m {"timestamp":"2019-09-02 13:14:43"}
+[33maccess[39m: [33mPOST /graphql 200 3.065 ms - User: ANONYMOUS PERSONEL[39m
+[33m[39m {"timestamp":"2019-09-02 13:14:43"}
+[33maccess[39m: [33mPOST /graphql 200 2.891 ms - User: ANONYMOUS PERSONEL[39m
+[33m[39m {"timestamp":"2019-09-02 13:14:43"}
+[33maccess[39m: [33mPOST /graphql 200 2.789 ms - User: ANONYMOUS PERSONEL[39m
+[33m[39m {"timestamp":"2019-09-02 13:14:56"}
+[33maccess[39m: [33mGET /graphql 200 0.296 ms - User: ANONYMOUS PERSONEL[39m
+[33m[39m {"timestamp":"2019-09-02 13:14:58"}
+[33maccess[39m: [33mPOST /graphql 200 23.912 ms - User: ANONYMOUS PERSONEL[39m
+[33m[39m {"timestamp":"2019-09-02 13:14:59"}
+[33maccess[39m: [33mPOST /graphql 200 3.281 ms - User: ANONYMOUS PERSONEL[39m
+[33m[39m {"timestamp":"2019-09-02 13:15:00"}
+[33maccess[39m: [33mPOST /graphql 200 3.723 ms - User: ANONYMOUS PERSONEL[39m
+[33m[39m {"timestamp":"2019-09-02 13:15:02"}
+[33maccess[39m: [33mPOST /graphql 200 15.183 ms - User: ANONYMOUS PERSONEL[39m
+[33m[39m {"timestamp":"2019-09-02 13:15:03"}
+[33maccess[39m: [33mPOST /graphql 200 3.421 ms - User: ANONYMOUS PERSONEL[39m
+[33m[39m {"timestamp":"2019-09-02 13:15:20"}
+[33maccess[39m: [33mPOST /graphql 200 2.950 ms - User: ANONYMOUS PERSONEL[39m
+[33m[39m {"timestamp":"2019-09-02 13:15:22"}

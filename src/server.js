@@ -2,7 +2,7 @@ import http from 'http'
 import chalk from 'chalk'
 import socket from 'socket.io'
 
-//import apolloServer from './core/graphql'
+import apolloServer from './core/graphql'
 import app from './app'
 import mongoose from './core/mongo'
 import conf from './core/config'
@@ -13,15 +13,15 @@ const server = http.Server(app)
 
 mongoose.Promise = require('bluebird')
 
-// apolloServer.installSubscriptionHandlers(server)
-//apolloServer.applyMiddleware({
-//  app,
-//  path: '/graphql',
-//  cors: {
-//    credentials: true,
-//    origin: 'http://localhost:3000'
-//  }
-//})
+apolloServer.installSubscriptionHandlers(server)
+apolloServer.applyMiddleware({
+  app,
+  path: '/graphql',
+  cors: {
+    credentials: true,
+    origin: 'http://localhost:3000'
+  }
+})
 
 export const io = socket(server)
 io.origins(['*:*'])

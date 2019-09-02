@@ -4358,6 +4358,39 @@ graceful-fs@*, graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2:
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.2.tgz#6f0952605d0140c1cfdb138ed005775b92d67b02"
   integrity sha512-IItsdsea19BoLC7ELy13q1iJFNmd7ofZH5+X/pJr90/nRoPEX0DJo1dHDbgtYWOhJhcCgMDTOw84RZ72q6lB+Q==
 
+graphql-compose-connection@^6.0.3:
+  version "6.0.3"
+  resolved "https://registry.yarnpkg.com/graphql-compose-connection/-/graphql-compose-connection-6.0.3.tgz#f01e0bcdb93383c3fc1d5e3115ce6d4f825a95b1"
+  integrity sha512-vGoh+4ewZxRDcaINPupJD/d3Ie6X/Mrc4+ctHF6bgI1WIh0RHTJWCEysrKGvh+yAO+rGrES1JpfAkY4iidDddA==
+
+graphql-compose-mongoose@^7.1.3:
+  version "7.1.3"
+  resolved "https://registry.yarnpkg.com/graphql-compose-mongoose/-/graphql-compose-mongoose-7.1.3.tgz#0ae64b62293db08d3bb879044a58fbb7bc2be567"
+  integrity sha512-7TvpkM/PdI2Fyit3oWf6WouoCgYmS35nd/C/PN5pkCfSl7kApoe3nc2LhSKuVSjl8YdSMmnYm3ThN8we5FUZnw==
+  dependencies:
+    object-path "^0.11.4"
+  optionalDependencies:
+    graphql-compose-connection "^6.0.3"
+    graphql-compose-pagination "^6.0.3"
+
+graphql-compose-pagination@^6.0.3:
+  version "6.0.3"
+  resolved "https://registry.yarnpkg.com/graphql-compose-pagination/-/graphql-compose-pagination-6.0.3.tgz#58a50c07226d055ecf01fdd5ab3f300f58598beb"
+  integrity sha512-XMiDSzLc/R13RXz2tpzWOQFTmkDZqVg6zSn3RBpoK2k9Ocg1JgfnIW3VeRw6vOG/Fm8dlWKzyBvQiicG33h8oQ==
+
+graphql-compose-relay@^5.0.2:
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/graphql-compose-relay/-/graphql-compose-relay-5.0.2.tgz#d760cfaef02220e957aec6dfcb47c4823867c983"
+  integrity sha512-uwAIcJDw7HqW09fXjJ1wwjozlm+jlK9V5j1yTZ8HJPFqBzAG/VTGjw8rYAY1Ek9hI171xlBqBgYfbCcupxptXw==
+
+graphql-compose@^7.3.0:
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/graphql-compose/-/graphql-compose-7.3.0.tgz#fc83e473395a20b685d4d03b74c7d7c2c34c413a"
+  integrity sha512-jehcJQRq1xJh1obQ7mKnyydfpUP4zmyg8YpWsruGbfCTCsbjC1jhMHqKT1LlIdMvMB8kPcJDcSqkfZ8W4QMkNw==
+  dependencies:
+    graphql-type-json "^0.3.0"
+    object-path "^0.11.4"
+
 graphql-cost-analysis@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/graphql-cost-analysis/-/graphql-cost-analysis-1.0.3.tgz#25b97c8e638c7e538af5ba9bcf6012cda74420ce"
@@ -4469,6 +4502,11 @@ graphql-tools@^4.0.0, graphql-tools@^4.0.5:
     deprecated-decorator "^0.1.6"
     iterall "^1.1.3"
     uuid "^3.1.0"
+
+graphql-type-json@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/graphql-type-json/-/graphql-type-json-0.3.0.tgz#bb32e1b74bf52ebc690f9df12b4067bc061f818a"
+  integrity sha512-lnxg5HiB95yxy+/5cDKtP6pZo0zgntsOmqsjeCBXFGJ4YoMF3+1YaSEKWJntNTu+VsAm3zf6lPxFpp1kxzofLA==
 
 graphql-upload@^8.0.2:
   version "8.0.7"

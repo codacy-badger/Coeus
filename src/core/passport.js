@@ -38,6 +38,7 @@ const jwtOptions = {
   secretOrKey: conf.get('JWT_SECRET')
 }
 
+
 /**
  * Login with JWT middleware
  */
@@ -53,17 +54,3 @@ const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
 
 
 passport.use(jwtLogin)
-
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
-
-passport.deserializeUser((id, done) => {
-  User.findById(id)
-    .then((user) => {
-      done(null, user);
-    })
-    .catch((error) => {
-      console.log(`Error: ${error}`);
-    });
-});

@@ -10,11 +10,16 @@ import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 // import history from 'express-history-api-fallback'
+// 
+import routes from './core/express'
 import conf from './core/config'
 import { log } from './core/logger'
+import User from '~/app/main/user/user.model'
+
 const uuid = require('uuid/v4')
+
 const MongoStore = require('connect-mongo')(session)
-import routes from './app/routes'
+
 
 const RATE_LIMIT = conf.get('RATE_LIMIT') || 0
 
@@ -70,11 +75,17 @@ const sendReq = (req, res) => {
   console.log(res)
   console.log('Cookies: ', req.cookies)
   console.log('Signed Cookies: ', req.signedCookies)
+  console.log(req.session)
+  
+  
 }
 
 morgan.token('user', (req, res) => {
-  sendReq(req, res)
-  return req.user
+//  sendReq(req, res)
+  if(req.user) {
+    return req.user.name
+  }
+  return 'ANONYMOUS PERSONEL'
 })
 
 if (conf.get('IS_PROD')) {
@@ -93,6 +104,21 @@ if (conf.get('IS_PROD')) {
 app.use(passport.initialize())
 app.use(passport.session())
 
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+
+passport.deserializeUser((id, done) => {
+  User.findById(id)
+    .then((user) => {
+      done(null, user);
+    })
+    .catch((error) => {
+      console.log(`Error: ${error}`);
+    });
+});
+
 
 app.get('/healthcheck', (req, res) =>
   res
@@ -105,7 +131,7 @@ app.get('/healthcheck', (req, res) =>
 
 app.get('/clear_cookie', (req, res) => {
   res.clearCookie('COEUS_JWT')
-  res.send('COEUS_JWT removed')
+  res.send('COEUS_JWT removed').status(200)
 })
 
 app.use('/__', routes)

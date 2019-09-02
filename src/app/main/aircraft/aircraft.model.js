@@ -1,5 +1,8 @@
 import mongoose from 'mongoose'
 import mongoosePaginate from 'mongoose-paginate-v2'
+import { schemaComposer } from 'graphql-compose';
+import { composeWithMongoose } from 'graphql-compose-mongoose'
+import composeWithRelay from 'graphql-compose-relay'
 
 export const AircraftManufacturers = [
   'Airbus',
@@ -56,5 +59,7 @@ const AircraftSchema = new mongoose.Schema({
 AircraftSchema.plugin(mongoosePaginate)
 
 const Aircraft = mongoose.model('Aircraft', AircraftSchema)
+
+export const AircraftTC = composeWithRelay(composeWithMongoose(Aircraft))
 
 export default Aircraft

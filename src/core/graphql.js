@@ -3,18 +3,12 @@ import { PubSub } from 'graphql-subscriptions'
 import Redis from 'ioredis'
 import { RedisCache } from 'apollo-server-cache-redis';
 import depthLimit from 'graphql-depth-limit';
-import costAnalysis from 'graphql-cost-analysis';
-import { importSchema } from 'graphql-import'
-import { mergeTypes, fileLoader } from 'merge-graphql-schemas'
-import { resolve } from 'path'
-import DataLoader from 'dataloader'
 import { jwtExtractor } from './passport'
-import { verifyTheToken } from '~/app/middleware/utils'
+import { verifyTheToken } from '~/middleware/utils'
+import User from '~/app/main/user/user.model'
 import conf from './config'
 
-import schema from '../app/graphql/schema';
-
-
+import schema from '~/app/schema';
 
 const config = conf.get('IS_PROD')
     ? {
@@ -25,10 +19,6 @@ const config = conf.get('IS_PROD')
     : undefined;
 
 const redisCache = new Redis(config);
-
-// const typeDefs = mergeTypes(
-//  fileLoader(resolve(__dirname, '../app/graphql/schema'))
-// );
 
 export const pubsub = new PubSub()
 
@@ -49,7 +39,24 @@ export default new ApolloServer({
   },
   context: async ({ req }) => {
     try {
-      await verifyTheToken(jwtExtractor(req))
+      let token = null
+      if (req.signedCookies) {
+        token = req.signedCookies.COEUS_JWT
+      }
+      if (req.headers.authorization) {
+        token = req.headers.authorization.replace('Bearer ', '').trim()
+      } else if (req.body.token) {
+        token = req.body.token.trim()
+      } else if (req.query.token) {
+        token = req.query.token.trim()
+      }
+      const userID = await verifyTheToken(token)
+      User.findById(userID, (err, user) => {
+        if (err) {
+          return console.log(err)
+        }
+        return console.log(user)
+      })
     } catch (e) {
         throw new AuthenticationError(
             'Authentication token is invalid, please log in'
@@ -66,10 +73,10 @@ export default new ApolloServer({
             'schema.polling.enable': false
           }
         },
-  subscriptions: {
-    onConnect: () => {},
-    onDisconnect: () => {}
-  },
+ //  subscriptions: {
+ //    onConnect: () => {},
+ //    onDisconnect: () => {}
+ //  },
   maxFileSize: 25 * 1024 * 1024, // 25MB
   debug: conf.get('IS_DEV'),
   engine: false,
@@ -80,7 +87,7 @@ export default new ApolloServer({
   cacheControl: {
     calculateHttpHeaders: false,
     // Cache everything for at least a minute since we only cache public responses
-    defaultMaxAge: 60
+    defaultMaxAge: 6000
   },
   cache: new RedisCache({
     redisCache,

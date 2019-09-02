@@ -23,7 +23,7 @@ const router = express.Router()
 require('~/core/passport')
 
 const secureIt = passport.authenticate('jwt', {
-  session: false
+  session: true
 })
 
 /*
@@ -93,7 +93,5 @@ router.delete(
   checkDeleteUser,
   deleteUser
 )
-
-export const routeName = 'user'
 
 module.exports = router

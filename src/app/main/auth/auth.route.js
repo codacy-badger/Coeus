@@ -63,6 +63,5 @@ router.get(
  */
 router.post('/login', trimRequest.all, CheckLogin, login)
 
-export const routeName = 'auth'
 
 module.exports = router

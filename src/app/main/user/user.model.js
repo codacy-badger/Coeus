@@ -1,3 +1,7 @@
+import { schemaComposer } from 'graphql-compose';
+import { composeWithMongoose } from 'graphql-compose-mongoose'
+import composeWithRelay from 'graphql-compose-relay'
+
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const validator = require('validator')
@@ -82,17 +86,21 @@ UserSchema.pre('save', function(next) {
     return next()
   }
   return hash(that, SALT_FACTOR, next)
-  
 })
 
 UserSchema.methods.comparePassword = function(passwordAttempt, cb) {
-  bcrypt.compare(passwordAttempt, this.password, (err, isMatch) =>
-    err ? cb(err) : cb(null, isMatch)
+  bcrypt.compare(
+    passwordAttempt,
+    this.password,
+    (err, isMatch) => (err ? cb(err) : cb(null, isMatch))
   )
 }
 
 UserSchema.plugin(mongoosePaginate)
 
-const User = mongoose.model('User', UserSchema);
+const User = mongoose.model('User', UserSchema)
 
-export default User;
+export const UserTC = composeWithRelay(composeWithMongoose(User))
+
+
+export default User
