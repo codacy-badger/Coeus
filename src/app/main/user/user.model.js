@@ -1,8 +1,8 @@
-import { schemaComposer } from 'graphql-compose';
 import { composeWithMongoose } from 'graphql-compose-mongoose'
 import composeWithRelay from 'graphql-compose-relay'
 
 const mongoose = require('mongoose')
+const mongooseDelete = require('mongoose-delete')
 const bcrypt = require('bcrypt')
 const validator = require('validator')
 const mongoosePaginate = require('mongoose-paginate-v2')
@@ -32,6 +32,14 @@ const UserSchema = new mongoose.Schema(
       type: String,
       enum: ['user', 'admin'],
       default: 'user'
+    },
+    photo: {
+      id: {
+        type: String,
+      },
+      url: {
+        type: String,
+      }
     },
     verification: {
       type: String
@@ -74,7 +82,7 @@ const hash = (user, salt, next) => {
     if (error) {
       return next(error)
     }
-    user.password = newHash
+    user.password = newHash // eslint-disable-line
     return next()
   })
 }
@@ -98,9 +106,14 @@ UserSchema.methods.comparePassword = function(passwordAttempt, cb) {
 
 UserSchema.plugin(mongoosePaginate)
 
+/**
+ * We are using mongoose delete plugin for soft deletes. 
+ * @SEE for details : https://github.com/dsanel/mongoose-delete
+ */
+UserSchema.plugin(mongooseDelete, { overrideMethods: true, deletedBy : true, deletedAt : true})
+
 const User = mongoose.model('User', UserSchema)
 
 export const UserTC = composeWithRelay(composeWithMongoose(User))
-
 
 export default User

@@ -3,7 +3,7 @@
         "allowUnknownTags": false
     },
     "source": {
-        "include": "index.js",
+        "include": "src/",
         "excludePattern": "(node_modules/|docs|dist|tools|public)"
     },
     "plugins": [

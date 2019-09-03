@@ -32,9 +32,14 @@ app.use(
 )
 app.use(rateLimit({ max: Number(RATE_LIMIT), windowMs: 15 * 60 * 1000 }))
 app.use(compression())
+
+export const sessionStore = new MongoStore({
+  mongooseConnection: mongoose.connection
+})
+
 app.use(
   session({
-    store: new MongoStore({ mongooseConnection: mongoose.connection }),
+    store: sessionStore,
     name: conf.get('SESSION_NAME'),
     secret: conf.get('EXPRESS_SESSION_SECRET'),
     resave: true,

@@ -87,6 +87,14 @@ export const getAircraft = async (req, res) => {
   }
 }
 
+export const getDeletedAircrafts = async (req, res) => {
+  try {
+    res.status(200).json(buildSuccObject(await db.getDeletedItems(Aircraft)))
+  } catch (error) {
+    handleError(res, error)
+  }
+}
+
 /**
  * Update item function called by route
  * @param {Object} req - request object
@@ -122,10 +130,20 @@ export const createAircraft = async (req, res) => {
  * @param {Object} req - request object
  * @param {Object} res - response object
  */
-export const deleteItem = async (req, res) => {
+export const deleteAircraft = async (req, res) => {
   try {
-    const id = await isIDGood(req.id)
-    res.status(200).json(await db.deleteItem(id, Aircraft))
+    const ItemId = await isIDGood(req.body.id)
+    const DeleterId = await isIDGood(req.user._id)
+    res.status(200).json(buildSuccObject(await db.deleteItem(ItemId, DeleterId, Aircraft)))
+  } catch (error) {
+    handleError(res, error)
+  }
+}
+
+export const restoreAircraft = async (req, res) => {
+  try {
+    const ItemId = await isIDGood(req.body.id)
+    res.status(200).json(buildSuccObject(await db.restore(ItemId, Aircraft)))
   } catch (error) {
     handleError(res, error)
   }

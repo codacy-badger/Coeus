@@ -162,3 +162,15 @@ export const checkDeleteUser = [
     theValidationResult(req, res, next)
   }
 ]
+
+export const checkRestoreUser = [
+  check('id')
+    .exists()
+    .withMessage('MISSING')
+    .not()
+    .isEmpty()
+    .withMessage('IS_EMPTY'),
+  (req, res, next) => {
+    theValidationResult(req, res, next)
+  }
+]

@@ -59,6 +59,21 @@ router.get(
 )
 
 /*
+ * Get new refresh token
+ */
+router.get(
+  '/logout',
+  secureIt,
+  onlyCanUse(['user', 'admin']),
+  trimRequest.all,
+  (req, res) => {
+    console.log(res)
+ }
+)
+
+
+
+/*
  * Login route
  */
 router.post('/login', trimRequest.all, CheckLogin, login)

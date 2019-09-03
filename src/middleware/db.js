@@ -1,5 +1,10 @@
+/**
+ * db actions and functions.
+ * @module middleware/db
+ */
+
 import { buildSuccObject, buildErrObject, itemNotFound, parser } from './utils'
-import {log} from '~/core/logger'
+import { log } from '~/core/logger'
 /**
  * Builds sorting
  * @param {string} sort - field to sort from
@@ -66,13 +71,12 @@ module.exports = {
           // Takes fields param and builds an array by splitting with ','
           const arrayFields = query.fields.split(',')
           // Adds SQL Like %word% with regex
-          arrayFields.map( item => {
+          arrayFields.map(item => {
             return array.push({
               [item]: {
                 $regex: new RegExp(query.filter, 'i')
               }
             })
-            
           })
           // Puts array result in data
           data.$or = array
@@ -112,9 +116,7 @@ module.exports = {
    * @SEE https://github.com/leodinas-hao/mongoose-query-parser#readme
    */
   async getItems(req, model, query) {
-    const { filter, select } = parser.parse(
-      query
-    )
+    const { filter, select } = parser.parse(query)
     return new Promise((resolve, reject) => {
       model
         .find(filter)
@@ -128,6 +130,17 @@ module.exports = {
     })
   },
 
+  async getDeletedItems(model) {
+    return new Promise((resolve, reject) => {
+      model.findDeleted((err, result) => {
+        if (err) {
+          reject(buildErrObject(422, err.message))
+        }
+        resolve(result)
+      })
+    })
+  },
+
   /**
    * Gets item from database by id
    * @param {string} id - item id
@@ -137,6 +150,7 @@ module.exports = {
       model.findById(id, (err, item) => {
         itemNotFound(err, item, reject, 'NOT_FOUND')
         resolve(item)
+        log.info(`Item ${id} has successfully founded and returned.`)
       })
     })
   },
@@ -152,6 +166,45 @@ module.exports = {
           reject(buildErrObject(422, err.message))
         }
         resolve(item)
+        log.info(`Item ${item.id} has successfully created.`)
+      })
+    })
+  },
+
+  /**
+   * [deleteItem Soft deletes with given ObjectID and records who did this, when did this...]
+   *
+   * @method deleteItem
+   *
+   * It's good. huh? We need soft deletes.
+   * @see for details : https://github.com/dsanel/mongoose-delete
+   *
+   * @param  {string}   itemID The item that we want to (soft) delete.
+   * @param  {string}   deleterID Who wants to delete
+   * @param  {object}   model In which mongodb model
+   *
+   * @return {Promise} If successfully returns deleted: true
+   */
+  async deleteItem(itemID, deleterID, model) {
+    return new Promise((resolve, reject) => {
+      model.findById(itemID, (err, item) => {
+        itemNotFound(err, item, reject, 'NOT_FOUND')
+        item.delete(deleterID, () => {
+          resolve({ deleted: true })
+          log.info(`Item ${itemID} has successfully deleted.`)
+        })
+      })
+    })
+  },
+
+  async restoreItem(itemID, model) {
+    return new Promise((resolve, reject) => {
+      model.findById(itemID, (err, item) => {
+        itemNotFound(err, item, reject, 'NOT_FOUND')
+        item.restore(() => {
+          log.info(`Item ${itemID} has successfully restored.`)
+          resolve({ restored: true })
+        })
       })
     })
   },
@@ -174,21 +227,9 @@ module.exports = {
         (err, item) => {
           itemNotFound(err, item, reject, 'NOT_FOUND')
           resolve(item)
+          log.info(`Item ${id} has successfully updated.`)
         }
       )
-    })
-  },
-
-  /**
-   * Deletes an item from database by id
-   * @param {string} id - id of item
-   */
-  async deleteItem(id, model) {
-    return new Promise((resolve, reject) => {
-      model.findByIdAndRemove(id, (err, item) => {
-        itemNotFound(err, item, reject, 'NOT_FOUND')
-        resolve(buildSuccObject('DELETED'))
-      })
     })
   }
 }

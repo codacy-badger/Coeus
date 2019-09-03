@@ -62,3 +62,15 @@ export const checkDeleteAircraft = [
     theValidationResult(req, res, next)
   }
 ]
+
+export const checkRestoreAircraft = [
+  check('id')
+    .exists()
+    .withMessage('MISSING')
+    .not()
+    .isEmpty()
+    .withMessage('IS_EMPTY'),
+  (req, res, next) => {
+    theValidationResult(req, res, next)
+  }
+]

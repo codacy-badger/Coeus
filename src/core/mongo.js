@@ -11,7 +11,7 @@ mongoose.connect(
     reconnectTries: 10,
     useUnifiedTopology: true,
     useNewUrlParser: true,
-    useFindAndModify:true,
+    useFindAndModify:false,
     useCreateIndex:true
   },
   err => {
@@ -20,6 +20,8 @@ mongoose.connect(
     }
   }
 );
+
+// mongoose.Error.messages = require('@ladjs/mongoose-error-messages')
 
 models();
 

@@ -8,14 +8,15 @@ import {
   createAircraft,
   getAircraft,
   updateItem,
-  deleteItem
+  deleteAircraft,
 } from './aircraft.controller'
 import { onlyCanUse } from '../auth/auth.controller'
 import {
   checkCreateAircraft,
   checkAircraftUpdate,
   checkGetAircraft,
-  checkDeleteAircraft
+  checkDeleteAircraft,
+  checkRestoreAircraft
 } from './aircraft.validate'
 
 
@@ -127,12 +128,24 @@ router.patch(
  * Delete aircraft (route)
  */
 router.delete(
-  '/:id',
+  '/delete',
   secureIt,
   onlyCanUse(['admin']),
   trimRequest.all,
   checkDeleteAircraft,
-  deleteItem
+  deleteAircraft
+)
+
+/*
+ * Restore aircraft (route)
+ */
+router.delete(
+  '/restore',
+  secureIt,
+  onlyCanUse(['admin']),
+  trimRequest.all,
+  checkRestoreAircraft,
+  deleteAircraft
 )
 
 module.exports = router

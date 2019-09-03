@@ -7,17 +7,22 @@ import {
   createNewUser,
   verifyUser,
   deleteUser,
-  updateUser
+  getDeletedUsers,
+  restoreUser,
+  updateUser,
+  addUserPhoto
 } from './user.controller'
 import {
    checkVerify,
    checkNewUser,
    checkUpdateUser,
    checkGetUser,
-   checkDeleteUser
+   checkDeleteUser,
+   checkRestoreUser,
  } from './user.validate'
  
 import { onlyCanUse } from '../auth/auth.controller'
+import uploader from '~/core/multer'
 
 const router = express.Router()
 require('~/core/passport')
@@ -35,8 +40,8 @@ const secureIt = passport.authenticate('jwt', {
  */
 router.get(
   '/',
-//  secureIt,
-//  onlyCanUse(['admin']),
+  secureIt,
+  onlyCanUse(['admin']),
   trimRequest.all,
   getUsers
 )
@@ -54,9 +59,35 @@ router.post(
 )
 
 /*
+ * Create new item route
+ */
+router.post(
+  '/photo',
+  secureIt,
+  onlyCanUse(['admin']),
+  uploader.single('image'),
+//  checkUserPhoto,
+  addUserPhoto
+)
+
+
+
+/*
  * Verify route
  */
 router.post('/verify', trimRequest.all, checkVerify, verifyUser)
+
+/*
+ * Get deleted users
+ */
+router.get(
+  '/deleted',
+  secureIt,
+  onlyCanUse(['admin']),
+  trimRequest.all,
+//  checkDeleteUser,
+ getDeletedUsers
+)
 
 /*
  * Get item route
@@ -85,13 +116,27 @@ router.patch(
 /*
  * Delete item route
  */
-router.delete(
-  '/:id',
+router.post(
+  '/delete',
   secureIt,
   onlyCanUse(['admin']),
   trimRequest.all,
   checkDeleteUser,
   deleteUser
+)
+
+
+
+/*
+ * Restore User (route)
+ */
+router.post(
+  '/restore',
+  secureIt,
+  onlyCanUse(['admin']),
+  trimRequest.all,
+  checkRestoreUser,
+  restoreUser
 )
 
 module.exports = router

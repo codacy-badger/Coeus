@@ -8,10 +8,12 @@ import {
   generateToken,
   verifyTheToken
 } from '~/middleware/utils'
+import {log} from '~/core/logger'
 
 const cryptoRandomString = require('crypto-random-string')
 const db = require('~/middleware/db')
 const emailer = require('~/middleware/emailer')
+
 
 /**
  * Creates a new item in database
@@ -28,7 +30,7 @@ const createItem = async req => {
         phone: req.phone,
         role: req.role,
         city: req.city,
-        verification: cryptoRandomString({length: 32, type: 'base64'})
+        verification: cryptoRandomString({ length: 32, type: 'base64' })
       },
       (err, item) => {
         if (err) {
@@ -49,6 +51,33 @@ const createItem = async req => {
   })
 }
 
+const addOrUpdatePhoto = async req => {
+  const { id } = req.body
+  const { filename, path} = req.file
+  
+  return new Promise((resolve, reject) => {
+    User.findByIdAndUpdate(
+      id,
+      {
+        photo: {
+          id: filename,
+          url: path
+        }
+      },
+      {
+        new: true,
+        runValidators: true,
+        context: 'query'
+      },
+      (err, item) => {
+        itemNotFound(err, item, reject, 'NOT_FOUND')
+        resolve(item)
+        log.info(`Photo for ${id} has successfully updated.`)
+      }
+    )
+  })
+}
+
 /**
  * Builds the registration token
  * @param {Object} item - user object that contains created id
@@ -60,7 +89,7 @@ const returnRegisterToken = item => {
     name: item.name,
     email: item.email,
     verified: item.verified,
-    token: generateToken(item.verification),
+    token: generateToken(item.verification)
   }
   return data
 }
@@ -78,7 +107,7 @@ const verify = async user => {
       }
       resolve({
         email: item.email,
-        verified: item.verified,
+        verified: item.verified
       })
     })
   })
@@ -175,6 +204,14 @@ export const createNewUser = async (req, res) => {
   }
 }
 
+export const addUserPhoto = async (req, res) => {
+  try {
+    res.status(201).json(buildSuccObject(await addOrUpdatePhoto(req)))
+  } catch (error) {
+    handleError(res, error)
+  }
+}
+
 /**
  * Verify function called by route
  * @param {Object} req - request object
@@ -200,9 +237,28 @@ export const verifyUser = async (req, res) => {
  */
 export const deleteUser = async (req, res) => {
   try {
-//    console.log(req.body.id)
-    const id = await isIDGood(req.params.id)
-    res.status(200).json(await db.deleteItem(id, User))
+    const ItemId = await isIDGood(req.body.id)
+    const DeleterId = await isIDGood(req.user._id)
+    res
+      .status(200)
+      .json(buildSuccObject(await db.deleteItem(ItemId, DeleterId, User)))
+  } catch (error) {
+    handleError(res, error)
+  }
+}
+
+export const getDeletedUsers = async (req, res) => {
+  try {
+    res.status(200).json(buildSuccObject(await db.getDeletedItems(User)))
+  } catch (error) {
+    handleError(res, error)
+  }
+}
+
+export const restoreUser = async (req, res) => {
+  try {
+    const ItemId = await isIDGood(req.body.id)
+    res.status(200).json(buildSuccObject(await db.restore(ItemId, User)))
   } catch (error) {
     handleError(res, error)
   }
