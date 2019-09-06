@@ -3,7 +3,6 @@ import { UserTC } from '~/app/main/user/user.model'
 import { AircraftTC } from '~/app/main/aircraft/aircraft.model'
 
 
-
 schemaComposer.Query.addFields({
 	userById: UserTC.getResolver('findById'),
   userByIds: UserTC.getResolver('findByIds'),

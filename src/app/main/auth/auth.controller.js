@@ -68,9 +68,7 @@ const saveUserAccessAndReturnToken = async (req, user) => {
       }
       const userInfo = setUserInfo(user)
       log.access(`Signed in:  ${userInfo.name} (${user.email})`)
-
-      // Returns data with access token
-      console.log(req)
+      // TODO: We gonna add a session expression right here.
       resolve({
         token: generateToken(user._id),
         user: userInfo
