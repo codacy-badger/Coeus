@@ -5,4 +5,4 @@
 
 [![codecov](https://codecov.io/gh/stevenselcuk/Coeus/branch/master/graph/badge.svg)](https://codecov.io/gh/stevenselcuk/Coeus)
 
-[![tested with jest](https://img.shields.io/badge/tested_with-jest-99424f.svg)](https://github.com/facebook/jest) 
+[![tested with jest](https://img.shields.io/badge/tested_with-jest-99424f.svg)](https://github.com/facebook/jest) [![Greenkeeper badge](https://badges.greenkeeper.io/stevenselcuk/Coeus.svg)](https://greenkeeper.io/) 
