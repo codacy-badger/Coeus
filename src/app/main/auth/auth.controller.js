@@ -69,9 +69,9 @@ const saveUserAccessAndReturnToken = async (req, user) => {
       const userInfo = setUserInfo(user)
       log.access(`Signed in:  ${userInfo.name} (${user.email})`)
       // TODO: We gonna add a session expression right here. id:54
-// - <https://github.com/stevenselcuk/Coeus/issues/32>
-// Steven J. Selcuk
-// stevenjselcuk@gmail.com
+      // - <https://github.com/stevenselcuk/Coeus/issues/32>
+      // Steven J. Selcuk
+      // stevenjselcuk@gmail.com
       resolve({
         token: generateToken(user._id),
         user: userInfo
