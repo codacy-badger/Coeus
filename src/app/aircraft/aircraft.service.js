@@ -13,21 +13,19 @@ module.exports = {
     })
   },
 
-  async showAircraft(args) {
+  async showAircraft(args, context) {
     return new Promise((resolve, reject) => {
       try {
-        console.log(args)
         resolve({registration: '1234'})
       } catch (err) {
         reject(buildErrObject(422, 'ERROR_WITH_FILTER'))
       }
     })
   },
-  async addAircraft(args) {
+  async addAircraft(args,context) {
     return new Promise((resolve, reject) => {
       try {
-        console.log(args)
-        resolve({isItOk: true})
+         resolve({})
       } catch (err) {
         reject(buildErrObject(422, 'ERROR_WITH_FILTER'))
       }

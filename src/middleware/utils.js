@@ -2,9 +2,10 @@ import requestIp from 'request-ip'
 import jwt from 'jsonwebtoken'
 import { MongooseQueryParser } from 'mongoose-query-parser'
 import { validationResult } from 'express-validator'
-import { log } from '~/core/logger'
+import { log, show } from '~/core/logger'
 import conf from '~/core/config'
 import User from '~/app/main/user/user.model'
+
 
 const auth = require('../middleware/auth')
 
@@ -170,11 +171,26 @@ export const verifyTheToken = async token => {
     // Decrypts, verifies and decode token
     jwt.verify(auth.decrypt(token), conf.get('JWT_SECRET'), (err, decoded) => {
       if (err) {
+        log.warn('Tried access with bogus or damaged token')
         reject(buildErrObject(409, 'BAD_TOKEN'))
       }
       resolve(decoded.data._id)
     })
   })
+}
+
+export const giveTokenGetUser = async token => {
+  const userID = await verifyTheToken(token)
+  return new Promise((resolve, reject) => {
+    User.findById(userID, (err, item) => {
+      if (err) {
+        log.warn('No user found with this UserID when trying to logging in')
+        itemNotFound(err, item, reject, 'NOT_FOUND')
+      }
+      resolve(item)
+    })
+  })
+
 }
 
 export const ContextMiddleware = async (context, onlyCanUse, ...args) => {
@@ -188,7 +204,6 @@ export const ContextMiddleware = async (context, onlyCanUse, ...args) => {
   if (typeof arguments === 'undefined') {
     return Promise.resolve(true)
   }
-
   return Promise.all(args)
     .then(() => {
       return Promise.resolve(true)

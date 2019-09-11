@@ -1,15 +1,20 @@
 import { ApolloServer, AuthenticationError } from 'apollo-server-express'
 import { PubSub } from 'graphql-subscriptions'
+import jwt from 'jsonwebtoken'
+
 import Redis from 'ioredis'
 import { RedisCache } from 'apollo-server-cache-redis'
 import responseCachePlugin from 'apollo-server-plugin-response-cache'
 import depthLimit from 'graphql-depth-limit'
 import { jwtExtractor } from './passport'
-import { verifyTheToken } from '~/middleware/utils'
+import { giveTokenGetUser } from '~/middleware/utils'
 import User from '~/app/main/user/user.model'
 import conf from './config'
+import { log, show } from '~/core/logger'
 
 import schema from '~/app/schema'
+
+const auth = require('~/middleware/auth')
 
 const config = conf.get('IS_PROD')
   ? {
@@ -38,27 +43,30 @@ export default new ApolloServer({
       message
     }
   },
-  context: async ({ req }) => {
-    try {
-      let token = null
-      if (req.headers.authorization) {
-        token = req.headers.authorization.replace('Bearer ', '').trim()
-      } else if (req.signedCookies) {
-        token = req.signedCookies.COEUS_JWT
-      }
+  context: async ({ req, res, connection, ...rest }, ...other) => {
+    let token = null
+    let currentUser = null;
 
-      const userID = await verifyTheToken(token)
-      User.findById(userID, (err, user) => {
-        if (err) {
-          return console.log(err)
-        }
-        req.user = user
-        return { user, logged: true, clerance: user.role }
-      })
+    if (req.headers.authorization) {
+      token = req.headers.authorization.replace('Bearer ', '').trim()
+    } else if (req.signedCookies) {
+      token = req.signedCookies.COEUS_JWT
+    }
+
+    try {
+      currentUser = await giveTokenGetUser(token)
     } catch (e) {
       throw new AuthenticationError(
         'Authentication token is invalid, please log in'
       )
+    }
+    return {
+      //      loaders,
+      req,
+      res,
+    //  user: currentUser,
+      clerance: currentUser.role,
+      logged: true
     }
   },
   schemaDirectives: {},

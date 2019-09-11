@@ -126,7 +126,7 @@ const SignaleOptions = {
     remind: {
       badge: '🍔',
       color: 'yellow',
-      label: 'dirty burger',
+      label: 'Check this ->',
       logLevel: 'info'
     },
     tabby: {

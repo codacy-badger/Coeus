@@ -114,6 +114,4 @@ UserSchema.plugin(mongooseDelete, { overrideMethods: true, deletedBy : true, del
 
 const User = mongoose.model('User', UserSchema)
 
-export const UserTC = composeWithRelay(composeWithMongoose(User))
-
 export default User
