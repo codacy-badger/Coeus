@@ -1,6 +1,7 @@
 import { check } from 'express-validator'
 import { theValidationResult } from '~/middleware/utils'
 
+const Joi = require('@hapi/joi')
 
 /**
  * Validates create new item request
@@ -74,3 +75,36 @@ export const checkRestoreAircraft = [
     theValidationResult(req, res, next)
   }
 ]
+
+const addAircraftSchema = Joi.object().keys({
+  registration: Joi.string()
+    .min(1)
+    .max(60)
+    .required()
+});
+const updateAircraftSchema = Joi.object().keys({
+  id: Joi.string().required()
+});
+
+export const addAircraftValidator = req => {
+  const reqBody = req.body || req
+  return new Promise((resolve, reject) =>
+    Joi.validate(reqBody, addAircraftSchema, err => {
+      if (err) {
+        return reject(err)
+      }
+      return resolve()
+    })
+  )
+}
+export const updateAircraftValidator = req => {
+  const reqBody = req.body || req
+  return new Promise((resolve, reject) =>
+    Joi.validate(reqBody, updateAircraftSchema, err => {
+      if (err) {
+        return reject(err)
+      }
+      return resolve()
+    })
+  )
+}

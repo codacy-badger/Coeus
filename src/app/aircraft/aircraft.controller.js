@@ -5,7 +5,7 @@ import {
   buildErrObject,
   buildSuccObject,
   itemAlreadyExists,
-	isIDGood
+  isIDGood
 } from '~/middleware/utils'
 import db from '~/middleware/db'
 import { log } from '~/core/logger'
@@ -54,7 +54,9 @@ export const getAllAircrafts = async (req, res) => {
 export const getAllItems = async (req, res) => {
   try {
     const query = await db.checkQueryString(req.query)
-    res.status(200).json(buildSuccObject(await db.getAllItems(req, Aircraft, query)))
+    res
+      .status(200)
+      .json(buildSuccObject(await db.getAllItems(req, Aircraft, query)))
   } catch (error) {
     handleError(res, error)
   }
@@ -67,7 +69,9 @@ export const getAllItems = async (req, res) => {
  */
 export const getItems = async (req, res) => {
   try {
-    res.status(200).json(buildSuccObject(await db.getItems(req, Aircraft, req.query)))
+    res
+      .status(200)
+      .json(buildSuccObject(await db.getItems(req, Aircraft, req.query)))
   } catch (error) {
     handleError(res, error)
   }
@@ -103,7 +107,9 @@ export const getDeletedAircrafts = async (req, res) => {
 export const updateItem = async (req, res) => {
   try {
     const id = await isIDGood(req.body.id)
-      res.status(200).json(buildSuccObject(await db.updateItem(id, Aircraft, req.body)))
+    res
+      .status(200)
+      .json(buildSuccObject(await db.updateItem(id, Aircraft, req.body)))
   } catch (error) {
     handleError(res, error)
   }
@@ -134,7 +140,9 @@ export const deleteAircraft = async (req, res) => {
   try {
     const ItemId = await isIDGood(req.body.id)
     const DeleterId = await isIDGood(req.user._id)
-    res.status(200).json(buildSuccObject(await db.deleteItem(ItemId, DeleterId, Aircraft)))
+    res
+      .status(200)
+      .json(buildSuccObject(await db.deleteItem(ItemId, DeleterId, Aircraft)))
   } catch (error) {
     handleError(res, error)
   }

@@ -1,5 +1,6 @@
 import winston, { createLogger, format, transports } from 'winston'
-import conf from '../core/config'
+import {Signale} from 'signale'
+import conf from '~/core/config'
 
 require('winston-mongodb')
 require('express-async-errors')
@@ -50,7 +51,7 @@ export const log = createLogger({
       maxsize: 5242880, // 5MB
       maxFiles: 5,
       colorize: false,
-      zippedArchive: true,
+      zippedArchive: false,
       options: { encoding: 'utf8' }
     }),
     new transports.File({
@@ -61,7 +62,7 @@ export const log = createLogger({
       maxsize: 5242880, // 5MB
       maxFiles: 10,
       colorize: false,
-      zippedArchive: true,
+      zippedArchive: false,
       options: { encoding: 'utf8' }
     }),
     new transports.File({ filename: 'logfile.log' }),
@@ -113,3 +114,40 @@ process.on('exit', code => {
 
 // const p = Promise.reject(new Error('Ive been rejected :('));
 // p.then(() => { console.log('done'); });
+
+const SignaleOptions = {
+  disabled: false,
+  interactive: false,
+  logLevel: 'info',
+//  scope: 'custom',
+  secrets: [],
+  stream: process.stdout,
+  types: {
+    remind: {
+      badge: '🍔',
+      color: 'yellow',
+      label: 'dirty burger',
+      logLevel: 'info'
+    },
+    tabby: {
+      badge: '🐈',
+      color: 'red',
+      label: 'tabby cat',
+      logLevel: 'info'
+    },
+		propane: {
+			badge: '🥃',
+			color: 'green',
+			label: 'Julian',
+			logLevel: 'info'
+		}
+  }
+};
+/**
+ * Create an instance of Signale
+ *
+ * @type {Signale}
+ *
+ * @see for details https://github.com/klaussinani/signale
+ */
+export const show = new Signale(SignaleOptions);

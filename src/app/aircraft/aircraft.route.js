@@ -10,7 +10,7 @@ import {
   updateItem,
   deleteAircraft,
 } from './aircraft.controller'
-import { onlyCanUse } from '../auth/auth.controller'
+import { onlyCanUse } from '../main/auth/auth.controller'
 import {
   checkCreateAircraft,
   checkAircraftUpdate,
@@ -148,4 +148,4 @@ router.delete(
   deleteAircraft
 )
 
-module.exports = router
+export default router

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import Aircraft from '~/app/main/aircraft/aircraft.route'
+import Aircraft from '~/app/aircraft/aircraft.route'
 import User from '~/app/main/user/user.route'
 import Auth from '~/app/main/auth/auth.route'
 

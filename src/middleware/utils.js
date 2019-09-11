@@ -1,9 +1,10 @@
-import requestIp from 'request-ip';
+import requestIp from 'request-ip'
 import jwt from 'jsonwebtoken'
-import { MongooseQueryParser } from 'mongoose-query-parser';
-import { validationResult } from 'express-validator';
+import { MongooseQueryParser } from 'mongoose-query-parser'
+import { validationResult } from 'express-validator'
 import { log } from '~/core/logger'
 import conf from '~/core/config'
+import User from '~/app/main/user/user.model'
 
 const auth = require('../middleware/auth')
 
@@ -16,7 +17,9 @@ export const generateToken = verificationString => {
         data: {
           _id: verificationString
         },
-        exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 * conf.get('JWT_EXPIRATION_IN_DAYS'))
+        exp:
+          Math.floor(Date.now() / 1000) +
+          60 * 60 * 24 * conf.get('JWT_EXPIRATION_IN_DAYS')
       },
       conf.get('JWT_SECRET')
     )
@@ -115,8 +118,6 @@ export const theValidationResult = (req, res, next) => {
   }
 }
 
-
-
 /**
  * Checks if given ID is good for MongoDB
  * @param {string} id - id to check
@@ -124,9 +125,7 @@ export const theValidationResult = (req, res, next) => {
 export const isIDGood = async id => {
   return new Promise((resolve, reject) => {
     const goodID = String(id).match(/^[0-9a-fA-F]{24}$/)
-    return goodID
-      ? resolve(id)
-      : reject(buildErrObject(422, 'ID_MALFORMED'))
+    return goodID ? resolve(id) : reject(buildErrObject(422, 'ID_MALFORMED'))
   })
 }
 
@@ -176,4 +175,25 @@ export const verifyTheToken = async token => {
       resolve(decoded.data._id)
     })
   })
+}
+
+export const ContextMiddleware = async (context, onlyCanUse, ...args) => {
+  const { next, logged, clerance } = context
+  if (!logged) {
+    return buildErrObject(401, 'Unauthorized access. Contact with your manager')
+  }
+  if (onlyCanUse.indexOf(clerance) > -1) {
+    return buildErrObject(401, 'Unauthorized access. Contact with your manager')
+  }
+  if (typeof arguments === 'undefined') {
+    return Promise.resolve(true)
+  }
+
+  return Promise.all(args)
+    .then(() => {
+      return Promise.resolve(true)
+    })
+    .catch(err => {
+      return next(err)
+    })
 }

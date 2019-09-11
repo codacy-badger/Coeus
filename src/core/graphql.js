@@ -41,22 +41,19 @@ export default new ApolloServer({
   context: async ({ req }) => {
     try {
       let token = null
-      if (req.signedCookies) {
-        token = req.signedCookies.COEUS_JWT
-      }
       if (req.headers.authorization) {
         token = req.headers.authorization.replace('Bearer ', '').trim()
-      } else if (req.body.token) {
-        token = req.body.token.trim()
-      } else if (req.query.token) {
-        token = req.query.token.trim()
+      } else if (req.signedCookies) {
+        token = req.signedCookies.COEUS_JWT
       }
+
       const userID = await verifyTheToken(token)
       User.findById(userID, (err, user) => {
         if (err) {
           return console.log(err)
         }
-        return console.log(user)
+        req.user = user
+        return { user, logged: true, clerance: user.role }
       })
     } catch (e) {
       throw new AuthenticationError(

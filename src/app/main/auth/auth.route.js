@@ -79,4 +79,4 @@ router.get(
 router.post('/login', trimRequest.all, CheckLogin, login)
 
 
-module.exports = router
+export default router
