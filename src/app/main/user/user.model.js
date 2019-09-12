@@ -1,6 +1,3 @@
-import { composeWithMongoose } from 'graphql-compose-mongoose'
-import composeWithRelay from 'graphql-compose-relay'
-
 const mongoose = require('mongoose')
 const mongooseDelete = require('mongoose-delete')
 const bcrypt = require('bcrypt')
@@ -40,6 +37,9 @@ const UserSchema = new mongoose.Schema(
       url: {
         type: String,
       }
+    },
+    clerance: {
+      type: Array,
     },
     verification: {
       type: String
@@ -87,7 +87,7 @@ const hash = (user, salt, next) => {
   })
 }
 
-UserSchema.pre('save', function(next) {
+UserSchema.pre('save', function(next) { // eslint-disable-line
   const that = this
   const SALT_FACTOR = 10
   if (!that.isModified('password')) {
@@ -96,7 +96,7 @@ UserSchema.pre('save', function(next) {
   return hash(that, SALT_FACTOR, next)
 })
 
-UserSchema.methods.comparePassword = function(passwordAttempt, cb) {
+UserSchema.methods.comparePassword = function(passwordAttempt, cb) { // eslint-disable-line
   bcrypt.compare(
     passwordAttempt,
     this.password,

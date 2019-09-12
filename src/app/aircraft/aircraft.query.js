@@ -1,13 +1,13 @@
 import { ContextMiddleware } from '~/middleware/utils'
-import AircraftService from './aircraft.service'
+import { getAircraft, getAllAircrafts } from './aircraft.service'
 
 module.exports = {
-  showAircraft: (root, args, context) =>
-    ContextMiddleware(context, ['admin']).then(() =>
-      AircraftService.showAircraft({ context, args })
+  showSingleAircraft: (root, args, context) =>
+    ContextMiddleware(context, 'canEditAircraft').then(() =>
+      getAircraft(args)
     ),
   showAllAircrafts: (root, args, context) =>
-    ContextMiddleware(context, ['admin']).then(() =>
-      AircraftService.showAllAircrafts(args)
+    ContextMiddleware(context, 'canEditAircraft').then(() =>
+      getAllAircrafts(args)
     )
 }

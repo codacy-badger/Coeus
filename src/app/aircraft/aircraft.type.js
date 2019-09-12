@@ -1,7 +1,15 @@
 const AircraftTypes = () => `
   type Aircraft {
-      _id: String!
-      registration: String!
+    _id: String!
+    registration: String!
+    operator: String!
+    manufacturer: String!
+    model: String!
+    msn: String!
+    weightVariant: String!
+    year: String!
+    totalFlightCycle: Int
+    totalFlightHour: Int
   }
   input AircraftInputType {
     registration: String!
@@ -15,8 +23,8 @@ const AircraftTypes = () => `
     message: String!
   }
   extend type Query {
-    showAircraft(id: ID!): Aircraft
-    showAllAircrafts(id: ID!): Aircraft
+    showSingleAircraft(id: ID!): Aircraft
+    showAllAircrafts: AircraftListType
   }
   extend type Mutation {
     addAircraft(input: AircraftInputType!): Success!

@@ -7,11 +7,9 @@ import { AircraftTypes, AircraftResolvers } from '~/app/aircraft'
 
 const Root = /* GraphQL */ `
   type Query {
-    dummy: String
     default: String
   }
   type Mutation {
-    dummy: String
     default: String
   }
   type Subscription {

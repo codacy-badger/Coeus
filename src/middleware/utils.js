@@ -1,10 +1,13 @@
 import requestIp from 'request-ip'
 import jwt from 'jsonwebtoken'
+import _ from 'lodash'
+import { AuthenticationError } from 'apollo-server-express'
 import { MongooseQueryParser } from 'mongoose-query-parser'
 import { validationResult } from 'express-validator'
 import { log, show } from '~/core/logger'
 import conf from '~/core/config'
 import User from '~/app/main/user/user.model'
+
 
 
 const auth = require('../middleware/auth')
@@ -193,22 +196,41 @@ export const giveTokenGetUser = async token => {
 
 }
 
+/**
+ * [ContextMiddleware for role based auth]
+ *
+ * @method ContextMiddleware(context,['admin'],function)
+ *
+ * @param  {[type]}         context Apollo context instance
+ * @param  {array}          onlyCanUse Which clerance can operate?
+ * @param  {[type]}         args Requested arguments
+ *
+ * @return {Promise}
+ */
 export const ContextMiddleware = async (context, onlyCanUse, ...args) => {
-  const { next, logged, clerance } = context
-  if (!logged) {
-    return buildErrObject(401, 'Unauthorized access. Contact with your manager')
+  console.log(context)
+  const { logged, clerance } = context
+  if (logged === false) {
+    throw new AuthenticationError(
+      'No login'
+    )
   }
-  if (onlyCanUse.indexOf(clerance) > -1) {
-    return buildErrObject(401, 'Unauthorized access. Contact with your manager')
+
+  if (_.includes(clerance, onlyCanUse) === false) {
+    throw new AuthenticationError(
+      'No clerance'
+    )
   }
   if (typeof arguments === 'undefined') {
+    log.warn('1')
     return Promise.resolve(true)
   }
+  log.warn('2')
   return Promise.all(args)
     .then(() => {
       return Promise.resolve(true)
     })
     .catch(err => {
-      return next(err)
+      return err
     })
 }

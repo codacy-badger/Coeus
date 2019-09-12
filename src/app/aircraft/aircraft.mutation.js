@@ -7,18 +7,17 @@ import {
 
 module.exports = {
   addAircraft: async (root, args, context) => {
-    const { user, next,clerance } = context
-    console.log(clerance)
+    const { user, clerance} = context
     try {
       await ContextMiddleware(
         context,
-        ['admin'],
+        'canEditAircrafts',
         addAircraftValidator(args.input)
       )
       await AircraftService.addAircraft(args, context)
       return { message: 'Aircraft has been succesfully added', ok: true }
     } catch (err) {
-      return next(err)
+      return { message: err, ok: false }
     }
   },
   updateAircraft: async (root, args, context) => {
