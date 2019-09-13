@@ -22,7 +22,7 @@
 		"_codecov": "codecov"
 	},
 	"dependencies": {
-		"@hapi/joi": "^15.1.1",
+		"@hapi/joi": "^16.0.0",
 		"@ladjs/mongoose-error-messages": "^0.0.3",
 		"apollo-server": "^2.8.1",
 		"apollo-server-cache-redis": "^1.1.1",
