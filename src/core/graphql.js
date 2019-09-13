@@ -16,8 +16,7 @@ const config = conf.get('IS_PROD')
       host: conf.get('REDIS_CACHE_URL'),
       password: conf.get('REDIS_CACHE_PASSWORD')
     }
-  : undefined
-
+  : null
 const redisCache = new Redis(config)
 
 export const pubsub = new PubSub()
@@ -46,7 +45,6 @@ export default new ApolloServer({
     } else if (req.signedCookies) {
       token = req.signedCookies.COEUS_JWT
     }
-
     try {
       currentUser = await giveTokenGetUser(token)
     } catch (e) {
@@ -59,7 +57,8 @@ export default new ApolloServer({
       //      loaders,
       req,
       res,
-    //  user: currentUser,
+      user: currentUser,
+      userID: currentUser._id,
       clerance: currentUser.clerance,
       logged: true
     }
@@ -84,8 +83,9 @@ export default new ApolloServer({
   validationRules: [depthLimit(10)],
   plugins: [
     responseCachePlugin({
-      sessionId: requestContext =>
-        requestContext.request.http.headers.get('sessionid') || null
+      sessionId: ({ context }) => context.userID,
+      shouldReadFromCache: ({ context }) => !context.logged,
+      shouldWriteToCache: ({ context }) => !context.logged,
     })
   ],
   cacheControl: {

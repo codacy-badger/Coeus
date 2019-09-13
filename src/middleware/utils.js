@@ -208,24 +208,26 @@ export const giveTokenGetUser = async token => {
  * @return {Promise}
  */
 export const ContextMiddleware = async (context, onlyCanUse, ...args) => {
-  console.log(context)
   const { logged, clerance } = context
+
   if (logged === false) {
+      log.access('Unauthorized access')
     throw new AuthenticationError(
       'No login'
     )
   }
 
   if (_.includes(clerance, onlyCanUse) === false) {
+    log.access('Access with low clerance')
     throw new AuthenticationError(
       'No clerance'
     )
   }
+  
+  log.access(`${context.user.name  } has requested a grapql query`)
   if (typeof arguments === 'undefined') {
-    log.warn('1')
     return Promise.resolve(true)
   }
-  log.warn('2')
   return Promise.all(args)
     .then(() => {
       return Promise.resolve(true)
