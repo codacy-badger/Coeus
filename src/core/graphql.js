@@ -17,8 +17,9 @@ const RedisConfig = {
   password: 'p1d3a9fee8e6af2fae8b18990ecffd65e2f8ddab903d4047d11a634422b15f799'
 }
 
-
-const redis = new Redis('redis://h:p1d3a9fee8e6af2fae8b18990ecffd65e2f8ddab903d4047d11a634422b15f799@ec2-3-220-50-71.compute-1.amazonaws.com:23339')
+const redis = new Redis(
+  'redis://h:p1d3a9fee8e6af2fae8b18990ecffd65e2f8ddab903d4047d11a634422b15f799@ec2-3-220-50-71.compute-1.amazonaws.com:23339'
+)
 
 export const pubsub = new PubSub()
 
@@ -39,7 +40,7 @@ export default new ApolloServer({
   },
   context: async ({ req, res, ...rest }, ...other) => {
     let token = null
-    let currentUser = null;
+    let currentUser = null
 
     if (req.headers.authorization) {
       token = req.headers.authorization.replace('Bearer ', '').trim()
@@ -86,7 +87,7 @@ export default new ApolloServer({
     responseCachePlugin({
       sessionId: ({ context }) => context.userID,
       shouldReadFromCache: ({ context }) => !context.logged,
-      shouldWriteToCache: ({ context }) => !context.logged,
+      shouldWriteToCache: ({ context }) => !context.logged
     })
   ],
   cacheControl: {
@@ -95,7 +96,27 @@ export default new ApolloServer({
     defaultMaxAge: 6000
   },
   cache: new RedisCache({
-    RedisConfig,
-    prefix: 'apollo-cache:',
-  }),
+    connectTimeout: 5000,
+    reconnectOnError(err) {
+      console.log('Reconnect on error', err)
+      const targetError = 'READONLY'
+      if (err.message.slice(0, targetError.length) === targetError) {
+        // Only reconnect when the error starts with "READONLY"
+        return true
+      }
+    },
+    retryStrategy(times) {
+      console.log('Redis Retry', times)
+      if (times >= 3) {
+        return undefined
+      }
+      const delay = Math.min(times * 50, 2000)
+      return delay
+    },
+    socket_keepalive: false,
+    host: conf.get('IS_DEV') ? '127.0.0.1' : conf.get('REDIS_HOST'),
+    port: conf.get('IS_DEV') ? 6379 : conf.get('REDIS_PORT'),
+    password: conf.get('IS_DEV') ? '' : conf.get('REDIS_PASSWORD'),
+    user: conf.get('IS_DEV') ? '' : conf.get('REDIS_USER')
+  })
 })
