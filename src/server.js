@@ -9,16 +9,16 @@ import conf from './core/config'
 import { log } from './core/logger'
 
 // include and initialize the rollbar library with your access token
-const Rollbar = require('rollbar')
+// const Rollbar = require('rollbar')
 
-const rollbar = new Rollbar({
-  accessToken: 'f442d8c998864f629924b0f38fd4596a',
-  captureUncaught: true,
-  captureUnhandledRejections: true
-})
+// const rollbar = new Rollbar({
+//   accessToken: 'f442d8c998864f629924b0f38fd4596a',
+//   captureUncaught: true,
+//   captureUnhandledRejections: true
+// })
 
 // record a generic message and send it to Rollbar
-rollbar.log('Hello world!')
+// rollbar.log('Hello world!')
 
 const port = conf.get('PORT') || 3000
 const server = http.Server(app)
