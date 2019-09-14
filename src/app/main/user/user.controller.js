@@ -216,6 +216,7 @@ export const addUserPhoto = async (req, res) => {
  * Verify function called by route
  * @param {Object} req - request object
  * @param {Object} res - response object
+ * @TODO : Not works when it deployed on Heroku
  */
 export const verifyUser = async (req, res) => {
   try {
