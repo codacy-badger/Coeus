@@ -11,7 +11,7 @@ import { log, show } from '~/core/logger'
 import schema from '~/app/schema'
 
 
-
+const redis = new Redis(conf.get('REDIS_URL'))
 export const pubsub = new PubSub()
 
 export default new ApolloServer({
@@ -85,5 +85,9 @@ export default new ApolloServer({
     calculateHttpHeaders: false,
     // Cache everything for at least a minute since we only cache public responses
     defaultMaxAge: 6000
-  }
+  },
+  cache: new RedisCache({
+    ...redis,
+    prefix: 'apollo-cache:',
+  }),
 })
