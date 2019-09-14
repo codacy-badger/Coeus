@@ -8,5 +8,12 @@
 	"engines": {
 		"node": "12.10.0",
 		"yarn": "1.17.3"
+	},
+	"environments": {
+	"test": {
+		"scripts": {
+			"test": "NODE_ENV=test nyc ./node_modules/.bin/mocha ./test/**/*.js"
+		}
 	}
+}
 }
