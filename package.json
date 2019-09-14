@@ -9,6 +9,7 @@
 	"scripts": {
 		"dev": "NODE_ENV=development nodemon src/server.js --exec babel-node",
 		"build": "babel src -d dist",
+		"deploy": "NODE_ENV=production npm install && babel src -d dist",
 		"start": "NODE_ENV=production npm run build && nodemon dist/server.js",
 		"seed": "NODE_ENV=development babel-node tools/seeder/seeder.js",
 		"test": "jest",

@@ -12,9 +12,9 @@ import schema from '~/app/schema'
 
 const config = conf.get('IS_PROD')
   ? {
-      port: conf.get('REDIS_CACHE_PORT'),
-      host: conf.get('REDIS_CACHE_URL'),
-      password: conf.get('REDIS_CACHE_PASSWORD')
+      port: conf.get('REDIS_PORT'),
+      host: conf.get('REDIS_URL'),
+      password: conf.get('REDIS_PASSWORD')
     }
   : null
 const redisCache = new Redis(config)
