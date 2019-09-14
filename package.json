@@ -12,7 +12,7 @@
 		"deploy": "NODE_ENV=production npm install && babel src -d dist",
 		"start": "NODE_ENV=production npm run build && nodemon dist/server.js",
 		"seed": "NODE_ENV=development babel-node tools/seeder/seeder.js",
-		"test": "jest",
+		"test": "NODE_ENV=test nyc ./node_modules/.bin/mocha ./test/**/*.js && codecov -t c76b1eb3-ebac-415e-b58f-1bfdb7500f99",
 		"doc": "./node_modules/.bin/jsdoc -c jsdoc.json",
 		"apidoc": "gulp apidoc",
 		"test:watch": "jest --watchAll",
