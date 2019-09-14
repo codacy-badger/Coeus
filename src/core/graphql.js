@@ -115,7 +115,7 @@ export default new ApolloServer({
     },
     socket_keepalive: false,
     host: conf.get('IS_DEV') ? '127.0.0.1' : conf.get('REDIS_HOST'),
-    port: conf.get('IS_DEV') ? 6379 : conf.get('REDIS_PORT'),
+    port: conf.get('IS_DEV') ? 6379 : '',
     password: conf.get('IS_DEV') ? '' : conf.get('REDIS_PASSWORD'),
     user: conf.get('IS_DEV') ? '' : conf.get('REDIS_USER')
   })
