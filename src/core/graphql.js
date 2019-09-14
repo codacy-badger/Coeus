@@ -16,14 +16,9 @@ const config = conf.get('IS_PROD')
       host: conf.get('REDIS_URL'),
       password: conf.get('REDIS_PASSWORD')
     }
-  : {
-    port: '23339',
-    host: 'ec2-3-220-50-71.compute-1.amazonaws.com',
-    password: 'p1d3a9fee8e6af2fae8b18990ecffd65e2f8ddab903d4047d11a634422b15f799',
-    user: 'h'
-  }
+  : null
 
-const redisCache = new Redis(config)
+const redisCache = new Redis("redis://h:p1d3a9fee8e6af2fae8b18990ecffd65e2f8ddab903d4047d11a634422b15f799@ec2-3-220-50-71.compute-1.amazonaws.com:23339/0")
 
 export const pubsub = new PubSub()
 
