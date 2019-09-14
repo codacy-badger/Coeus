@@ -20,11 +20,6 @@ const config = conf.get('IS_PROD')
   
 const redisCache = new Redis(config)
 
-
-redisCache.on("error", (error) => {
-    console.log(error);
-});
-
 export const pubsub = new PubSub()
 
 export default new ApolloServer({
