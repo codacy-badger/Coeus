@@ -51,8 +51,8 @@ router.get(
  */
 router.post(
   '/',
-  secureIt,
-  onlyCanUse(['admin']),
+//  secureIt,
+//  onlyCanUse(['admin']),
   trimRequest.all,
   checkNewUser,
   createNewUser
