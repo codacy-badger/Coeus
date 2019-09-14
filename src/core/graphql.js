@@ -95,7 +95,7 @@ export default new ApolloServer({
     defaultMaxAge: 6000
   },
   cache: new RedisCache({
-    ...redis,
+    RedisConfig,
     prefix: 'apollo-cache:',
   }),
 })
