@@ -216,12 +216,13 @@ export const addUserPhoto = async (req, res) => {
  * Verify function called by route
  * @param {Object} req - request object
  * @param {Object} res - response object
- * @TODO : Not works when it deployed on Heroku
+ * TODO : Not works when it deployed on Heroku
  */
 export const verifyUser = async (req, res) => {
   try {
     const verifiedToken = await verifyTheToken(req.body.token)
     const user = await verificationExists(verifiedToken)
+    
     if (verifiedToken && user.verification === verifiedToken) {
       const verifiedUser = await verify(user)
       res.status(200).json(verifiedUser)
