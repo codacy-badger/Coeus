@@ -16,9 +16,7 @@ const config = conf.get('IS_PROD')
       host: conf.get('REDIS_URL'),
       password: conf.get('REDIS_PASSWORD')
     }
-  : {
-    host: conf.get('REDIS_URL')
-  }
+  : conf.get('REDIS_URL')
 const redisCache = new Redis(config)
 
 export const pubsub = new PubSub()
