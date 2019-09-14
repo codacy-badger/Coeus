@@ -10,15 +10,6 @@ import { log, show } from '~/core/logger'
 
 import schema from '~/app/schema'
 
-const config = conf.get('IS_PROD')
-  ? {
-      port: conf.get('REDIS_PORT'),
-      host: conf.get('REDIS_URL'),
-      password: conf.get('REDIS_PASSWORD')
-    }
-  : conf.get('REDIS_URL')
-  
-const redisCache = new Redis(config)
 
 export const pubsub = new PubSub()
 
@@ -93,9 +84,5 @@ export default new ApolloServer({
     calculateHttpHeaders: false,
     // Cache everything for at least a minute since we only cache public responses
     defaultMaxAge: 6000
-  },
-  cache: new RedisCache({
-    redisCache,
-    prefix: 'apollo-cache:'
-  })
+  }
 })

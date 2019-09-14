@@ -21,7 +21,8 @@ import { log } from './core/logger'
 // rollbar.log('Hello world!')
 
 const port = conf.get('PORT') || 3000
-console.log(port)
+
+
 const server = http.Server(app)
 
 mongoose.Promise = require('bluebird')
