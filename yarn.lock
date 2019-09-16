@@ -9334,6 +9334,11 @@ requizzle@^0.2.3:
   dependencies:
     lodash "^4.17.14"
 
+resnap@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/resnap/-/resnap-1.0.1.tgz#699157cd351d129f2f70497f1720686a8ab833d9"
+  integrity sha512-INWHhTlHwkl0h9m1MMYBgZmatCLoQwMmeijEyTjEOPXcBBgCfAxskSNAUDLL/lO1PB+evr5FsJ8Y8K+GLkpV3A==
+
 resolve-cwd@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/resolve-cwd/-/resolve-cwd-2.0.0.tgz#00a9f7387556e27038eae232caa372a6a59b665a"

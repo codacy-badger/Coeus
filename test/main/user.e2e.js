@@ -55,7 +55,7 @@ describe('User tests', () => {
         })
     })
   })
-	
+
 	// ROUTE: [GET] /__/users
 	// MODEL: USER
 	// CONTROLLER: USER
@@ -64,7 +64,7 @@ describe('User tests', () => {
 	// Must be auth
 
 
-  describe('[GET] /__/users/ Get Users List', () => {
+  describe('[GET] /__/user/ Get Users List', () => {
     it('must give users list', done => {
       chai
         .request(Application)
@@ -112,7 +112,7 @@ describe('User tests', () => {
 	// Auth does not necessary
 	// Must have verification token
 
-  describe('[POST] /__/users/verify Verify the user with given verification token', () => {
+  describe('[POST] /__/user/verify Verify the user with given verification token', () => {
     it('must give back a positive vibe 😐', done => {
       chai
         .request(Application)
@@ -161,13 +161,13 @@ describe('User tests', () => {
     it('must be delete the user successfully', done => {
       chai
         .request(Application)
-        .delete(`/__/user/${userID}`)
+        .post(`/__/user/delete`)
 				.set('Authorization', `Bearer ${theToken}`)
-        .send(userCredentials)
+        .send({id: userID})
 				.end((error, response) => {
 					response.should.have.status(200)
 					response.body.success.should.equal(true)
-					response.body.data.should.equal('DELETED')
+					response.body.data.deleted.should.equal(true)
 					done()
 				})
     })

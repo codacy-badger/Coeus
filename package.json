@@ -155,6 +155,7 @@
 		"mongo-seeding": "3.3.0",
 		"nodemon": "1.19.2",
 		"nyc": "14.1.1",
-		"prettier": "1.18.2"
+		"prettier": "1.18.2",
+		"resnap": "^1.0.1"
 	}
 }

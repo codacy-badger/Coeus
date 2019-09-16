@@ -8,16 +8,17 @@ const JwtStrategy = require('passport-jwt').Strategy
 const auth = require('~/middleware/auth')
 
 /**
-* Extracts token from: header, body or query
-* @param {Object} req - request object
-* @returns {string} token - decrypted token
-*/
+ * Extracts token from: header, body or query
+ * @param {Object} req - request object
+ * @returns {string} token - decrypted token
+ */
 export const jwtExtractor = req => {
   let token = null
-  if (req.signedCookies) {
-    token = req.signedCookies.COEUS_JWT
-  } else if (req.headers.authorization) {
+  // TODO Order of looking for token is something. Do we really really want to use cookies or what?
+  if (req.headers.authorization) {
     token = req.headers.authorization.replace('Bearer ', '').trim()
+  } else if (req.signedCookies) {
+    token = req.signedCookies.COEUS_JWT
   } else if (req.body.token) {
     token = req.body.token.trim()
   } else if (req.query.token) {
@@ -37,7 +38,6 @@ const jwtOptions = {
   jwtFromRequest: jwtExtractor,
   secretOrKey: conf.get('JWT_SECRET')
 }
-
 
 /**
  * Login with JWT middleware

@@ -27,12 +27,8 @@ describe('Auth tests', () => {
         .send(userCredentials)
         .end((err, res) => {
           res.should.have.status(200)
-          // console.log(res.body.data.token)
-          // TODO: Must adding a validation for token. id:53
-          // - <https://github.com/stevenselcuk/Coeus/issues/26>
-          // Steven J. Selcuk
-          // stevenjselcuk@gmail.com
-          res.body.should.be.a('object')
+          res.body.success.should.equal(true)
+          res.body.data.user.should.be.a('object')
           done()
         })
     })
