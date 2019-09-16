@@ -28,7 +28,9 @@ jobs:
         MONGODB_URI: ${{ secrets.MONGODB_URI }}
         REDIS_URI: ${{ secrets.REDIS_URI }}
       run: |
+        npm install -g mocha
         yarn
-        yarn deploy
         yarn mocha
+        yarn build
+        yarn start
 
