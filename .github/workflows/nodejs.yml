@@ -15,6 +15,7 @@ jobs:
         node-version: '12.x'
     - name: npm install, build, and test
       env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         CI: true
         PORT: 3000
         JWT_SECRET: 6369AD13051EB8986C6EE3F9617F3199
