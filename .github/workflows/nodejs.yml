@@ -26,6 +26,7 @@ jobs:
         RATE_LIMIT: 100
         SESSION_NAME: COEUS
         MONGODB_URI: ${{ secrets.MONGODB_URI }}
+        REDIS_URI: ${{ secrets.REDIS_URI }}
       run: |
         yarn
         yarn dev
