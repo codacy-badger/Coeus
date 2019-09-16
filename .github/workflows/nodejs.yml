@@ -29,6 +29,6 @@ jobs:
         REDIS_URI: ${{ secrets.REDIS_URI }}
       run: |
         yarn
-        yarn dev
+        yarn deploy
         yarn mocha
 
