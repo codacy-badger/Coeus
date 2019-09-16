@@ -1,6 +1,15 @@
-import Redis from 'ioredis'
+import redis from 'redis'
 import conf from './config'
+let cache = ''
 
-const redis = new Redis(conf.get('REDIS_URI'))
 
-export default redis
+if (process.env.REDIS_URI) {
+	const rtg   = require("url").parse(process.env.REDISTOGO_URL);
+  cache = redis.createClient(rtg.port, rtg.hostname);
+
+redis.auth(rtg.auth.split(":")[1]);
+} else {
+    cache = redis.createClient();
+}
+
+export default cache
