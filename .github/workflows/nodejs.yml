@@ -14,10 +14,6 @@ jobs:
       with:
         node-version: '12.x'
     - name: npm install, build, and test
-      run: |
-        yarn
-        yarn dev
-        yarn mocha
       env:
         CI: true
         PORT: 3000
@@ -29,3 +25,8 @@ jobs:
         RATE_LIMIT: 100
         SESSION_NAME: COEUS
         MONGODB_URI: ${{ secrets.MONGODB_URI }}
+      run: |
+        yarn
+        yarn dev
+        yarn mocha
+
