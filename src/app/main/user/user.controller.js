@@ -217,9 +217,9 @@ export const addUserPhoto = async (req, res) => {
  * @param {Object} req - request object
  * @param {Object} res - response object
  * TODO : Not works when it deployed on Heroku id:55
-         - <https://github.com/stevenselcuk/Coeus/issues/49>
-         Steven J. Selcuk
-         stevenjselcuk@gmail.com
+          - <https://github.com/stevenselcuk/Coeus/issues/49>
+          Steven J. Selcuk
+          stevenjselcuk@gmail.com
  */
 export const verifyUser = async (req, res) => {
   try {
