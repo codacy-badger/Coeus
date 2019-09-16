@@ -15,9 +15,9 @@ const auth = require('~/middleware/auth')
 export const jwtExtractor = req => {
   let token = null
   // TODO Order of looking for token is something. Do we really really want to use cookies or what? id:60
-// - <https://github.com/stevenselcuk/Coeus/issues/71>
-// Steven J. Selcuk
-// stevenjselcuk@gmail.com
+  // - <https://github.com/stevenselcuk/Coeus/issues/71>
+  // Steven J. Selcuk
+  // stevenjselcuk@gmail.com
   if (req.headers.authorization) {
     token = req.headers.authorization.replace('Bearer ', '').trim()
   } else if (req.signedCookies) {
