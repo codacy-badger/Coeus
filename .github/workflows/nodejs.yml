@@ -13,8 +13,8 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - uses: actions/setup-node@v1
-    with:
-      node-version: '12.x'
+      with:
+        node-version: '10.x'
     - name: npm install, build, and test
       run: |
         npm install
