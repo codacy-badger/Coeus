@@ -327,7 +327,7 @@ const checkPermissions = async (data, next) => {
   return new Promise((resolve, reject) => {
     User.findById(data.id, (err, result) => {
       itemNotFound(err, result, reject, 'NOT_FOUND')
-      if (data.roles.indexOf(result.role) > -1) {
+      if (data.roles.indexOf(result.role) > -1 && result.verified)  {
         return resolve(next())
       }
       return reject(buildErrObject(401, 'UNAUTHORIZED ACCESS'))

@@ -8,44 +8,43 @@ import {
   generateToken,
   verifyTheToken
 } from '~/middleware/utils'
-import {log} from '~/core/logger'
+import { log } from '~/core/logger'
 
 const cryptoRandomString = require('crypto-random-string')
 const db = require('~/middleware/db')
 const emailer = require('~/middleware/emailer')
 
-
 /**
  * Creates a new item in database
  * @param {Object} req - request object
  */
-const createItem = async req => {
+const createUser = async req => {
   return new Promise((resolve, reject) => {
     User.create(
       {
         name: req.name,
         email: req.email,
         password: req.password,
-        country: req.country,
-        phone: req.phone,
-        role: req.role,
-        city: req.city,
         verification: cryptoRandomString({ length: 32, type: 'base64' })
       },
       (err, item) => {
         if (err) {
           reject(buildErrObject(422, err.message))
         }
-        const removeProperties = ({
-          // eslint-disable-next-line no-unused-vars
-          password,
-          // eslint-disable-next-line no-unused-vars
-          blockExpires,
-          // eslint-disable-next-line no-unused-vars
-          loginAttempts,
-          ...rest
-        }) => rest
-        resolve(removeProperties(item.toObject()))
+        if (item) {
+          const removeProperties = ({
+            // eslint-disable-next-line no-unused-vars
+            password,
+            // eslint-disable-next-line no-unused-vars
+            blockExpires,
+            // eslint-disable-next-line no-unused-vars
+            loginAttempts,
+            ...rest
+          }) => rest
+          resolve(removeProperties(item.toObject()))
+        } else {
+          reject(buildErrObject(422, 'UNKNOWN USER CREATION ERROR'))
+        }
       }
     )
   })
@@ -53,8 +52,8 @@ const createItem = async req => {
 
 const addOrUpdatePhoto = async req => {
   const { id } = req.body
-  const { filename, path} = req.file
-  
+  const { filename, path } = req.file
+
   return new Promise((resolve, reject) => {
     User.findByIdAndUpdate(
       id,
@@ -195,7 +194,7 @@ export const createNewUser = async (req, res) => {
     // Gets locale from header 'Accept-Language'
     const doesEmailExists = await emailer.emailExists(req.body.email)
     if (!doesEmailExists) {
-      const item = await createItem(req.body)
+      const item = await createUser(req.body)
       const response = returnRegisterToken(item)
       res.status(201).json(buildSuccObject(response))
     }
@@ -217,15 +216,15 @@ export const addUserPhoto = async (req, res) => {
  * @param {Object} req - request object
  * @param {Object} res - response object
  * TODO : Not works when it deployed on Heroku id:55
-          - <https://github.com/stevenselcuk/Coeus/issues/49>
-          Steven J. Selcuk
-          stevenjselcuk@gmail.com
+     - <https://github.com/stevenselcuk/Coeus/issues/49>
+     Steven J. Selcuk
+     stevenjselcuk@gmail.com
  */
 export const verifyUser = async (req, res) => {
   try {
     const verifiedToken = await verifyTheToken(req.body.token)
     const user = await verificationExists(verifiedToken)
-    
+
     if (verifiedToken && user.verification === verifiedToken) {
       const verifiedUser = await verify(user)
       res.status(200).json(verifiedUser)

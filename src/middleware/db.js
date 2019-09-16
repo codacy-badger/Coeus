@@ -188,11 +188,17 @@ module.exports = {
   async deleteItem(itemID, deleterID, model) {
     return new Promise((resolve, reject) => {
       model.findById(itemID, (err, item) => {
-        itemNotFound(err, item, reject, 'NOT_FOUND')
-        item.delete(deleterID, () => {
-          resolve({ deleted: true })
-          log.info(`Item ${itemID} has successfully deleted.`)
-        })
+        if (err) {
+          reject(buildErrObject(422, err.message))
+        }
+        if (item) {
+          item.delete(deleterID, () => {
+            resolve({ deleted: true })
+            log.info(`Item ${itemID} has successfully deleted.`)
+          })
+        } else {
+          reject(buildErrObject(422, 'ITEM HAS ALREADY DELETED.'))
+        }
       })
     })
   },

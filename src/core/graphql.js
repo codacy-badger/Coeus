@@ -1,16 +1,14 @@
 import { ApolloServer, AuthenticationError } from 'apollo-server-express'
 import { PubSub } from 'graphql-subscriptions'
-import Redis from 'ioredis'
 import { RedisCache } from 'apollo-server-cache-redis'
 import responseCachePlugin from 'apollo-server-plugin-response-cache'
 import depthLimit from 'graphql-depth-limit'
 import { giveTokenGetUser } from '~/middleware/utils'
 import conf from './config'
+import redis from './redis'
 import { log, show } from '~/core/logger'
 
 import schema from '~/app/schema'
-
-const redis = new Redis('redis://h:p1d3a9fee8e6af2fae8b18990ecffd65e2f8ddab903d4047d11a634422b15f799@ec2-3-220-50-71.compute-1.amazonaws.com:23339');
 
 export const pubsub = new PubSub()
 
@@ -53,6 +51,7 @@ export default new ApolloServer({
       user: currentUser,
       userID: currentUser._id,
       clerance: currentUser.clerance,
+      verified: currentUser.verified,
       logged: true
     }
   },
@@ -87,7 +86,7 @@ export default new ApolloServer({
     defaultMaxAge: 6000
   },
   cache: new RedisCache({
-    ...redis,
+    redis,
     prefix: 'apollo-cache:',
   }),
 })
