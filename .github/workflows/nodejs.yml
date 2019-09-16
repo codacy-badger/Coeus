@@ -13,10 +13,12 @@ jobs:
     - uses: actions/setup-node@v1
       with:
         node-version: '12.x'
+    - name: ESLint checks
+      uses: gimenete/eslint-action@1.0
     - name: npm install, build, and test
       run: |
         npm install
-        npm run start
+        npm run dev
         npm run mocha
       env:
         CI: true
