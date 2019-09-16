@@ -13,13 +13,11 @@ jobs:
     - uses: actions/setup-node@v1
       with:
         node-version: '12.x'
-    - name: ESLint checks
-      uses: gimenete/eslint-action@1.0
     - name: npm install, build, and test
       run: |
-        npm install
-        npm run dev
-        npm run mocha
+        yarn
+        yarn dev
+        yarn mocha
       env:
         CI: true
         PORT: 3000
@@ -30,3 +28,4 @@ jobs:
         COOKIE_EXPIRATION_IN_DAYS: 7
         RATE_LIMIT: 100
         SESSION_NAME: COEUS
+        MONGODB_URI: ${{ secrets.MONGODB_URI }}
