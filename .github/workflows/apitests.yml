@@ -31,4 +31,4 @@ jobs:
       run: |
         npm install -g mocha
         yarn
-        yarn mocha
+        NODE_ENV=test ./node_modules/.bin/mocha ./test/**/*.js --require @babel/register
