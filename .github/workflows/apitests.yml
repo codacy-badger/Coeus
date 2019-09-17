@@ -1,0 +1,34 @@
+name: Test it
+
+on: 
+  push:
+    branches:
+    - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+    - name: Run Mocha Tests
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        CI: true
+        PORT: 3000
+        JWT_SECRET: 6369AD13051EB8986C6EE3F9617F3199
+        COOKIE_SECRET: uUFbnz5WXTramxJOC0xM4i9eawBwkFiw
+        EXPRESS_SESSION_SECRET: C454B294E2D31A84A998E33DF2D42
+        JWT_EXPIRATION_IN_DAYS: 7
+        COOKIE_EXPIRATION_IN_DAYS: 7
+        RATE_LIMIT: 100
+        SESSION_NAME: COEUS
+        MONGODB_URI: ${{ secrets.MONGODB_URI }}
+        MONGODB_TEST_URI: ${{ secrets.MONGODB_URI }}
+        REDIS_URI: ${{ secrets.REDIS_URI }}
+      run: |
+        npm install -g mocha
+        yarn
+        yarn mocha
