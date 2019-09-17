@@ -37,7 +37,8 @@ const setUserInfo = req => {
     name: req.name,
     email: req.email,
     role: req.role,
-    verified: req.verified
+    verified: req.verified,
+    clerance: req.clerance
   }
   // Adds verification for testing purposes
   if (conf.get('IS_DEV')) {
@@ -169,7 +170,7 @@ const findUser = async email => {
       {
         email
       },
-      'password loginAttempts blockExpires name email role verified verification',
+      'password loginAttempts blockExpires name email role verified verification clerance',
       (err, item) => {
         itemNotFound(err, item, reject, 'USER_DOES_NOT_EXIST')
         resolve(item)
@@ -356,10 +357,12 @@ export const login = async (req, res) => {
       
     } else {
       // all ok, register access and return token
+      console.log(user)
       const result = await saveUserAccessAndReturnToken(req, user)
       user.loginAttempts = 0
       await saveLoginAttemptsToDB(user)
-      res.cookie('COEUS_JWT', result.token, {signed:true, maxAge: 1000*60*60*24*conf.get('COOKIE_EXPIRATION_IN_DAYS'), httpOnly: true});      
+      res.cookie('COEUS_JWT', result.token, {signed:true, maxAge: 1000*60*60*24*conf.get('COOKIE_EXPIRATION_IN_DAYS'), httpOnly: true});    
+      req.session.user = result.user 
       res.status(200).json(buildSuccObject(result))
     }
   } catch (error) {

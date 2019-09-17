@@ -14,6 +14,8 @@ import conf from './core/config'
 import { log } from './core/logger'
 
 const MongoStore = require('connect-mongo')(session)
+const eer = require('expeditious-engine-redis')
+const ExpeditiousCache = require('express-expeditious')
 
 const RATE_LIMIT = conf.get('RATE_LIMIT') || 0
 
@@ -54,6 +56,17 @@ app.use(
   })
 )
 
+app.use(
+  ExpeditiousCache({
+    namespace: 'CoeusCache',
+    defaultTtl: '10 minute',
+    engine: eer({
+      host: conf.get('REDIS_HOST'),
+      port: conf.get('REDIS_PORT')
+    })
+  })
+)
+
 // for parsing json
 app.use(
   bodyParser.json({
@@ -91,7 +104,7 @@ const sendReq = (req, res) => {
 }
 
 morgan.token('user', (req, res) => {
-//  sendReq(req, res)
+  sendReq(req, res)
   if (req.user) {
     return req.user.name
   }
@@ -118,15 +131,19 @@ app.get('/healthcheck', (req, res) =>
   res
     .json({
       service: 'Coeus API',
-      version: conf.get('VERSION')
+      version: conf.get('VERSION'),
+      session: req.session,
+      cookie: req.signedCookies
     })
     .status(200)
 )
 
 app.get('/clear_cookie', (req, res) => {
   res.clearCookie('COEUS_JWT')
+  res.clearCookie('COEUS')
   res.send('COEUS_JWT removed').status(200)
 })
+
 
 app.use('/__', routes)
 

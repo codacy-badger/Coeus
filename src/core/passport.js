@@ -34,6 +34,7 @@ export const jwtExtractor = req => {
   return token
 }
 
+
 /**
  * Options object for jwt middlware
  */

@@ -2354,6 +2354,13 @@ async@~1.2.1:
   resolved "https://registry.yarnpkg.com/async/-/async-1.2.1.tgz#a4816a17cd5ff516dfa2c7698a453369b9790de0"
   integrity sha1-pIFqF81f9RbfosdpikUzabl5DeA=
 
+async@~2.0.0:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/async/-/async-2.0.1.tgz#b709cc0280a9c36f09f4536be823c838a9049e25"
+  integrity sha1-twnMAoCpw28J9FNr6CPIOKkEniU=
+  dependencies:
+    lodash "^4.8.0"
+
 asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
@@ -3219,6 +3226,11 @@ connect-mongo@^3.0.0:
   dependencies:
     mongodb "^3.1.0"
 
+connect-redis@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/connect-redis/-/connect-redis-4.0.2.tgz#b3ea8c6a92e9c6c04cf9ec957c193558ddad0bbc"
+  integrity sha512-SuOGp/2dgpH738SYj0rZfoeKpuV/C4W0APGWrvyC3ijgXkKq/LKdgyCfW2oSxIPE1ndeOgmuei2bh3wIU50ZLw==
+
 console-control-strings@^1.0.0, console-control-strings@~1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/console-control-strings/-/console-control-strings-1.1.0.tgz#3d7cf4464db6446ea644bf4b39507f9851008e8e"
@@ -3520,7 +3532,7 @@ debug@*, debug@4, debug@^4.0.1, debug@^4.1.0, debug@^4.1.1, debug@~4.1.0:
   dependencies:
     ms "^2.1.1"
 
-debug@2.6.9, debug@^2.2.0, debug@^2.3.3, debug@^2.5.2, debug@^2.6.8, debug@^2.6.9:
+debug@2.6.9, debug@^2.2.0, debug@^2.3.3, debug@^2.5.2, debug@^2.6.8, debug@^2.6.9, debug@~2.6.9:
   version "2.6.9"
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.9.tgz#5d128515df134ff327e90a4c93f4e077a536341f"
   integrity sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==
@@ -4364,10 +4376,56 @@ expect@^24.9.0:
     jest-message-util "^24.9.0"
     jest-regex-util "^24.9.0"
 
+expeditious-engine-memory@~0.2.0:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/expeditious-engine-memory/-/expeditious-engine-memory-0.2.1.tgz#ce1d9cbdf2df9a7db91cd91913c28ba537965d11"
+  integrity sha1-zh2cvfLfmn25HNkZE8KLpTeWXRE=
+  dependencies:
+    expeditious "~1.0.0"
+
+expeditious-engine-redis@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/expeditious-engine-redis/-/expeditious-engine-redis-0.1.2.tgz#64159223bbf60531ef9802b9c69a0d7d140d4547"
+  integrity sha512-qYC3PZ+6oSQbgGXCUOg5D4mbqQrLoxfMR90HAicDtCwTm27Dc+9yVuxWeKqVUpNjpTHyNWw+Z7E+/enIDjuOfQ==
+  dependencies:
+    async "~2.0.0"
+    expeditious "~0.1.0"
+    redis "~2.6.2"
+    verror "~1.9.0"
+
+expeditious@~0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/expeditious/-/expeditious-0.1.0.tgz#be6f6f9122506d6dcc137658c76846409b46ff34"
+  integrity sha1-vm9vkSJQbW3ME3ZYx2hGQJtG/zQ=
+  dependencies:
+    safejson "^1.0.1"
+    verror "^1.6.1"
+
+expeditious@~1.0.0, expeditious@~1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/expeditious/-/expeditious-1.0.1.tgz#995b7ac76741a66029891449d5867bccc338b30f"
+  integrity sha1-mVt6x2dBpmApiRRJ1YZ7zMM4sw8=
+  dependencies:
+    debug "~2.6.9"
+    safejson "~1.0.1"
+    verror "~1.6.1"
+
 express-async-errors@^3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/express-async-errors/-/express-async-errors-3.1.1.tgz#6053236d61d21ddef4892d6bd1d736889fc9da41"
   integrity sha512-h6aK1da4tpqWSbyCa3FxB/V6Ehd4EEB15zyQq9qe75OZBp0krinNKuH4rAY+S/U/2I36vdLAUFSjQJ+TFmODng==
+
+express-expeditious@^5.1.1:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/express-expeditious/-/express-expeditious-5.1.1.tgz#124414564733e5533fe0ea755e7fa968e3ee5280"
+  integrity sha512-4akMwHm8TVRYzm/HQ520fJxqT1NIEb0J+CNzJ18l1kXt0GSnIHsRt2WpoI+8jdD/g3tf/Ggz+vbW6rwronJdvA==
+  dependencies:
+    debug "~4.1.0"
+    expeditious "~1.0.1"
+    expeditious-engine-memory "~0.2.0"
+    on-finished "~2.3.0"
+    timestring "~5.0.0"
+    verror "~1.10.0"
 
 express-history-api-fallback@^2.2.1:
   version "2.2.1"
@@ -4501,6 +4559,11 @@ extract-opts@^2.2.0:
   integrity sha1-H6KOunNSxttID4hc63GkaBC+bX0=
   dependencies:
     typechecker "~2.0.1"
+
+extsprintf@1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.2.0.tgz#5ad946c22f5b32ba7f8cd7426711c6e8a3fc2529"
+  integrity sha1-WtlGwi9bMrp/jNdCZxHG6KP8JSk=
 
 extsprintf@1.3.0:
   version "1.3.0"
@@ -7096,7 +7159,7 @@ lodash.startswith@^4.0.1:
   resolved "https://registry.yarnpkg.com/lodash.startswith/-/lodash.startswith-4.2.1.tgz#c598c4adce188a27e53145731cdc6c0e7177600c"
   integrity sha1-xZjErc4YiiflMUVzHNxsDnF3YAw=
 
-lodash@4.17.15, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.4, lodash@~4.17.4:
+lodash@4.17.15, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.4, lodash@^4.8.0, lodash@~4.17.4:
   version "4.17.15"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
   integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
@@ -9086,7 +9149,7 @@ redis-errors@^1.0.0, redis-errors@^1.2.0:
   resolved "https://registry.yarnpkg.com/redis-errors/-/redis-errors-1.2.0.tgz#eb62d2adb15e4eaf4610c04afe1529384250abad"
   integrity sha1-62LSrbFeTq9GEMBK/hUpOEJQq60=
 
-redis-parser@^2.6.0:
+redis-parser@^2.0.0, redis-parser@^2.6.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/redis-parser/-/redis-parser-2.6.0.tgz#52ed09dacac108f1a631c07e9b69941e7a19504b"
   integrity sha1-Uu0J2srBCPGmMcB+m2mUHnoZUEs=
@@ -9106,6 +9169,15 @@ redis@^2.8.0:
     double-ended-queue "^2.1.0-0"
     redis-commands "^1.2.0"
     redis-parser "^2.6.0"
+
+redis@~2.6.2:
+  version "2.6.5"
+  resolved "https://registry.yarnpkg.com/redis/-/redis-2.6.5.tgz#87c1eff4a489f94b70871f3d08b6988f23a95687"
+  integrity sha1-h8Hv9KSJ+Utwhx89CLaYjyOpVoc=
+  dependencies:
+    double-ended-queue "^2.1.0-0"
+    redis-commands "^1.2.0"
+    redis-parser "^2.0.0"
 
 referrer-policy@1.2.0:
   version "1.2.0"
@@ -9509,6 +9581,11 @@ safefs@^3.1.2:
   integrity sha1-gXDBRE1wOOCMrqBaN0+uL6NJ4Vw=
   dependencies:
     graceful-fs "*"
+
+safejson@^1.0.1, safejson@~1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/safejson/-/safejson-1.0.1.tgz#5bcbb9533b96fce10e6356f420017c16a4f9c998"
+  integrity sha1-W8u5UzuW/OEOY1b0IAF8FqT5yZg=
 
 "safer-buffer@>= 2.1.2 < 3", safer-buffer@^2.0.2, safer-buffer@^2.1.0, safer-buffer@~2.1.0:
   version "2.1.2"
@@ -10345,6 +10422,11 @@ timed-out@^4.0.0:
   resolved "https://registry.yarnpkg.com/timed-out/-/timed-out-4.0.1.tgz#f32eacac5a175bea25d7fab565ab3ed8741ef56f"
   integrity sha1-8y6srFoXW+ol1/q1Zas+2HQe9W8=
 
+timestring@~5.0.0:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/timestring/-/timestring-5.0.1.tgz#065bd9dda1bcaf7c08ec9a4841569d3bbbb6cf87"
+  integrity sha512-0VfOVpaTYqBMTEpjwcY5mB+72YYjFI44Z5F2q80ZiIyDn5pRJm+rEV1OEM8xfnf5/FdtckcrTERTp9TbrlMMHw==
+
 tmp@^0.0.33:
   version "0.0.33"
   resolved "https://registry.yarnpkg.com/tmp/-/tmp-0.0.33.tgz#6d34335889768d21b2bcda0aa277ced3b1bfadf9"
@@ -10809,10 +10891,27 @@ vary@^1, vary@~1.1.2:
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
   integrity sha1-IpnwLG3tMNSllhsLn3RSShj2NPw=
 
-verror@1.10.0:
+verror@1.10.0, verror@^1.6.1, verror@~1.10.0:
   version "1.10.0"
   resolved "https://registry.yarnpkg.com/verror/-/verror-1.10.0.tgz#3a105ca17053af55d6e270c1f8288682e18da400"
   integrity sha1-OhBcoXBTr1XW4nDB+CiGguGNpAA=
+  dependencies:
+    assert-plus "^1.0.0"
+    core-util-is "1.0.2"
+    extsprintf "^1.2.0"
+
+verror@~1.6.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/verror/-/verror-1.6.1.tgz#236402060648c219d1162c2451d1c341a0e1c9ce"
+  integrity sha1-I2QCBgZIwhnRFiwkUdHDQaDhyc4=
+  dependencies:
+    core-util-is "1.0.2"
+    extsprintf "1.2.0"
+
+verror@~1.9.0:
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/verror/-/verror-1.9.0.tgz#107a8a2d14c33586fc4bb830057cd2d19ae2a6ee"
+  integrity sha1-EHqKLRTDNYb8S7gwBXzS0Zripu4=
   dependencies:
     assert-plus "^1.0.0"
     core-util-is "1.0.2"
