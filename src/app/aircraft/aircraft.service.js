@@ -1,7 +1,10 @@
 import Aircraft from './aircraft.model'
 import { buildErrObject } from '~/middleware/utils'
+import { log } from '~/core/logger'
 
-const getAllAircrafts = async args => {
+const getAllAircrafts = async (args, context) => {
+  log.info(context.dataloaders.AircraftData.load('5d793d2b0f3a39bb442c8a19'))
+
   return new Promise((resolve, reject) => {
     try {
       Aircraft.find(
@@ -27,9 +30,11 @@ const getAllAircrafts = async args => {
   })
 }
 
-const getAircraft = async args => {
+const getAircraft = async (args, context) => {
+
   return new Promise((resolve, reject) => {
     try {
+
       Aircraft.findById(args.id, (err, item) => {
         resolve(item)
       })

@@ -5,12 +5,20 @@ import responseCachePlugin from 'apollo-server-plugin-response-cache'
 import depthLimit from 'graphql-depth-limit'
 import { giveTokenGetUser } from '~/middleware/utils'
 import conf from './config'
-import redis from './redis'
 import { log, show } from '~/core/logger'
 
 import schema from '~/app/schema'
+import * as loaders from '~/app/loader'
 
 export const pubsub = new PubSub()
+
+const dataloaders = Object.keys(loaders).reduce(
+    (acc, loaderKey) => ({
+        ...acc,
+        [loaderKey]: loaders[loaderKey].getLoader(),
+    }),
+    {},
+)
 
 export default new ApolloServer({
   schema,
@@ -43,9 +51,10 @@ export default new ApolloServer({
         'Authentication token is invalid, please log in'
       )
     }
+    req.user = currentUser
 
     return {
-      //      loaders,
+      dataloaders,
       req,
       res,
       user: currentUser,
@@ -71,7 +80,7 @@ export default new ApolloServer({
   maxFileSize: 25 * 1024 * 1024, // 25MB
   debug: conf.get('IS_DEV'),
   engine: false,
-  tracing: false,
+  tracing: true,
   validationRules: [depthLimit(10)],
   plugins: [
     responseCachePlugin({
@@ -83,12 +92,11 @@ export default new ApolloServer({
   cacheControl: {
     calculateHttpHeaders: false,
     // Cache everything for at least a minute since we only cache public responses
-    defaultMaxAge: 6000
+    defaultMaxAge: 240000
   },
   cache: new RedisCache({
-    redis,
-    prefix: 'apollo-cache:',
-  }),
+    host: conf.get('REDIS_HOST'),
+    port: conf.get('REDIS_PORT'),
+    prefix: 'apollo-cache'
+  })
 })
-
-

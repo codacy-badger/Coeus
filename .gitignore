@@ -22,3 +22,5 @@ error.log.gz
 access.log.gz
 # No coverage reports too
 coverage
+# Not my uploads motherfucker
+public/uploads/**

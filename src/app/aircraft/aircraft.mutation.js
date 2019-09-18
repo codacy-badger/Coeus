@@ -1,4 +1,8 @@
-import AircraftService from './aircraft.service'
+import {
+  addAircraft,
+  updateAircraft,
+  deleteAircraft
+} from './aircraft.service'
 import { ContextMiddleware } from '~/middleware/utils'
 import {
   addAircraftValidator,
@@ -11,10 +15,10 @@ module.exports = {
     try {
       await ContextMiddleware(
         context,
-        'canEditAircrafts',
+        ['canEditAircrafts'],
         addAircraftValidator(args.input)
       )
-      await AircraftService.addAircraft(args, context)
+      await addAircraft(args, context)
       return { message: 'Aircraft has been succesfully added', ok: true }
     } catch (err) {
       return { message: err, ok: false }
@@ -25,10 +29,10 @@ module.exports = {
     try {
       await ContextMiddleware(
         context,
-        ['admin'],
+        ['canEditAircrafts'],
         updateAircraftValidator({ ...args.input, id: args.id })
       )
-      await AircraftService.updateAircraft(user, args.id, args.input)
+      await updateAircraft(user, args.id, args.input)
       return { message: 'Aircraft has been succesfully updated', ok: true }
     } catch (err) {
       return next(err)
@@ -38,7 +42,7 @@ module.exports = {
     const { next, user } = context
     try {
       await ContextMiddleware(context, ['admin'])
-      await AircraftService.deleteAircraft(user, args)
+      await deleteAircraft(user, args)
       return { ok: true, message: 'Aircraft has been deleted successfully' }
     } catch (err) {
       return next(err)

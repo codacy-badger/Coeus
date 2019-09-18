@@ -104,7 +104,7 @@ const sendReq = (req, res) => {
 }
 
 morgan.token('user', (req, res) => {
-  sendReq(req, res)
+//  sendReq(req, res)
   if (req.user) {
     return req.user.name
   }

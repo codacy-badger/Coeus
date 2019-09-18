@@ -225,7 +225,7 @@ export const ContextMiddleware = async (context, onlyCanUse, ...args) => {
     )
   }
 
-  if (_.includes(clerance, onlyCanUse) === false) {
+  if (onlyCanUse.every(i => clerance.includes(i)) === false) {
     log.access('Access with low clerance')
     throw new AuthenticationError(
       'No clerance'
