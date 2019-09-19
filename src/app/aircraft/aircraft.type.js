@@ -31,8 +31,8 @@ const AircraftTypes = () => `
     updateAircraft(id: ID!, input: AircraftInputType!): Success!
     deleteAircraft(id: ID!): Success!
   }
-`;
+`
 
 module.exports = {
   AircraftTypes: AircraftTypes()
-};
+}

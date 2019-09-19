@@ -51,6 +51,16 @@ const listInitOptions = async req => {
 }
 
 module.exports = {
+  async checkItemIsExist(model, _id) {
+    return new Promise((resolve, reject) => {
+      model.findOne({ _id }, (err, result) => {
+        if (result) {
+          resolve(true)
+        } else
+          reject(buildErrObject(422, 'NOTHIN FOUND'))
+      })
+    })
+  },
   /**
    * Checks the query string for filtering records
    * query.filter should be the text to search (string)
@@ -170,7 +180,6 @@ module.exports = {
       })
     })
   },
-
 
   /**
    * [deleteItem Soft deletes with given ObjectID and records who did this, when did this...]

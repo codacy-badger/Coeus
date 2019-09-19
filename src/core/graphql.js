@@ -8,17 +8,9 @@ import conf from './config'
 import { log, show } from '~/core/logger'
 
 import schema from '~/app/schema'
-import * as loaders from '~/app/loader'
+import createLoaders from '~/app/loader'
 
 export const pubsub = new PubSub()
-
-const dataloaders = Object.keys(loaders).reduce(
-    (acc, loaderKey) => ({
-        ...acc,
-        [loaderKey]: loaders[loaderKey].getLoader(),
-    }),
-    {},
-)
 
 export default new ApolloServer({
   schema,
@@ -52,9 +44,10 @@ export default new ApolloServer({
       )
     }
     req.user = currentUser
+    const loaders = createLoaders()
 
     return {
-      dataloaders,
+      loaders,
       req,
       res,
       user: currentUser,
@@ -70,9 +63,23 @@ export default new ApolloServer({
     : {
         settings: {
           'request.credentials': 'include',
-          'schema.polling.enable': false
-        }
+          'schema.polling.enable': false,
+          'editor.fontFamily': 'StevenMono'
+        },
+        tabs: [
+          {
+            endpoint: 'http://localhost:3000/graphql',
+            query: `{
+              showSingleAircraft(id:"5d793d2b0f3a39bb442c8a19") {
+             registration
+                model
+                operator
+            }
+          }`
+          }
+        ]
       },
+
   //  subscriptions: {
   //    onConnect: () => {},
   //    onDisconnect: () => {}

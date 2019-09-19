@@ -3,4 +3,4 @@ import { connectionFromMongoCursor, mongooseLoader } from '@entria/graphql-mongo
 
 import Aircraft from './aircraft.model'
 
-export const getLoader = () => new DataLoader(ids => mongooseLoader(Aircraft, ids))
+export const getAircraft = () => new DataLoader(ids => mongooseLoader(Aircraft, ids))

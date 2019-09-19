@@ -1,5 +1,7 @@
-import * as AircraftData from './aircraft/aircraft.dataloader'
+import { getAircraft } from './aircraft/aircraft.dataloader'
 
-export {
-    AircraftData
-}
+const createLoaders = () => ({
+	aircraft: getAircraft(),
+})
+
+export default createLoaders;

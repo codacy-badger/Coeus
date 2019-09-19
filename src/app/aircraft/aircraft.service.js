@@ -3,7 +3,7 @@ import { buildErrObject } from '~/middleware/utils'
 import { log } from '~/core/logger'
 
 const getAllAircrafts = async (args, context) => {
-  log.info(context.dataloaders.AircraftData.load('5d793d2b0f3a39bb442c8a19'))
+  log.info()
 
   return new Promise((resolve, reject) => {
     try {
@@ -31,14 +31,12 @@ const getAllAircrafts = async (args, context) => {
 }
 
 const getAircraft = async (args, context) => {
-
   return new Promise((resolve, reject) => {
     try {
-
-      Aircraft.findById(args.id, (err, item) => {
-        resolve(item)
-      })
+      console.log(context.loaders)
+      resolve(context.loaders.aircraft.load(args.id))
     } catch (err) {
+      console.log(err)
       reject(buildErrObject(422, 'ERROR_WITH_FILTER'))
     }
   })
