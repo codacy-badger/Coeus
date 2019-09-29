@@ -146,7 +146,7 @@
 		"chai": "4.2.0",
 		"chai-http": "4.3.0",
 		"docdash": "1.1.1",
-		"eslint": "6.4.0",
+		"eslint": "6.5.0",
 		"eslint-config-airbnb-base": "14.0.0",
 		"eslint-config-prettier": "6.3.0",
 		"eslint-import-resolver-babel-plugin-root-import": "1.1.1",
@@ -161,7 +161,7 @@
 		"jsdoc-mermaid": "1.0.0",
 		"mocha": "6.2.0",
 		"mongo-seeding": "3.3.0",
-		"nodemon": "1.19.2",
+		"nodemon": "1.19.3",
 		"nyc": "14.1.1",
 		"prettier": "1.18.2",
 		"resnap": "^1.0.1"

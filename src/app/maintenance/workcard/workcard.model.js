@@ -142,7 +142,7 @@ const stepSchema = new Schema(
             message: `User doesn't exist`
           }
         },
-        // TODO I dont know how but starting clock and some calculation must handle at front end.
+        // TODO I dont know how but starting clock and some calculation must handle at front end. id:61
         // There are some react job unf.
         startedAt: {
           type: Date
