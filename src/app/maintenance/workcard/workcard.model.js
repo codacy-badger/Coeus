@@ -16,9 +16,9 @@ export const AircraftManufacturers = [
 
 export const WorkCardType = ['Non-Routine', 'MPD']
 
-export const NRWIStatus = ['Open', 'Done', 'Closed', 'Deferred', 'Declined']
+export const CardStatus = ['Open', 'Done', 'Closed', 'Deferred', 'Declined']
 
-export const NRWISource = [
+export const CardSource = [
   'Task Card',
   'Airworthiness Directive',
   'Service Bulletin',
@@ -183,7 +183,7 @@ const stepSchema = new Schema(
 
 const WorkCardSchema = new mongoose.Schema(
   {
-    NRWINumber: {
+    WCNumber: {
       type: String,
       required: true
     },
@@ -198,14 +198,14 @@ const WorkCardSchema = new mongoose.Schema(
     status: {
       type: String,
       required: false,
-      enum: NRWIStatus,
-      default: NRWIStatus[0]
+      enum: CardStatus,
+      default: CardStatus[0]
     },
     source: {
       type: String,
       required: false,
-      enum: NRWISource,
-      default: NRWISource[0]
+      enum: CardSource,
+      default: CardSource[0]
     },
     ataChapter: {
       type: String,
