@@ -5081,10 +5081,10 @@ express-validator@^6.1.1:
     lodash "^4.17.11"
     validator "^11.0.0"
 
-express-winston@^3.3.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/express-winston/-/express-winston-3.3.0.tgz#cda163acb9b848c1b2b967efc9b23bd4db862d00"
-  integrity sha512-7Ws97tPNTeSt9mtvXJlHIsSuTIE3BskOnxMVc23KokWEgYCcLmXtofvznzALiUCBQc8k24B66AycjqUU3IJz4A==
+express-winston@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/express-winston/-/express-winston-4.0.0.tgz#15aba012d7312b82b7bfba81ef0f70d05ab6b459"
+  integrity sha512-/Da8VFo1u2QEf4EKUHoIlBY3MioGdrraHfExxEqfiyhCY5WsVTxGMw5R2/Bn1Zk9pDrJI5y5/d2ALvuoRz5utA==
   dependencies:
     chalk "^2.4.1"
     lodash "^4.17.10"
