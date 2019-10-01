@@ -62,7 +62,7 @@
 		"express-rate-limit": "^5.0.0",
 		"express-session": "^1.16.2",
 		"express-validator": "^6.1.1",
-		"express-winston": "^3.3.0",
+		"express-winston": "^4.0.0",
 		"glob": "^7.1.4",
 		"graphql": "^14.4.2",
 		"graphql-compose": "^7.3.0",
