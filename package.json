@@ -11,7 +11,7 @@
 		"build": "babel src -d dist",
 		"deploy": "NODE_ENV=production npm install && babel src -d dist",
 		"start": "NODE_ENV=production node dist/server.js",
-		"seed": "NODE_ENV=development babel-node tools/seeder/seeder.js",
+		"seed": "NODE_ENV=test babel-node tools/seeder/seeder.js",
 		"test": "ava ./test/**/*.js --color",
 		"doc": "./node_modules/.bin/jsdoc -c jsdoc.json",
 		"apidoc": "gulp apidoc",
