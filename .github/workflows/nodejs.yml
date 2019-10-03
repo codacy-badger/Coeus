@@ -7,13 +7,23 @@ on:
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
     steps:
-    - uses: actions/checkout@master
-    - uses: actions/setup-node@v1
+    - uses: actions/checkout@v1
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
       with:
-        node-version: '12.x'
-    - name: npm install, build, and test
+        node-version: ${{ matrix.node-version }}
+    - name: npm install and npm test
+      run: |
+        npm run setup-test
+        npm run test
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         CI: true
@@ -27,6 +37,3 @@ jobs:
         SESSION_NAME: COEUS
         MONGODB_URI: ${{ secrets.MONGODB_URI }}
         REDIS_URI: ${{ secrets.REDIS_URI }}
-      run: |
-        yarn
-        yarn build
