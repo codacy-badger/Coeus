@@ -22,10 +22,11 @@ import { log } from './core/logger'
 
 const port = conf.get('PORT') || 3000
 
-
 const server = http.Server(app)
 
 mongoose.Promise = require('bluebird')
+
+export const io = socket(server)
 
 apolloServer.installSubscriptionHandlers(server)
 apolloServer.applyMiddleware({
@@ -37,14 +38,22 @@ apolloServer.applyMiddleware({
   }
 })
 
-export const io = socket(server)
 io.origins(['*:*'])
 
 io.on('connection', connSocket => {
-  console.log(chalk.hex('#009688')(' [*] Socket: Connection Succeeded.'))
-  connSocket.on('disconnect', () =>
-    console.log(chalk.hex('#009688')(' [*] Socket: Disconnected.'))
-  )
+  log.info(`${connSocket.id} just connected.`)
+  connSocket.emit('A', { coeusVersion: '1.0.1', stuff: 'ok' })
+  connSocket.on('B', data => console.log(data)) // { foo: 'baz' }
+  io.to(`${connSocket.id}`).emit('me?', 'Yes you are')
+  
+  connSocket.on('subscribeToTimer', interval => {
+  console.log("client is subscribing to timer with interval ", interval);
+  setInterval(() => {
+    connSocket.emit('timer', new Date());
+  }, interval);
+});
+
+  connSocket.on('disconnect', () => log.info('Somebody has disconnected'))
 })
 
 mongoose.connection.once('open', () => {
@@ -56,19 +65,25 @@ export const Application = server.listen(port, () =>
   log.info(`Server has started at ${port}`)
 )
 
-server.on('error', err => {
-  log.error('error', err, {
-    isExpressError: true
-  })
-})
+server.on('error', err => { log.error(err)})
 
-server.on('close', () => {
-  log.info('Server has been closed by Admin')
-})
+server.on('close', () => {})
 
 process.on('SIGINT', () => {
   mongoose.connection.close()
   server.close()
+})
+
+process.on('uncaughtException', e => {
+  console.log(e)
+  server.close()
+  process.exit(1)
+})
+
+process.on('unhandledRejection', e => {
+  console.log(e)
+  server.close()
+  process.exit(1)
 })
 
 // To Mocha-Chai Tests

@@ -93,7 +93,7 @@ const blockUser = async user => {
         reject(buildErrObject(422, err.message))
       }
       if (result) {
-        resolve(buildErrObject(409, 'BLOCKED_USER'))
+        resolve(buildErrObject(409, 'You are blocked due to too many request'))
       }
     })
   })
@@ -154,7 +154,7 @@ const checkLoginAttemptsAndBlockExpires = async user => {
 const userIsBlocked = async user => {
   return new Promise((resolve, reject) => {
     if (user.blockExpires > new Date()) {
-      reject(buildErrObject(409, 'BLOCKED_USER'))
+      reject(buildErrObject(409, 'You are blocked due to too many request'))
     }
     resolve(true)
   })
