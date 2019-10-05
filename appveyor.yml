@@ -8,6 +8,7 @@ install:
 # Post-install test scripts.
 test_script:
   # run tests
+  - npm install -g mocha
   - npm run mocha
 
 # Don't actually build.
