@@ -1,6 +1,11 @@
 image: ubuntu
 # Test against this version of Node.js
 stack: node 12, mongodb, redis
+environment:
+  PORT: 3000
+  MONGODB_URI: mongodb://localhost:27017/coeus
+  JWT_SECRET: 4469SD13051EB8986C6HK3F9617F3135
+  COOKIE_SECRET: uUFbnz5WXTramxJOC0xM4i9eawBwkFiw
 install:
   # install modules
   - yarn
