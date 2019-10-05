@@ -9,7 +9,7 @@ install:
 test_script:
   # run tests
   - npm install -g mocha
-  - yarn mocha
+  - ./node_modules/.bin/mocha ./test/**/*.js
 
 # Don't actually build.
 build: off
