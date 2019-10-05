@@ -1,4 +1,6 @@
+image: ubuntu
 # Test against this version of Node.js
+stack: node 12, mongodb
 environment:
   matrix:
   # node.js
