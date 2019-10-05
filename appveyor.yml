@@ -1,11 +1,10 @@
 image: ubuntu
+# Test against this version of Node.js
+stack: node 12, mongodb, redis
 environment:
-  matrix:
-  # node.js
-  - nodejs_version: "12"
-
 # Install scripts. (runs after repo cloning)
 install:
+  # install modules
   - npm install
 
 # Post-install test scripts.
@@ -15,6 +14,3 @@ test_script:
 
 # Don't actually build.
 build: off
-services:
-  - mongodb
-  - redis
