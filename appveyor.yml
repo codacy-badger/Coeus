@@ -3,13 +3,13 @@ image: ubuntu
 stack: node 12, mongodb, redis
 install:
   # install modules
-  - npm install
+  - yarn
 
 # Post-install test scripts.
 test_script:
   # run tests
   - npm install -g mocha
-  - npm run mocha
+  - yarn mocha
 
 # Don't actually build.
 build: off
