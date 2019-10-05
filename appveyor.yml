@@ -1,8 +1,6 @@
 image: ubuntu
 # Test against this version of Node.js
 stack: node 12, mongodb, redis
-environment:
-# Install scripts. (runs after repo cloning)
 install:
   # install modules
   - npm install
