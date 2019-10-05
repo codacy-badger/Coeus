@@ -14,7 +14,10 @@ install:
 # Post-install test scripts.
 test_script:
   # run tests
-  - npm test
+  - npm run mocha
 
 # Don't actually build.
 build: off
+services:
+  - mongodb
+  - redis
