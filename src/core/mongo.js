@@ -3,9 +3,10 @@ import models from '~/app/models';
 import conf from './config'
 import { log } from '~/core/logger'
 
-const DB_URL = conf.get('IS_TEST') ? conf.get('MONGODB_TEST_URI') : conf.get('MONGODB_URI');
+const MONGO_URI = conf.get('MONGODB_URI') || 'mongodb://localhost:27017/coeusTest'
+
 mongoose.connect(
-  DB_URL,
+  MONGO_URI,
   {
     keepAlive: true,
     reconnectTries: 10,
