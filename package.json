@@ -16,7 +16,7 @@
 		"doc": "./node_modules/.bin/jsdoc -c jsdoc.json",
 		"apidoc": "gulp apidoc",
 		"test:watch": "jest --watchAll",
-		"mocha": "NODE_ENV=test ./node_modules/.bin/mocha ./test/**/*.js",
+		"mocha": "mocha ./test/**/*.js",
 		"report-coverage": "NODE_ENV=test nyc ./node_modules/.bin/mocha ./test/**/*.js && codecov -t c76b1eb3-ebac-415e-b58f-1bfdb7500f99",
 		"unit": "jest \"src/.*\\.js$\" --coverage --forceExit",
 		"e2e": "cross-env JEST_ENV=e2e jest \"src/.*\\.js$\" --forceExit",
