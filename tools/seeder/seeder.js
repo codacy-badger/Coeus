@@ -4,7 +4,7 @@ import { Seeder } from 'mongo-seeding';
 const path = require('path');
 
 const config = {
-  database: conf.get('IS_TEST') ? conf.get('MONGODB_TEST_URI') : conf.get('MONGODB_URI'),
+  database: 'mongodb://localhost:27017/coeusTest',
   inputPath: path.resolve(__dirname, './tools/seeder/data'),
   dropDatabase: true
 }
