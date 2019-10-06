@@ -17,10 +17,11 @@ import {
   checkQueryString,
   restoreItem
 } from '~/middleware/db'
+import { emailExistsExcludingMyself, emailExists } from '~/middleware/emailer'
 import { log } from '~/core/logger'
 
 const cryptoRandomString = require('crypto-random-string')
-const emailer = require('~/middleware/emailer')
+
 
 /**
  * Creates a new item in database
@@ -176,7 +177,7 @@ export const getUser = async (req, res) => {
 export const updateUser = async (req, res) => {
   try {
     const id = await isIDGood(req.id)
-    const doesEmailExists = await emailer.emailExistsExcludingMyself(
+    const doesEmailExists = await emailExistsExcludingMyself(
       id,
       req.email
     )
@@ -196,7 +197,7 @@ export const updateUser = async (req, res) => {
 export const createNewUser = async (req, res) => {
   try {
     // Gets locale from header 'Accept-Language'
-    const doesEmailExists = await emailer.emailExists(req.body.email)
+    const doesEmailExists = await emailExists(req.body.email)
     if (!doesEmailExists) {
       const item = await createUser(req.body)
       const response = returnRegisterToken(item)

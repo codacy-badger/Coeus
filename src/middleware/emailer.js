@@ -11,7 +11,7 @@ const { itemAlreadyExists } = require('~/middleware/utils')
  * @param {Object} data - data
  * @param {boolean} callback - callback
  */
-const sendEmail = async (data, callback) => {
+export const sendEmail = async (data, callback) => {
   const auth = {
     auth: {
       // eslint-disable-next-line camelcase
@@ -62,12 +62,12 @@ const prepareToSendEmail = (user, subject, htmlMessage) => {
   }
 }
 
-export default {
+
   /**
    * Checks User model if user with an specific email exists
    * @param {string} email - user email
    */
-  async emailExists(email) {
+  export const emailExists = async (email) => {
     return new Promise((resolve, reject) => {
       User.findOne(
         {
@@ -79,14 +79,14 @@ export default {
         }
       )
     })
-  },
+  }
 
   /**
    * Checks User model if user with an specific email exists but excluding user id
    * @param {string} id - user id
    * @param {string} email - user email
    */
-  async emailExistsExcludingMyself(id, email) {
+  export const emailExistsExcludingMyself = async (id, email) => {
     return new Promise((resolve, reject) => {
       User.findOne(
         {
@@ -101,14 +101,14 @@ export default {
         }
       )
     })
-  },
+  }
 
   /**
    * Sends registration email
    * @param {string} locale - locale
    * @param {Object} user - user object
    */
-  async sendRegistrationEmailMessage(locale, user) {
+  export const sendRegistrationEmailMessage = async (locale, user) => {
     i18n.setLocale(locale)
     const subject = i18n.__('registration.SUBJECT')
     const htmlMessage = i18n.__(
@@ -118,14 +118,14 @@ export default {
       user.verification
     )
     prepareToSendEmail(user, subject, htmlMessage)
-  },
+  }
 
   /**
    * Sends reset password email
    * @param {string} locale - locale
    * @param {Object} user - user object
    */
-  async sendResetPasswordEmailMessage(locale, user) {
+  export const sendResetPasswordEmailMessage = (locale, user) => {
     i18n.setLocale(locale)
     const subject = i18n.__('forgotPassword.SUBJECT')
     const htmlMessage = i18n.__(
@@ -136,4 +136,3 @@ export default {
     )
     prepareToSendEmail(user, subject, htmlMessage)
   }
-}
