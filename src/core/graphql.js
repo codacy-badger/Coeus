@@ -102,8 +102,8 @@ export default new ApolloServer({
     defaultMaxAge: 240000
   },
   cache: new RedisCache({
-    host: conf.get('REDIS_HOST'),
-    port: conf.get('REDIS_PORT'),
+    host: 'redis',
+    port: 6379,
     prefix: 'apollo-cache'
   })
 })

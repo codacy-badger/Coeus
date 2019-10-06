@@ -10,6 +10,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
+    environment:
+      - MONGODB_URI=mongodb://mongo/coeus
     links:
       - redis
       - mongo
@@ -31,10 +33,10 @@ services:
 
   redis:
     image: redis
-    container_name: myapp-redis
+    container_name: coeus-redis
     restart: always
     ports:
-      - "${REDIS_PORT:-6379}:6379"
+      - "6379"
     networks:
       - redis
 
