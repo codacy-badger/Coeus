@@ -1,35 +1,34 @@
 import winston, { createLogger, format, transports } from 'winston'
-import {Signale} from 'signale'
+import { Signale } from 'signale'
 import conf from '~/core/config'
 
 require('winston-mongodb')
 require('express-async-errors')
 
-  const config = {
-    levels: {
-      access: 0,
-      error: 1,
-      debug: 2,
-      warn: 3,
-      data: 4,
-      info: 5,
-      verbose: 6,
-      silly: 7,
+const config = {
+  levels: {
+    access: 0,
+    error: 1,
+    debug: 2,
+    warn: 3,
+    data: 4,
+    info: 5,
+    verbose: 6,
+    silly: 7
+  },
+  colors: {
+    error: 'red',
+    debug: 'blue',
+    warn: 'yellow',
+    data: 'grey',
+    info: 'bold green',
+    verbose: 'cyan',
+    silly: 'magenta',
+    access: 'yellow'
+  }
+}
 
-    },
-    colors: {
-      error: 'red',
-      debug: 'blue',
-      warn: 'yellow',
-      data: 'grey',
-      info: 'bold green',
-      verbose: 'cyan',
-      silly: 'magenta',
-      access: 'yellow'
-    }
-  };
-
-winston.addColors(config.colors);
+winston.addColors(config.colors)
 
 export const log = createLogger({
   levels: config.levels,
@@ -38,10 +37,10 @@ export const log = createLogger({
       format: 'YYYY-MM-DD HH:mm:ss'
     }),
     format.errors({ stack: true }),
-    format.colorize({ all: true }),
+    format.colorize({ all: false }),
     format.simple()
   ),
-//  defaultMeta: { service: 'Coeus API' },
+  //  defaultMeta: { service: 'Coeus API' },
   transports: [
     new transports.File({
       filename: 'error.log',
@@ -55,7 +54,7 @@ export const log = createLogger({
       options: { encoding: 'utf8' }
     }),
     new transports.File({
-      filename: 'access.log',
+      filename: './logs/access.log',
       level: 'access',
       handleExceptions: false,
       json: false,
@@ -65,8 +64,8 @@ export const log = createLogger({
       zippedArchive: false,
       options: { encoding: 'utf8' }
     }),
-    new transports.File({ filename: 'logfile.log' }),
-//    new transports.MongoDB({ db: MONGO_URL })
+    new transports.File({ filename: './logs/info.log' })
+    //    new transports.MongoDB({ db: MONGO_URL })
   ]
 })
 
@@ -84,7 +83,7 @@ if (conf.get('IS_DEV') && !conf.get('IS_TEST')) {
           const { timestamp, level, message, ...args } = info
           const ts = timestamp.slice(0, 19).replace('T', ' ')
           return `${ts}  [${level}]: ${message}
-          ${Object.keys(args).length ? JSON.stringify(args, null, 2) : '' }`
+          ${Object.keys(args).length ? JSON.stringify(args, null, 2) : ''}`
         })
       )
     })
@@ -119,7 +118,7 @@ const SignaleOptions = {
   disabled: false,
   interactive: false,
   logLevel: 'info',
-//  scope: 'custom',
+  //  scope: 'custom',
   secrets: [],
   stream: process.stdout,
   types: {
@@ -135,14 +134,14 @@ const SignaleOptions = {
       label: 'tabby cat',
       logLevel: 'info'
     },
-		propane: {
-			badge: '🥃',
-			color: 'green',
-			label: 'Julian',
-			logLevel: 'info'
-		}
+    propane: {
+      badge: '🥃',
+      color: 'green',
+      label: 'Julian',
+      logLevel: 'info'
+    }
   }
-};
+}
 /**
  * Create an instance of Signale
  *
@@ -150,4 +149,4 @@ const SignaleOptions = {
  *
  * @see for details https://github.com/klaussinani/signale
  */
-export const show = new Signale(SignaleOptions);
+export const show = new Signale(SignaleOptions)

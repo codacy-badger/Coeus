@@ -1,5 +1,4 @@
 import http from 'http'
-import chalk from 'chalk'
 import socket from 'socket.io'
 
 import apolloServer from './core/graphql'
@@ -45,13 +44,13 @@ io.on('connection', connSocket => {
   connSocket.emit('A', { coeusVersion: '1.0.1', stuff: 'ok' })
   connSocket.on('B', data => console.log(data)) // { foo: 'baz' }
   io.to(`${connSocket.id}`).emit('me?', 'Yes you are')
-  
+
   connSocket.on('subscribeToTimer', interval => {
-  console.log("client is subscribing to timer with interval ", interval);
-  setInterval(() => {
-    connSocket.emit('timer', new Date());
-  }, interval);
-});
+    console.log('client is subscribing to timer with interval ', interval)
+    setInterval(() => {
+      connSocket.emit('timer', new Date())
+    }, interval)
+  })
 
   connSocket.on('disconnect', () => log.info('Somebody has disconnected'))
 })
@@ -65,7 +64,9 @@ export const Application = server.listen(port, () =>
   log.info(`Server has started at ${port}`)
 )
 
-server.on('error', err => { log.error(err)})
+server.on('error', err => {
+  log.error(err)
+})
 
 server.on('close', () => {})
 

@@ -83,28 +83,7 @@ app.use(
 
 app.use(cookieParser(conf.get('COOKIE_SECRET')))
 
-const sendReq = (req, res) => {
-  console.log('-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+')
-  console.log('-+-+-+-+-+-+-+-+-+       REQ        -+-+-+-+-+-+-+-+-+-+')
-  console.log('-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+')
-  log.info(req)
-  console.log('-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+')
-  console.log('-+-+-+-+-+-+-+-+-+       RES        -+-+-+-+-+-+-+-+-+-+')
-  console.log('-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+')
-  log.info(res)
-  console.log('-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+')
-  console.log('-+-+-+-+-+-+-+-+-+       MSC        -+-+-+-+-+-+-+-+-+-+')
-
-  console.log('-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+')
-  log.info('Cookies: ', req.cookies)
-  log.info('Signed Cookies: ', req.signedCookies)
-  log.info(req.session)
-  console.log('-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+')
-  console.log('-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+')
-}
-
-morgan.token('user', (req, res) => {
-//  sendReq(req, res)
+morgan.token('user', req => {
   if (req.user) {
     return req.user.name
   }
@@ -143,7 +122,6 @@ app.get('/clear_cookie', (req, res) => {
   res.clearCookie('COEUS')
   res.send('COEUS_JWT removed').status(200)
 })
-
 
 app.use('/__', routes)
 

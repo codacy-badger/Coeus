@@ -1,4 +1,4 @@
-import { matchedData } from 'express-validator'
+// import { matchedData } from 'express-validator'
 import Aircraft from './aircraft.model'
 import {
   handleError,
@@ -7,8 +7,17 @@ import {
   itemAlreadyExists,
   isIDGood
 } from '~/middleware/utils'
-import db from '~/middleware/db'
-import { log } from '~/core/logger'
+import {
+  updateItem,
+  restoreItem,
+  deleteItem,
+  createItem,
+  getAllItems,
+  getItems,
+  getDeletedItems,
+  getItem,
+  checkQueryString
+} from '~/middleware/db'
 
 /**
  * Checks if a city already exists in database
@@ -51,12 +60,12 @@ export const getAllAircrafts = async (req, res) => {
   })
 }
 
-export const getAllItems = async (req, res) => {
+export const queryAircrafts = async (req, res) => {
   try {
-    const query = await db.checkQueryString(req.query)
+    const query = await checkQueryString(req.query)
     res
       .status(200)
-      .json(buildSuccObject(await db.getAllItems(req, Aircraft, query)))
+      .json(buildSuccObject(await getAllItems(req, Aircraft, query)))
   } catch (error) {
     handleError(res, error)
   }
@@ -67,11 +76,11 @@ export const getAllItems = async (req, res) => {
  * @param {Object} req - request object
  * @param {Object} res - response object
  */
-export const getItems = async (req, res) => {
+export const getAircrafts = async (req, res) => {
   try {
     res
       .status(200)
-      .json(buildSuccObject(await db.getItems(req, Aircraft, req.query)))
+      .json(buildSuccObject(await getItems(req, Aircraft, req.query)))
   } catch (error) {
     handleError(res, error)
   }
@@ -85,7 +94,7 @@ export const getItems = async (req, res) => {
 export const getAircraft = async (req, res) => {
   try {
     const id = await isIDGood(req.body.id)
-    res.status(200).json(buildSuccObject(await db.getItem(id, Aircraft)))
+    res.status(200).json(buildSuccObject(await getItem(id, Aircraft)))
   } catch (error) {
     handleError(res, error)
   }
@@ -93,7 +102,7 @@ export const getAircraft = async (req, res) => {
 
 export const getDeletedAircrafts = async (req, res) => {
   try {
-    res.status(200).json(buildSuccObject(await db.getDeletedItems(Aircraft)))
+    res.status(200).json(buildSuccObject(await getDeletedItems(Aircraft)))
   } catch (error) {
     handleError(res, error)
   }
@@ -104,12 +113,12 @@ export const getDeletedAircrafts = async (req, res) => {
  * @param {Object} req - request object
  * @param {Object} res - response object
  */
-export const updateItem = async (req, res) => {
+export const updateAircraft = async (req, res) => {
   try {
     const id = await isIDGood(req.body.id)
     res
       .status(200)
-      .json(buildSuccObject(await db.updateItem(id, Aircraft, req.body)))
+      .json(buildSuccObject(await updateItem(id, Aircraft, req.body)))
   } catch (error) {
     handleError(res, error)
   }
@@ -124,7 +133,7 @@ export const createAircraft = async (req, res) => {
   try {
     const doesAircraftExists = await aircraftExists(req.body.registration)
     if (!doesAircraftExists) {
-      res.status(201).json(buildSuccObject(await db.createItem(req, Aircraft)))
+      res.status(201).json(buildSuccObject(await createItem(req, Aircraft)))
     }
   } catch (error) {
     handleError(res, error)
@@ -142,7 +151,7 @@ export const deleteAircraft = async (req, res) => {
     const DeleterId = await isIDGood(req.user._id)
     res
       .status(200)
-      .json(buildSuccObject(await db.deleteItem(ItemId, DeleterId, Aircraft)))
+      .json(buildSuccObject(await deleteItem(ItemId, DeleterId, Aircraft)))
   } catch (error) {
     handleError(res, error)
   }
@@ -151,7 +160,7 @@ export const deleteAircraft = async (req, res) => {
 export const restoreAircraft = async (req, res) => {
   try {
     const ItemId = await isIDGood(req.body.id)
-    res.status(200).json(buildSuccObject(await db.restore(ItemId, Aircraft)))
+    res.status(200).json(buildSuccObject(await restoreItem(ItemId, Aircraft)))
   } catch (error) {
     handleError(res, error)
   }

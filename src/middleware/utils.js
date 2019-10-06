@@ -1,14 +1,11 @@
 import requestIp from 'request-ip'
 import jwt from 'jsonwebtoken'
-import _ from 'lodash'
 import { AuthenticationError } from 'apollo-server-express'
 import { MongooseQueryParser } from 'mongoose-query-parser'
 import { validationResult } from 'express-validator'
-import { log, show } from '~/core/logger'
+import { log } from '~/core/logger'
 import conf from '~/core/config'
 import User from '~/app/main/user/user.model'
-
-
 
 const auth = require('../middleware/auth')
 
@@ -193,7 +190,6 @@ export const giveTokenGetUser = async token => {
       resolve(item)
     })
   })
-
 }
 
 /**
@@ -209,30 +205,23 @@ export const giveTokenGetUser = async token => {
  */
 export const ContextMiddleware = async (context, onlyCanUse, ...args) => {
   const { logged, clerance, verified } = context
-  
-  
+
   if (logged === false) {
-      log.access('Unauthorized access')
-    throw new AuthenticationError(
-      'Non-logged'
-    )
+    log.access('Unauthorized access')
+    throw new AuthenticationError('Non-logged')
   }
-  
+
   if (verified === false) {
-      log.access('Unauthorized access')
-    throw new AuthenticationError(
-      'Non-verified user'
-    )
+    log.access('Unauthorized access')
+    throw new AuthenticationError('Non-verified user')
   }
 
   if (onlyCanUse.every(i => clerance.includes(i)) === false) {
     log.access('Access with low clerance')
-    throw new AuthenticationError(
-      'No clerance'
-    )
+    throw new AuthenticationError('No clerance')
   }
-  
-  log.access(`${context.user.name } has requested a grapql query`)
+
+  log.access(`${context.user.name} has requested a grapql query`)
   if (typeof arguments === 'undefined') {
     return Promise.resolve(true)
   }

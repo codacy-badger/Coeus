@@ -1,7 +1,6 @@
-import {
-  makeExecutableSchema
-} from 'graphql-tools'
-import { merge } from 'lodash'
+import { makeExecutableSchema } from 'graphql-tools'
+// uncomment when adding more resolvers.
+// import { merge } from 'lodash'
 
 import { AircraftTypes, AircraftResolvers } from '~/app/aircraft'
 
@@ -21,12 +20,12 @@ const Root = /* GraphQL */ `
     subscription: Subscription
   }
 `
-
-const resolvers = merge(AircraftResolvers)
+// uncomment when adding more resolvers.
+// const resolvers = merge(AircraftResolvers)
 
 const schema = makeExecutableSchema({
   typeDefs: [Root, AircraftTypes],
-  resolvers: AircraftResolvers,
+  resolvers: AircraftResolvers
 })
 
 export default schema

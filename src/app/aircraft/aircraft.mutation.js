@@ -1,17 +1,13 @@
-import {
-  addAircraft,
-  updateAircraft,
-  deleteAircraft
-} from './aircraft.service'
+import { addAircraft, updateAircraft, deleteAircraft } from './aircraft.service'
 import { ContextMiddleware } from '~/middleware/utils'
 import {
   addAircraftValidator,
   updateAircraftValidator
 } from './aircraft.validate'
 
-module.exports = {
+export default {
   addAircraft: async (root, args, context) => {
-    const { user, clerance} = context
+    const { user, clerance } = context //eslint-disable-line
     try {
       await ContextMiddleware(
         context,

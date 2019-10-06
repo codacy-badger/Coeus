@@ -1,7 +1,7 @@
 {
   "diff": true,
   "extension": ["js"],
-  "opts": false,
+  "opts": true,
   "package": "./package.json",
   "reporter": "spec",
   "slow": 75,

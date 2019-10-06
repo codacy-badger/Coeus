@@ -8,10 +8,18 @@ import {
   generateToken,
   verifyTheToken
 } from '~/middleware/utils'
+import {
+  updateItem,
+  deleteItem,
+  getItems,
+  getDeletedItems,
+  getItem,
+  checkQueryString,
+  restoreItem
+} from '~/middleware/db'
 import { log } from '~/core/logger'
 
 const cryptoRandomString = require('crypto-random-string')
-const db = require('~/middleware/db')
 const emailer = require('~/middleware/emailer')
 
 /**
@@ -132,10 +140,6 @@ const verificationExists = async verification => {
   })
 }
 
-/********************
- * Public functions *
- ********************/
-
 /**
  * Get items function called by route
  * @param {Object} req - request object
@@ -143,8 +147,8 @@ const verificationExists = async verification => {
  */
 export const getUsers = async (req, res) => {
   try {
-    const query = await db.checkQueryString(req.query)
-    res.status(200).json(buildSuccObject(await db.getItems(req, User, query)))
+    const query = await checkQueryString(req.query)
+    res.status(200).json(buildSuccObject(await getItems(req, User, query)))
   } catch (error) {
     handleError(res, error)
   }
@@ -158,7 +162,7 @@ export const getUsers = async (req, res) => {
 export const getUser = async (req, res) => {
   try {
     const id = await isIDGood(req.id)
-    res.status(200).json(buildSuccObject(await db.getItem(id, User)))
+    res.status(200).json(buildSuccObject(await getItem(id, User)))
   } catch (error) {
     handleError(res, error)
   }
@@ -177,7 +181,7 @@ export const updateUser = async (req, res) => {
       req.email
     )
     if (!doesEmailExists) {
-      res.status(200).json(await db.updateItem(id, User, req))
+      res.status(200).json(await updateItem(id, User, req))
     }
   } catch (error) {
     handleError(res, error)
@@ -245,7 +249,7 @@ export const deleteUser = async (req, res) => {
     const DeleterId = await isIDGood(req.user._id)
     res
       .status(200)
-      .json(buildSuccObject(await db.deleteItem(ItemId, DeleterId, User)))
+      .json(buildSuccObject(await deleteItem(ItemId, DeleterId, User)))
   } catch (error) {
     handleError(res, error)
   }
@@ -253,7 +257,7 @@ export const deleteUser = async (req, res) => {
 
 export const getDeletedUsers = async (req, res) => {
   try {
-    res.status(200).json(buildSuccObject(await db.getDeletedItems(User)))
+    res.status(200).json(buildSuccObject(await getDeletedItems(User)))
   } catch (error) {
     handleError(res, error)
   }
@@ -262,7 +266,7 @@ export const getDeletedUsers = async (req, res) => {
 export const restoreUser = async (req, res) => {
   try {
     const ItemId = await isIDGood(req.body.id)
-    res.status(200).json(buildSuccObject(await db.restore(ItemId, User)))
+    res.status(200).json(buildSuccObject(await restoreItem(ItemId, User)))
   } catch (error) {
     handleError(res, error)
   }

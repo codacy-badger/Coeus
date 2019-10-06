@@ -1,9 +1,9 @@
-import mongoose from 'mongoose';
-import models from '~/app/models';
+import mongoose from 'mongoose'
 import conf from './config'
 import { log } from '~/core/logger'
 
-const MONGO_URI = conf.get('MONGODB_URI') || 'mongodb://localhost:27017/coeusTest'
+const MONGO_URI =
+  conf.get('MONGODB_URI') || 'mongodb://localhost:27017/coeusTest'
 
 mongoose.connect(
   MONGO_URI,
@@ -12,18 +12,14 @@ mongoose.connect(
     reconnectTries: 10,
     useUnifiedTopology: true,
     useNewUrlParser: true,
-    useFindAndModify:false,
-    useCreateIndex:true
+    useFindAndModify: false,
+    useCreateIndex: true
   },
   err => {
     if (err) {
       log.error(err)
     }
   }
-);
+)
 
-// mongoose.Error.messages = require('@ladjs/mongoose-error-messages')
-
-models();
-
-export default mongoose;
+export default mongoose

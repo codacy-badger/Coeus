@@ -3,7 +3,13 @@ import { buildErrObject } from '~/middleware/utils'
 import { log } from '~/core/logger'
 
 const getAllAircrafts = async (args, context) => {
-  log.info()
+  if (args) {
+      log.info(args)
+  }
+  if (context) {
+      log.info(context)
+  }
+
 
   return new Promise((resolve, reject) => {
     try {
@@ -15,7 +21,7 @@ const getAllAircrafts = async (args, context) => {
             totalFlightCycle: -1
           }
         },
-        
+
         (err, items) => {
           if (err) {
             reject(buildErrObject(422, err.message))

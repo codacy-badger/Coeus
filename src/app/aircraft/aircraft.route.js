@@ -2,13 +2,13 @@ import express from 'express'
 import passport from 'passport'
 import trimRequest from 'trim-request'
 import {
-  getAllItems,
+  queryAircrafts,
   getAllAircrafts,
-  getItems,
+  getAircrafts,
   createAircraft,
   getAircraft,
-  updateItem,
-  deleteAircraft,
+  updateAircraft,
+  deleteAircraft
 } from './aircraft.controller'
 import { onlyCanUse } from '../main/auth/auth.controller'
 import {
@@ -18,7 +18,6 @@ import {
   checkDeleteAircraft,
   checkRestoreAircraft
 } from './aircraft.validate'
-
 
 require('~/core/passport')
 
@@ -37,7 +36,6 @@ export const router = express.Router()
  */
 router.get('/all', getAllAircrafts)
 
-
 /*
  * Aircraft/s data with query
  */
@@ -46,51 +44,45 @@ router.get(
   secureIt,
   onlyCanUse(['admin']),
   trimRequest.all,
-  getAllItems
+  queryAircrafts
 )
 
 /*
  * Aircraft/s data with query
  */
-router.get(
-  '/',
-  secureIt,
-  onlyCanUse(['admin']),
-  trimRequest.all,
-  getItems
-)
+router.get('/', secureIt, onlyCanUse(['admin']), trimRequest.all, getAircrafts)
 
 /**
-* @api {post} /__/aircraft Create a Aircraft
-* @apiVersion 1.0.0
-* @apiName Create
-* @apiGroup Aircraft
-* @apiPermission authenticated user
-*
-* @apiParam (Request body) {String} name The task name
-*
-* @apiExample {js} Example usage:
-* const data = {
-*   "name": "Do the dishes"
-* }
-*
-* $http.defaults.headers.common["Authorization"] = token;
-* $http.post(url, data)
-*   .success((res, status) => doSomethingHere())
-*   .error((err, status) => doSomethingHere());
-*
-* @apiSuccess (Success 201) {String} message Task saved successfully!
-* @apiSuccess (Success 201) {String} id The campaign id
-*
-* @apiSuccessExample {json} Success response:
-*     HTTPS 201 OK
-*     {
-*      "message": "Task saved successfully!",
-*      "id": "57e903941ca43a5f0805ba5a"
-*    }
-*
-* @apiUse UnauthorizedError
-*/
+ * @api {post} /__/aircraft Create a Aircraft
+ * @apiVersion 1.0.0
+ * @apiName Create
+ * @apiGroup Aircraft
+ * @apiPermission authenticated user
+ *
+ * @apiParam (Request body) {String} name The task name
+ *
+ * @apiExample {js} Example usage:
+ * const data = {
+ *   "name": "Do the dishes"
+ * }
+ *
+ * $http.defaults.headers.common["Authorization"] = token;
+ * $http.post(url, data)
+ *   .success((res, status) => doSomethingHere())
+ *   .error((err, status) => doSomethingHere());
+ *
+ * @apiSuccess (Success 201) {String} message Task saved successfully!
+ * @apiSuccess (Success 201) {String} id The campaign id
+ *
+ * @apiSuccessExample {json} Success response:
+ *     HTTPS 201 OK
+ *     {
+ *      "message": "Task saved successfully!",
+ *      "id": "57e903941ca43a5f0805ba5a"
+ *    }
+ *
+ * @apiUse UnauthorizedError
+ */
 router.post(
   '/',
   secureIt,
@@ -121,7 +113,7 @@ router.patch(
   onlyCanUse(['admin']),
   trimRequest.all,
   checkAircraftUpdate,
-  updateItem
+  updateAircraft
 )
 
 /*

@@ -8,6 +8,7 @@ node_modules
 config.json
 # Not production ready files
 dist
+build
 # Not my logs
 *.log
 # No locks too
@@ -18,8 +19,8 @@ yarn-error.log
 .nyc_output
 *.log.gz
 iamdone-help.md
-error.log.gz
-access.log.gz
+# Not my logs
+logs
 # No coverage reports too
 coverage
 # Not my uploads motherfucker

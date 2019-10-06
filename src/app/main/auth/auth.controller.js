@@ -12,6 +12,7 @@ import {
   generateToken,
   verifyTheToken
 } from '~/middleware/utils'
+import { checkPassword } from '~/middleware/auth'
 import { log } from '~/core/logger'
 
 const { matchedData } = require('express-validator')
@@ -21,7 +22,6 @@ const { addHours } = require('date-fns')
 const UserAccess = require('../user/userAccess.model')
 const ForgotPassword = require('./forgotPassword.model')
 
-const auth = require('~/middleware/auth')
 const emailer = require('~/middleware/emailer')
 
 const HOURS_TO_BLOCK = 2
@@ -328,17 +328,13 @@ const checkPermissions = async (data, next) => {
   return new Promise((resolve, reject) => {
     User.findById(data.id, (err, result) => {
       itemNotFound(err, result, reject, 'NOT_FOUND')
-      if (data.roles.indexOf(result.role) > -1 && result.verified)  {
+      if (data.roles.indexOf(result.role) > -1 && result.verified) {
         return resolve(next())
       }
       return reject(buildErrObject(401, 'UNAUTHORIZED ACCESS'))
     })
   })
 }
-
-/********************
- * Public functions *
- ********************/
 
 /**
  * Login function called by route
@@ -351,18 +347,20 @@ export const login = async (req, res) => {
     const user = await findUser(data.email)
     await userIsBlocked(user)
     await checkLoginAttemptsAndBlockExpires(user)
-    const isPasswordMatch = await auth.checkPassword(data.password, user)
+    const isPasswordMatch = await checkPassword(data.password, user)
     if (!isPasswordMatch) {
       handleError(res, await passwordsDoNotMatch(user))
-      
     } else {
       // all ok, register access and return token
-      console.log(user)
       const result = await saveUserAccessAndReturnToken(req, user)
       user.loginAttempts = 0
       await saveLoginAttemptsToDB(user)
-      res.cookie('COEUS_JWT', result.token, {signed:true, maxAge: 1000*60*60*24*conf.get('COOKIE_EXPIRATION_IN_DAYS'), httpOnly: true});    
-      req.session.user = result.user 
+      res.cookie('COEUS_JWT', result.token, {
+        signed: true,
+        maxAge: 1000 * 60 * 60 * 24 * conf.get('COOKIE_EXPIRATION_IN_DAYS'),
+        httpOnly: true
+      })
+      req.session.user = result.user
       res.status(200).json(buildSuccObject(result))
     }
   } catch (error) {

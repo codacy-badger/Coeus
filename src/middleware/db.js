@@ -3,7 +3,7 @@
  * @module middleware/db
  */
 
-import { buildSuccObject, buildErrObject, itemNotFound, parser } from './utils'
+import { buildErrObject, itemNotFound, parser } from './utils'
 import { log } from '~/core/logger'
 /**
  * Builds sorting
@@ -21,7 +21,7 @@ const buildSort = (sort, order) => {
  * @param {Object} result - result object
  */
 const cleanPaginationID = result => {
-  result.docs.map(element => delete element.id)
+  result.docs.map(element => delete element.id) // eslint-disable-line
   return result
 }
 
@@ -50,202 +50,213 @@ const listInitOptions = async req => {
   })
 }
 
-module.exports = {
-  async checkItemIsExist(model, _id) {
-    return new Promise((resolve, reject) => {
-      model.findOne({ _id }, (err, result) => {
-        if (result) {
-          resolve(true)
-        } else
-          reject(buildErrObject(422, 'NOTHIN FOUND'))
-      })
+const checkItemIsExist = async (model, _id) => {
+  return new Promise((resolve, reject) => {
+    model.findOne({ _id }, (err, result) => {
+      if (result) {
+        resolve(true)
+      } else reject(buildErrObject(422, 'NOTHIN FOUND'))
     })
-  },
-  /**
-   * Checks the query string for filtering records
-   * query.filter should be the text to search (string)
-   * query.fields should be the fields to search into (array)
-   * @param {Object} query - query object
-   */
-  async checkQueryString(query) {
-    return new Promise((resolve, reject) => {
-      try {
-        if (
-          typeof query.filter !== 'undefined' &&
-          typeof query.fields !== 'undefined'
-        ) {
-          const data = {
-            $or: []
-          }
-          const array = []
-          // Takes fields param and builds an array by splitting with ','
-          const arrayFields = query.fields.split(',')
-          // Adds SQL Like %word% with regex
-          arrayFields.map(item => {
-            return array.push({
-              [item]: {
-                $regex: new RegExp(query.filter, 'i')
-              }
-            })
+  })
+}
+/**
+ * Checks the query string for filtering records
+ * query.filter should be the text to search (string)
+ * query.fields should be the fields to search into (array)
+ * @param {Object} query - query object
+ */
+const checkQueryString = async query => {
+  // eslint-disable-line
+  return new Promise((resolve, reject) => {
+    try {
+      if (
+        typeof query.filter !== 'undefined' &&
+        typeof query.fields !== 'undefined'
+      ) {
+        const data = {
+          $or: []
+        }
+        const array = []
+        // Takes fields param and builds an array by splitting with ','
+        const arrayFields = query.fields.split(',')
+        // Adds SQL Like %word% with regex
+        arrayFields.map(item => {
+          return array.push({
+            [item]: {
+              $regex: new RegExp(query.filter, 'i')
+            }
           })
-          // Puts array result in data
-          data.$or = array
-          resolve(data)
-        } else {
-          resolve({})
-        }
-      } catch (err) {
-        reject(buildErrObject(422, 'ERROR_WITH_FILTER'))
-      }
-    })
-  },
-
-  /**
-   * Gets items from database
-   * @param {Object} req - request object
-   * @param {Object} query - query object
-   */
-  async getAllItems(req, model, query) {
-    const options = await listInitOptions(req)
-    return new Promise((resolve, reject) => {
-      model.paginate(query, options, (err, items) => {
-        if (err) {
-          reject(buildErrObject(422, err.message))
-        }
-        resolve(cleanPaginationID(items))
-      })
-    })
-  },
-
-  /**
-   * Gets items from database
-   * @param {Object} req - request object
-   * @param {Object} query - query object
-   * Now supports find and select
-   * @TODO We also need population, limit etc.
-   * @SEE https://github.com/leodinas-hao/mongoose-query-parser#readme
-   */
-  async getItems(req, model, query) {
-    const { filter, select } = parser.parse(query)
-    return new Promise((resolve, reject) => {
-      model
-        .find(filter)
-        .select(select)
-        .exec((err, result) => {
-          if (err) {
-            reject(buildErrObject(422, err.message))
-          }
-          resolve(result)
         })
-    })
-  },
+        // Puts array result in data
+        data.$or = array
+        resolve(data)
+      } else {
+        resolve({})
+      }
+    } catch (err) {
+      reject(buildErrObject(422, 'ERROR_WITH_FILTER'))
+    }
+  })
+}
 
-  async getDeletedItems(model) {
-    return new Promise((resolve, reject) => {
-      model.findDeleted((err, result) => {
+/**
+ * Gets items from database
+ * @param {Object} req - request object
+ * @param {Object} query - query object
+ */
+const getAllItems = async (req, model, query) => {
+  const options = await listInitOptions(req)
+  return new Promise((resolve, reject) => {
+    model.paginate(query, options, (err, items) => {
+      if (err) {
+        reject(buildErrObject(422, err.message))
+      }
+      resolve(cleanPaginationID(items))
+    })
+  })
+}
+
+/**
+ * Gets items from database
+ * @param {Object} req - request object
+ * @param {Object} query - query object
+ * Now supports find and select
+ * @TODO We also need population, limit etc.
+ * @SEE https://github.com/leodinas-hao/mongoose-query-parser#readme
+ */
+const getItems = async (req, model, query) => {
+  const { filter, select } = parser.parse(query)
+  return new Promise((resolve, reject) => {
+    model
+      .find(filter)
+      .select(select)
+      .exec((err, result) => {
         if (err) {
           reject(buildErrObject(422, err.message))
         }
         resolve(result)
       })
-    })
-  },
+  })
+}
 
-  /**
-   * Gets item from database by id
-   * @param {string} id - item id
-   */
-  async getItem(id, model) {
-    return new Promise((resolve, reject) => {
-      model.findById(id, (err, item) => {
-        itemNotFound(err, item, reject, 'NOT_FOUND')
-        resolve(item)
-        log.info(`Item ${id} has successfully founded and returned.`)
-      })
+const getDeletedItems = async model => {
+  return new Promise((resolve, reject) => {
+    model.findDeleted((err, result) => {
+      if (err) {
+        reject(buildErrObject(422, err.message))
+      }
+      resolve(result)
     })
-  },
+  })
+}
 
-  /**
-   * Creates a new item in database
-   * @param {Object} req - request object
-   */
-  async createItem(req, model) {
-    return new Promise((resolve, reject) => {
-      model.create(req.body, (err, item) => {
-        if (err) {
-          reject(buildErrObject(422, err.message))
-        }
-        resolve(item)
-        log.info(`Item ${item.id} has successfully created.`)
-      })
+/**
+ * Gets item from database by id
+ * @param {string} id - item id
+ */
+const getItem = async (id, model) => {
+  return new Promise((resolve, reject) => {
+    model.findById(id, (err, item) => {
+      itemNotFound(err, item, reject, 'NOT_FOUND')
+      resolve(item)
+      log.info(`Item ${id} has successfully founded and returned.`)
     })
-  },
+  })
+}
 
-  /**
-   * [deleteItem Soft deletes with given ObjectID and records who did this, when did this...]
-   *
-   * @method deleteItem
-   *
-   * It's good. huh? We need soft deletes.
-   * @see for details : https://github.com/dsanel/mongoose-delete
-   *
-   * @param  {string}   itemID The item that we want to (soft) delete.
-   * @param  {string}   deleterID Who wants to delete
-   * @param  {object}   model In which mongodb model
-   *
-   * @return {Promise} If successfully returns deleted: true
-   */
-  async deleteItem(itemID, deleterID, model) {
-    return new Promise((resolve, reject) => {
-      model.findById(itemID, (err, item) => {
-        if (err) {
-          reject(buildErrObject(422, err.message))
-        }
-        if (item) {
-          item.delete(deleterID, () => {
-            resolve({ deleted: true })
-            log.info(`Item ${itemID} has successfully deleted.`)
-          })
-        } else {
-          reject(buildErrObject(422, 'ITEM HAS ALREADY DELETED.'))
-        }
-      })
+/**
+ * Creates a new item in database
+ * @param {Object} req - request object
+ */
+const createItem = async (req, model) => {
+  return new Promise((resolve, reject) => {
+    model.create(req.body, (err, item) => {
+      if (err) {
+        reject(buildErrObject(422, err.message))
+      }
+      resolve(item)
+      log.info(`Item ${item.id} has successfully created.`)
     })
-  },
+  })
+}
 
-  async restoreItem(itemID, model) {
-    return new Promise((resolve, reject) => {
-      model.findById(itemID, (err, item) => {
-        itemNotFound(err, item, reject, 'NOT_FOUND')
-        item.restore(() => {
-          log.info(`Item ${itemID} has successfully restored.`)
-          resolve({ restored: true })
+/**
+ * [deleteItem Soft deletes with given ObjectID and records who did this, when did this...]
+ *
+ * @method deleteItem
+ *
+ * It's good. huh? We need soft deletes.
+ * @see for details : https://github.com/dsanel/mongoose-delete
+ *
+ * @param  {string}   itemID The item that we want to (soft) delete.
+ * @param  {string}   deleterID Who wants to delete
+ * @param  {object}   model In which mongodb model
+ *
+ * @return {Promise} If successfully returns deleted: true
+ */
+const deleteItem = async (itemID, deleterID, model) => {
+  return new Promise((resolve, reject) => {
+    model.findById(itemID, (err, item) => {
+      if (err) {
+        reject(buildErrObject(422, err.message))
+      }
+      if (item) {
+        item.delete(deleterID, () => {
+          resolve({ deleted: true })
+          log.info(`Item ${itemID} has successfully deleted.`)
         })
+      } else {
+        reject(buildErrObject(422, 'ITEM HAS ALREADY DELETED.'))
+      }
+    })
+  })
+}
+
+const restoreItem = async (itemID, model) => {
+  return new Promise((resolve, reject) => {
+    model.findById(itemID, (err, item) => {
+      itemNotFound(err, item, reject, 'NOT_FOUND')
+      item.restore(() => {
+        log.info(`Item ${itemID} has successfully restored.`)
+        resolve({ restored: true })
       })
     })
-  },
+  })
+}
 
-  /**
-   * Updates an item in database by id
-   * @param {string} id - item id
-   * @param {Object} req - request object
-   */
-  async updateItem(id, model, req) {
-    return new Promise((resolve, reject) => {
-      model.findByIdAndUpdate(
-        id,
-        req,
-        {
-          new: true,
-          runValidators: true,
-          context: 'query'
-        },
-        (err, item) => {
-          itemNotFound(err, item, reject, 'NOT_FOUND')
-          resolve(item)
-          log.info(`Item ${id} has successfully updated.`)
-        }
-      )
-    })
-  }
+/**
+ * Updates an item in database by id
+ * @param {string} id - item id
+ * @param {Object} req - request object
+ */
+const updateItem = async (id, model, req) => {
+  return new Promise((resolve, reject) => {
+    model.findByIdAndUpdate(
+      id,
+      req,
+      {
+        new: true,
+        runValidators: true,
+        context: 'query'
+      },
+      (err, item) => {
+        itemNotFound(err, item, reject, 'NOT_FOUND')
+        resolve(item)
+        log.info(`Item ${id} has successfully updated.`)
+      }
+    )
+  })
+}
+
+export {
+  updateItem,
+  restoreItem,
+  deleteItem,
+  createItem,
+  getAllItems,
+  getItems,
+  checkItemIsExist,
+  getDeletedItems,
+  getItem,
+  checkQueryString
 }

@@ -5,7 +5,6 @@ import responseCachePlugin from 'apollo-server-plugin-response-cache'
 import depthLimit from 'graphql-depth-limit'
 import { giveTokenGetUser } from '~/middleware/utils'
 import conf from './config'
-import { log, show } from '~/core/logger'
 
 import schema from '~/app/schema'
 import createLoaders from '~/app/loader'
@@ -27,7 +26,7 @@ export default new ApolloServer({
       message
     }
   },
-  context: async ({ req, res, ...rest }, ...other) => {
+  context: async ({ req, res }) => {
     let token = null
     let currentUser = null
 
@@ -102,7 +101,7 @@ export default new ApolloServer({
     defaultMaxAge: 240000
   },
   cache: new RedisCache({
-    host: 'redis',
+    host: 'localhost',
     port: 6379,
     prefix: 'apollo-cache'
   })

@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 import { v4 as uuid } from 'uuid'
 import isMongoId from 'validator/lib/isMongoId'
 import mongoosePaginate from 'mongoose-paginate-v2'
-import db from '~/middleware/db'
+// import db from '~/middleware/db'
 
 const { Schema } = mongoose
 const { ObjectId } = Schema
@@ -47,13 +47,13 @@ export const stepLogEvents = [
   'Manufacturer Report',
   'Started',
   'Inspected',
-	'Assingment',
+  'Assingment'
 ]
 
 export const stepTypes = [
   'Preliminary Inspection',
-	'GVI Inspection',
-	'DVI Inspection',
+  'GVI Inspection',
+  'DVI Inspection',
   'NDT Inspection',
   'Cleaning',
   'Material Prepearing',
@@ -61,7 +61,7 @@ export const stepTypes = [
   'Changing',
   'Removing',
   'Installing',
-	'Assingment',
+  'Assingment'
 ]
 
 const stepSchema = new Schema(
@@ -81,12 +81,12 @@ const stepSchema = new Schema(
       enum: StepStatus,
       default: StepStatus[0]
     },
-		stepType: {
-			type: String,
-			required: false,
-			enum: stepTypes,
-			default: stepTypes[0]
-		},
+    stepType: {
+      type: String,
+      required: false,
+      enum: stepTypes,
+      default: stepTypes[0]
+    },
     department: {
       type: String
     },
@@ -122,8 +122,8 @@ const stepSchema = new Schema(
         },
         eventType: {
           type: String,
-					enum: stepLogEvents,
-					default: stepLogEvents[0]
+          enum: stepLogEvents,
+          default: stepLogEvents[0]
         },
         subject: {
           type: String

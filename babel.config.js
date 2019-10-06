@@ -45,6 +45,7 @@ module.exports = api => {
       require('@babel/plugin-proposal-throw-expressions'),
       require('@babel/plugin-syntax-dynamic-import'),
       require('@babel/plugin-syntax-import-meta'),
+      ['lodash'],
       [require('@babel/plugin-proposal-class-properties'), { loose: true }],
       require('@babel/plugin-proposal-json-strings'),
       ...(development ? developmentPlugins : productionPlugins)
