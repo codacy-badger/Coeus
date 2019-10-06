@@ -9,8 +9,8 @@
 	"scripts": {
 		"dev": "NODE_ENV=development webpack --config ./webpack.config.dev.babel.js",
 		"dev:debug": "NODE_ENV=development nodemon src/server.js --exec babel-node",
-		"build": "babel src -d build",
-		"deploy": "NODE_ENV=production webpack --config ./webpack.config.production.babel.js && node dist/server.js",
+		"build": "yarn clean && babel -d ./build ./src -s && NODE_ENV=development node ./index.js",
+		"deploy": "NODE_ENV=production webpack --config ./webpack.config.production.babel.js && pm2 start pm2.config.js",
 		"start": "NODE_ENV=production node build/server.js",
 		"seed": "NODE_ENV=development babel-node tools/seeder/seeder.js",
 		"test": "ava ./test/**/*.js --color",
@@ -21,6 +21,7 @@
 		"report-coverage": "NODE_ENV=test nyc ./node_modules/.bin/mocha ./test/**/*.js && codecov -t c76b1eb3-ebac-415e-b58f-1bfdb7500f99",
 		"unit": "jest \"src/.*\\.js$\" --coverage --forceExit",
 		"e2e": "cross-env JEST_ENV=e2e jest \"src/.*\\.js$\" --forceExit",
+		"clean": "rm -rf build && mkdir build && pm2 kill && pm2 flush",
 		"_codecov": "codecov"
 	},
 	"husky": {

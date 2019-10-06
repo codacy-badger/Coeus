@@ -1,7 +1,5 @@
 import DataLoader from 'dataloader'
-import {
-  mongooseLoader
-} from '@entria/graphql-mongoose-loader' // eslint-disable-line
+import { mongooseLoader } from '@entria/graphql-mongoose-loader' // eslint-disable-line
 
 import Aircraft from './aircraft.model'
 

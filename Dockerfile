@@ -3,7 +3,7 @@ FROM node:12
 ENV HOME /Coeus
 
 WORKDIR ${HOME}
-ADD . $HOME
+COPY . $HOME
 
 RUN yarn install
 

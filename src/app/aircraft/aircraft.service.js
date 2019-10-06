@@ -4,12 +4,11 @@ import { log } from '~/core/logger'
 
 const getAllAircrafts = async (args, context) => {
   if (args) {
-      log.info(args)
+    log.info(args)
   }
   if (context) {
-      log.info(context)
+    log.info(context)
   }
-
 
   return new Promise((resolve, reject) => {
     try {
