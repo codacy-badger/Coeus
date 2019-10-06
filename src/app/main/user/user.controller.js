@@ -22,7 +22,6 @@ import { log } from '~/core/logger'
 
 const cryptoRandomString = require('crypto-random-string')
 
-
 /**
  * Creates a new item in database
  * @param {Object} req - request object
@@ -177,10 +176,7 @@ export const getUser = async (req, res) => {
 export const updateUser = async (req, res) => {
   try {
     const id = await isIDGood(req.id)
-    const doesEmailExists = await emailExistsExcludingMyself(
-      id,
-      req.email
-    )
+    const doesEmailExists = await emailExistsExcludingMyself(id, req.email)
     if (!doesEmailExists) {
       res.status(200).json(await updateItem(id, User, req))
     }

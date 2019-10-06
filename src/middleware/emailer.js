@@ -62,77 +62,76 @@ const prepareToSendEmail = (user, subject, htmlMessage) => {
   }
 }
 
-
-  /**
-   * Checks User model if user with an specific email exists
-   * @param {string} email - user email
-   */
-  export const emailExists = async (email) => {
-    return new Promise((resolve, reject) => {
-      User.findOne(
-        {
-          email
-        },
-        (err, item) => {
-          itemAlreadyExists(err, item, reject, 'EMAIL_ALREADY_EXISTS')
-          resolve(false)
-        }
-      )
-    })
-  }
-
-  /**
-   * Checks User model if user with an specific email exists but excluding user id
-   * @param {string} id - user id
-   * @param {string} email - user email
-   */
-  export const emailExistsExcludingMyself = async (id, email) => {
-    return new Promise((resolve, reject) => {
-      User.findOne(
-        {
-          email,
-          _id: {
-            $ne: id
-          }
-        },
-        (err, item) => {
-          itemAlreadyExists(err, item, reject, 'EMAIL_ALREADY_EXISTS')
-          resolve(false)
-        }
-      )
-    })
-  }
-
-  /**
-   * Sends registration email
-   * @param {string} locale - locale
-   * @param {Object} user - user object
-   */
-  export const sendRegistrationEmailMessage = async (locale, user) => {
-    i18n.setLocale(locale)
-    const subject = i18n.__('registration.SUBJECT')
-    const htmlMessage = i18n.__(
-      'registration.MESSAGE',
-      user.name,
-      process.env.FRONTEND_URL,
-      user.verification
+/**
+ * Checks User model if user with an specific email exists
+ * @param {string} email - user email
+ */
+export const emailExists = async email => {
+  return new Promise((resolve, reject) => {
+    User.findOne(
+      {
+        email
+      },
+      (err, item) => {
+        itemAlreadyExists(err, item, reject, 'EMAIL_ALREADY_EXISTS')
+        resolve(false)
+      }
     )
-    prepareToSendEmail(user, subject, htmlMessage)
-  }
+  })
+}
 
-  /**
-   * Sends reset password email
-   * @param {string} locale - locale
-   * @param {Object} user - user object
-   */
-  export const sendResetPasswordEmailMessage = (locale, user) => {
-    i18n.setLocale(locale)
-    const subject = i18n.__('forgotPassword.SUBJECT')
-    const htmlMessage = i18n.__(
-      'forgotPassword.MESSAGE',
-      user.email,
-      process.env.FRONTEND_URL,
-      user.verification
+/**
+ * Checks User model if user with an specific email exists but excluding user id
+ * @param {string} id - user id
+ * @param {string} email - user email
+ */
+export const emailExistsExcludingMyself = async (id, email) => {
+  return new Promise((resolve, reject) => {
+    User.findOne(
+      {
+        email,
+        _id: {
+          $ne: id
+        }
+      },
+      (err, item) => {
+        itemAlreadyExists(err, item, reject, 'EMAIL_ALREADY_EXISTS')
+        resolve(false)
+      }
     )
-    prepareToSendEmail(user, subject, htmlMessage)
-  }
+  })
+}
+
+/**
+ * Sends registration email
+ * @param {string} locale - locale
+ * @param {Object} user - user object
+ */
+export const sendRegistrationEmailMessage = async (locale, user) => {
+  i18n.setLocale(locale)
+  const subject = i18n.__('registration.SUBJECT')
+  const htmlMessage = i18n.__(
+    'registration.MESSAGE',
+    user.name,
+    process.env.FRONTEND_URL,
+    user.verification
+  )
+  prepareToSendEmail(user, subject, htmlMessage)
+}
+
+/**
+ * Sends reset password email
+ * @param {string} locale - locale
+ * @param {Object} user - user object
+ */
+export const sendResetPasswordEmailMessage = (locale, user) => {
+  i18n.setLocale(locale)
+  const subject = i18n.__('forgotPassword.SUBJECT')
+  const htmlMessage = i18n.__(
+    'forgotPassword.MESSAGE',
+    user.email,
+    process.env.FRONTEND_URL,
+    user.verification
+  )
+  prepareToSendEmail(user, subject, htmlMessage)
+}
