@@ -127,7 +127,7 @@
 		"winston-mongodb": "^5.0.0"
 	},
 	"devDependencies": {
-		"@babel/cli": "7.6.2",
+		"@babel/cli": "7.6.3",
 		"@babel/core": "7.6.2",
 		"@babel/node": "7.6.2",
 		"@babel/plugin-proposal-class-properties": "7.5.5",
