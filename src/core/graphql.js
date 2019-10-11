@@ -39,12 +39,12 @@ export default new ApolloServer({
       currentUser = await giveTokenGetUser(token)
     } catch (e) {
       throw new AuthenticationError(
-        'Authentication token is invalid, please log in'
+        '🔥 Authentication token is invalid, please log in'
       )
     }
     req.user = currentUser
     const loaders = createLoaders()
-
+    console.log(currentUser.clerance)
     return {
       loaders,
       req,
@@ -78,14 +78,19 @@ export default new ApolloServer({
           }
         ]
       },
-
-  //  subscriptions: {
-  //    onConnect: () => {},
-  //    onDisconnect: () => {}
-  //  },
+  subscriptions: {
+    path: '/websocket',
+    onDisconnect: rawSocket => {
+      console.log(rawSocket)
+    },
+    onConnect: (connectionParams, rawSocket) => {
+      console.log(connectionParams)
+      console.log(rawSocket)
+    }
+  },
   maxFileSize: 25 * 1024 * 1024, // 25MB
   debug: conf.get('IS_DEV'),
-  engine: false,
+  engine: true,
   tracing: true,
   validationRules: [depthLimit(10)],
   plugins: [

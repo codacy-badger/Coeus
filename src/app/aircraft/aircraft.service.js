@@ -80,7 +80,20 @@ const deleteAircraft = async args => {
   })
 }
 
+const test = async args => {
+  return new Promise((resolve, reject) => {
+    try {
+      console.log(args)
+      resolve({ ok: true, message: 'Yup, seems good 🙌🏻' })
+    } catch (err) {
+      reject(buildErrObject(422, 'ERROR_WITH_FILTER'))
+    }
+  })
+}
+
+
 export {
+  test,
   getAllAircrafts,
   getAircraft,
   addAircraft,

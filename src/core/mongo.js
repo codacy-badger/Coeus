@@ -3,7 +3,8 @@ import conf from './config'
 import { log } from '~/core/logger'
 
 const MONGO_URI =
-  conf.get('MONGODB_URI') || 'mongodb://localhost:27017/coeusTest'
+  conf.get('MONGODB_URI') || 'mongodb://localhost:27017/coeus'
+
 
 mongoose.connect(
   MONGO_URI,
@@ -12,7 +13,7 @@ mongoose.connect(
     reconnectTries: 10,
     useUnifiedTopology: true,
     useNewUrlParser: true,
-    useFindAndModify: false,
+    useFindAndModify: true,
     useCreateIndex: true
   },
   err => {

@@ -357,7 +357,7 @@ export const login = async (req, res) => {
       await saveLoginAttemptsToDB(user)
       res.cookie('COEUS_JWT', result.token, {
         signed: true,
-        maxAge: 1000 * 60 * 60 * 24 * conf.get('COOKIE_EXPIRATION_IN_DAYS'),
+        maxAge: 1000 * 60 * 60 * 24 * 7,
         httpOnly: true
       })
       req.session.user = result.user

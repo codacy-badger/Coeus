@@ -38,9 +38,10 @@ const UserSchema = new mongoose.Schema(
         type: String,
       }
     },
-    clerance: {
-      type: Array,
-    },
+    clerance:[{
+        type: String,
+        default: undefined
+    }],
     verification: {
       type: String
     },

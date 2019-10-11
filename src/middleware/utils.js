@@ -187,6 +187,7 @@ export const giveTokenGetUser = async token => {
         log.warn('No user found with this UserID when trying to logging in')
         itemNotFound(err, item, reject, 'NOT_FOUND')
       }
+      console.log(item)
       resolve(item)
     })
   })
@@ -203,11 +204,15 @@ export const giveTokenGetUser = async token => {
  *
  * @return {Promise}
  */
-export const ContextMiddleware = async (context, onlyCanUse, ...args) => {
-  const { logged, clerance, verified } = context
 
+export const ContextMiddleware = async (context, onlyCanUse, ...args) => {
+
+  const { logged, clerance, verified } = context
+  
   if (logged === false) {
+    
     log.access('Unauthorized access')
+    
     throw new AuthenticationError('Non-logged')
   }
 
@@ -216,10 +221,15 @@ export const ContextMiddleware = async (context, onlyCanUse, ...args) => {
     throw new AuthenticationError('Non-verified user')
   }
 
-  if (onlyCanUse.every(i => clerance.includes(i)) === false) {
-    log.access('Access with low clerance')
-    throw new AuthenticationError('No clerance')
+  if (onlyCanUse) {
+    if (onlyCanUse.every(i => clerance.includes(i)) === false) {
+      log.access('Access with low clerance')
+      throw new AuthenticationError('No clerance')
+    }
+  } else {
+    log.access('It should be test... wait what?')
   }
+
 
   log.access(`${context.user.name} has requested a grapql query`)
   if (typeof arguments === 'undefined') {

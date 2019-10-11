@@ -1,13 +1,13 @@
 const AircraftTypes = () => `
   type Aircraft {
-    _id: String!
-    registration: String!
-    operator: String!
-    manufacturer: String!
-    model: String!
-    msn: String!
-    weightVariant: String!
-    year: String!
+    _id: String
+    registration: String
+    operator: String
+    manufacturer: String
+    model: String
+    msn: String
+    weightVariant: String
+    year: String
     totalFlightCycle: Int
     totalFlightHour: Int
   }
@@ -23,8 +23,9 @@ const AircraftTypes = () => `
     message: String!
   }
   extend type Query {
-    showSingleAircraft(id: ID!): Aircraft
+    getAircraft(id: ID!): Aircraft
     showAllAircrafts: AircraftListType
+    test: Success!
   }
   extend type Mutation {
     addAircraft(input: AircraftInputType!): Success!
