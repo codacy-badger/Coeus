@@ -17,11 +17,9 @@ const MongoStore = require('connect-mongo')(session)
 const eer = require('expeditious-engine-redis')
 const ExpeditiousCache = require('express-expeditious')
 const swStats = require('swagger-stats')
+const swaggerUi = require('swagger-ui-express')
 const apiSpec = require('../swagger.json')
-const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('../swagger.json');
-
-
+const swaggerDocument = require('../swagger.json')
 
 const RATE_LIMIT = conf.get('RATE_LIMIT') || 0
 

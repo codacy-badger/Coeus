@@ -36,16 +36,13 @@ apolloServer.applyMiddleware({
 io.origins(['*:*'])
 
 io.on('connection', connSocket => {
-  
   log.info(`🐈 ID: ${connSocket.id} just connected.`)
   connSocket.emit('A', { coeusVersion: '1.0.1', stuff: 'ok' })
   connSocket.on('B', data => console.log(data)) // { foo: 'baz' }
-  
-  
+
   connSocket.on('Are you there?', () => {
-  connSocket.emit('connection', { connection: true });
-});
-  
+    connSocket.emit('connection', { connection: true })
+  })
 
   io.to(`${connSocket.id}`).emit('me?', 'Yes you are')
 
@@ -72,9 +69,7 @@ server.on('error', err => {
   log.error(err)
 })
 
-server.on('close', () => {
-  
-})
+server.on('close', () => {})
 
 process.on('SIGINT', () => {
   mongoose.connection.close()
