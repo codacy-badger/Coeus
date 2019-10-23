@@ -32,16 +32,18 @@ const UserSchema = new mongoose.Schema(
     },
     photo: {
       id: {
-        type: String,
+        type: String
       },
       url: {
-        type: String,
+        type: String
       }
     },
-    clerance:[{
+    clerance: [
+      {
         type: String,
         default: undefined
-    }],
+      }
+    ],
     verification: {
       type: String
     },
@@ -88,7 +90,8 @@ const hash = (user, salt, next) => {
   })
 }
 
-UserSchema.pre('save', function(next) { // eslint-disable-line
+UserSchema.pre('save', function(next) {
+  // eslint-disable-line
   const that = this
   const SALT_FACTOR = 10
   if (!that.isModified('password')) {
@@ -97,21 +100,24 @@ UserSchema.pre('save', function(next) { // eslint-disable-line
   return hash(that, SALT_FACTOR, next)
 })
 
-UserSchema.methods.comparePassword = function(passwordAttempt, cb) { // eslint-disable-line
-  bcrypt.compare(
-    passwordAttempt,
-    this.password,
-    (err, isMatch) => (err ? cb(err) : cb(null, isMatch))
+UserSchema.methods.comparePassword = function(passwordAttempt, cb) {
+  // eslint-disable-line
+  bcrypt.compare(passwordAttempt, this.password, (err, isMatch) =>
+    err ? cb(err) : cb(null, isMatch)
   )
 }
 
 UserSchema.plugin(mongoosePaginate)
 
 /**
- * We are using mongoose delete plugin for soft deletes. 
+ * We are using mongoose delete plugin for soft deletes.
  * @SEE for details : https://github.com/dsanel/mongoose-delete
  */
-UserSchema.plugin(mongooseDelete, { overrideMethods: true, deletedBy : true, deletedAt : true})
+UserSchema.plugin(mongooseDelete, {
+  overrideMethods: true,
+  deletedBy: true,
+  deletedAt: true
+})
 
 const User = mongoose.model('User', UserSchema)
 

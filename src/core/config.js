@@ -15,7 +15,7 @@ conf.set('IS_DEV', process.env.NODE_ENV === 'development')
 conf.set('IS_TEST', process.env.NODE_ENV === 'test')
 
 if (conf.get('IS_PROD')) {
-  conf.set('REDIS_HOST','localhost')
+  conf.set('REDIS_HOST', 'localhost')
   conf.set('REDIS_PORT', 6379)
 }
 

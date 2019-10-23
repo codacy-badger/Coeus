@@ -91,7 +91,6 @@ const test = async args => {
   })
 }
 
-
 export {
   test,
   getAllAircrafts,

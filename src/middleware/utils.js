@@ -206,13 +206,11 @@ export const giveTokenGetUser = async token => {
  */
 
 export const ContextMiddleware = async (context, onlyCanUse, ...args) => {
-
   const { logged, clerance, verified } = context
-  
+
   if (logged === false) {
-    
     log.access('Unauthorized access')
-    
+
     throw new AuthenticationError('Non-logged')
   }
 
@@ -229,7 +227,6 @@ export const ContextMiddleware = async (context, onlyCanUse, ...args) => {
   } else {
     log.access('It should be test... wait what?')
   }
-
 
   log.access(`${context.user.name} has requested a grapql query`)
   if (typeof arguments === 'undefined') {

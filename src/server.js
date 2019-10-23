@@ -30,19 +30,23 @@ export const io = socket(server)
 apolloServer.installSubscriptionHandlers(server)
 apolloServer.applyMiddleware({
   app,
-  path: '/graphql',
-  cors: {
-    credentials: true,
-    origin: 'http://localhost:3000'
-  }
+  path: '/graphql'
 })
 
 io.origins(['*:*'])
 
 io.on('connection', connSocket => {
-  log.info(`${connSocket.id} just connected.`)
+  
+  log.info(`🐈 ID: ${connSocket.id} just connected.`)
   connSocket.emit('A', { coeusVersion: '1.0.1', stuff: 'ok' })
   connSocket.on('B', data => console.log(data)) // { foo: 'baz' }
+  
+  
+  connSocket.on('Are you there?', () => {
+  connSocket.emit('connection', { connection: true });
+});
+  
+
   io.to(`${connSocket.id}`).emit('me?', 'Yes you are')
 
   connSocket.on('subscribeToTimer', interval => {
@@ -68,7 +72,9 @@ server.on('error', err => {
   log.error(err)
 })
 
-server.on('close', () => {})
+server.on('close', () => {
+  
+})
 
 process.on('SIGINT', () => {
   mongoose.connection.close()

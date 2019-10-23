@@ -44,7 +44,6 @@ export default new ApolloServer({
     }
     req.user = currentUser
     const loaders = createLoaders()
-    console.log(currentUser.clerance)
     return {
       loaders,
       req,
@@ -106,8 +105,8 @@ export default new ApolloServer({
     defaultMaxAge: 240000
   },
   cache: new RedisCache({
-    host: 'localhost',
-    port: 6379,
+    host: conf.get('REDIS_HOST'),
+    port: conf.get('REDIS_PORT'),
     prefix: 'apollo-cache'
   })
 })

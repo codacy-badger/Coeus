@@ -16,6 +16,12 @@ import { log } from './core/logger'
 const MongoStore = require('connect-mongo')(session)
 const eer = require('expeditious-engine-redis')
 const ExpeditiousCache = require('express-expeditious')
+const swStats = require('swagger-stats')
+const apiSpec = require('../swagger.json')
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('../swagger.json');
+
+
 
 const RATE_LIMIT = conf.get('RATE_LIMIT') || 0
 
@@ -26,14 +32,19 @@ const app = express()
 app.use(helmet())
 app.use(
   cors({
-    origin: '*',
+    origin: 'hangar://webapp',
     allowMethods: ['GET', 'HEAD', 'PUT', 'POST', 'DELETE', 'PATCH'],
     allowHeaders: ['Content-Type', 'Authorization'],
     exposeHeaders: ['Content-Length', 'Date', 'X-Request-Id']
   })
 )
+
 app.use(rateLimit({ max: Number(RATE_LIMIT), windowMs: 15 * 60 * 1000 }))
 app.use(compression())
+
+app.use(swStats.getMiddleware({ swaggerSpec: apiSpec }))
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 export const sessionStore = new MongoStore({
   mongooseConnection: mongoose.connection
@@ -48,7 +59,7 @@ app.use(
     rolling: true,
     saveUninitialized: true,
     cookie: {
-      maxAge: 1000 * 60 * 60 * 24 * conf.get('COOKIE_EXPIRATION_IN_DAYS'),
+      maxAge: 1000 * 60 * 60 * 24 * 7,
       sameSite: true,
       httpOnly: true,
       secure: conf.get('IS_PROD')
@@ -84,7 +95,9 @@ app.use(
 app.use(cookieParser(conf.get('COOKIE_SECRET')))
 
 morgan.token('user', req => {
+  console.log(req)
   if (req.user) {
+    console.log(req)
     return req.user.name
   }
   return 'Anonymous request'
@@ -118,7 +131,7 @@ app.get('/healthcheck', (req, res) =>
 )
 
 app.get('/clear_cookie', (req, res) => {
-  res.clearCookie('COEUS_JWT')
+  res.clearCookie('jwt')
   res.clearCookie('COEUS')
   res.send('COEUS_JWT removed').status(200)
 })

@@ -341,6 +341,7 @@ const checkPermissions = async (data, next) => {
  * @param {Object} req - request object
  * @param {Object} res - response object
  */
+
 export const login = async (req, res) => {
   try {
     const data = matchedData(req)
@@ -355,11 +356,12 @@ export const login = async (req, res) => {
       const result = await saveUserAccessAndReturnToken(req, user)
       user.loginAttempts = 0
       await saveLoginAttemptsToDB(user)
-      res.cookie('COEUS_JWT', result.token, {
+      res.cookie('jwt', result.token, {
         signed: true,
         maxAge: 1000 * 60 * 60 * 24 * 7,
         httpOnly: true
       })
+      log.info('New cookie has cooked 🍪')
       req.session.user = result.user
       res.status(200).json(buildSuccObject(result))
     }
