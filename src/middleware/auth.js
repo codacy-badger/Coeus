@@ -1,4 +1,5 @@
 import conf from '~/core/config'
+import {buildErrObject} from './utils'
 
 const crypto = require('crypto')
 
@@ -16,7 +17,7 @@ const checkPassword = async (password, user) => {
   return new Promise((resolve, reject) => {
     user.comparePassword(password, (err, isMatch) => {
       if (err) {
-        reject(this.buildErrObject(422, err.message))
+        reject(buildErrObject(422, err.message))
       }
       if (!isMatch) {
         resolve(false)

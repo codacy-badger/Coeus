@@ -23,9 +23,81 @@ const secureIt = passport.authenticate('jwt', {
 })
 
 
-/*
- * Auth routes
+/**
+ * @swagger
+ * definitions:
+ *   Login:
+ *     required:
+ *       - username
+ *       - password
+ *     properties:
+ *       username:
+ *         type: string
+ *       password:
+ *         type: string
+ *       path:
+ *         type: string
+ * components:
+ *   schemas:
+ *     User Login Credentials:
+ *       type: object
+ *       required:
+ *         - email
+ *         - password
+ *       properties:
+ *         email:
+ *           type: string
+ *           format: email
+ *         password:
+ *           type: string
+ *           format: password
+ *       example:
+ *          email: admin@admin.com
+ *          password: "12345"
+ *     User Login Response:
+ *       type: object
+ *       properties:
+ *         success:
+ *           type: boolean
+ *           description: Is action Successfully performed?
+ *         data:
+ *           type: object
  */
+
+/**
+ * @swagger
+ * tags:
+ *   - name: Auth
+ *     description: Authentication and Authorization Module
+ */
+
+ /**
+  * @swagger
+  * /auth/login:
+  *   post:
+  *     description: Login to the Coeus
+  *     tags: [Auth]
+  *     produces:
+  *       - application/json
+  *     requestBody:
+  *       required: true
+  *       content:
+  *         application/json:
+  *           schema:
+  *             $ref: '#/components/schemas/User Login Credentials'
+  *     responses:
+  *       200:
+  *         description: Successfully logged
+  *         schema:
+  *           type: object
+  *           $ref: '#/components/schemas/User Login Response'
+  *       401:
+  *         description: Wrong credentials
+  *       402:
+  *         description: Wrong Data
+  */
+ 
+router.post('/login', trimRequest.all, CheckLogin, login)
 
 /*
  * Forgot password route
@@ -58,8 +130,20 @@ router.get(
   getRefreshToken
 )
 
-/*
- * Get new refresh token
+/**
+ * @swagger
+ * /auth/logout:
+ *   get:
+ *     description: Logout to the Coeus
+ *     tags: [Auth]
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: login
+ *         schema:
+ *           type: object
+ *           $ref: '#/definitions/Login'
  */
 router.get(
   '/logout',
@@ -70,13 +154,6 @@ router.get(
     console.log(res)
  }
 )
-
-
-
-/*
- * Login route
- */
-router.post('/login', trimRequest.all, CheckLogin, login)
 
 
 export default router

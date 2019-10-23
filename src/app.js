@@ -18,8 +18,52 @@ const eer = require('expeditious-engine-redis')
 const ExpeditiousCache = require('express-expeditious')
 const swStats = require('swagger-stats')
 const swaggerUi = require('swagger-ui-express')
-const apiSpec = require('../swagger.json')
-const swaggerDocument = require('../swagger.json')
+const swaggerJsdoc = require('swagger-jsdoc')
+
+const swaggerDefinition = {
+  openapi: '3.0.2',
+  info: {
+    title: 'Coeus API',
+    version: '1.0.0',
+    description:
+      'A test project to understand how easy it is to document and Express API',
+    license: {
+      name: 'MIT',
+      url: 'https://choosealicense.com/licenses/mit/'
+    },
+    contact: {
+      name: 'Steven J. Selcuk',
+      url: 'https://swagger.io',
+      email: 'stevenjselcuk@gmail.com'
+    }
+  },
+  host:'http://localhost:3000',
+  basePath: '/__/',
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        }
+      }
+    },
+    security: [{
+      bearerAuth: []
+    }],
+  servers: [
+    {
+      url: 'http://localhost:3000/__/'
+    }
+  ]
+}
+
+const options = {
+  swaggerDefinition,
+  apis: ['./src/app/**/*.js']
+}
+
+const specs = swaggerJsdoc(options)
 
 const RATE_LIMIT = conf.get('RATE_LIMIT') || 0
 
@@ -30,7 +74,7 @@ const app = express()
 app.use(helmet())
 app.use(
   cors({
-    origin: 'hangar://webapp',
+    origin: '*',
     allowMethods: ['GET', 'HEAD', 'PUT', 'POST', 'DELETE', 'PATCH'],
     allowHeaders: ['Content-Type', 'Authorization'],
     exposeHeaders: ['Content-Length', 'Date', 'X-Request-Id']
@@ -40,9 +84,9 @@ app.use(
 app.use(rateLimit({ max: Number(RATE_LIMIT), windowMs: 15 * 60 * 1000 }))
 app.use(compression())
 
-app.use(swStats.getMiddleware({ swaggerSpec: apiSpec }))
+app.use(swStats.getMiddleware({ swaggerSpec: specs }))
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs))
 
 export const sessionStore = new MongoStore({
   mongooseConnection: mongoose.connection
