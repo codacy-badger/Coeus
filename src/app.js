@@ -9,6 +9,8 @@ import morgan from 'morgan'
 import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
+import favicon from 'serve-favicon'
+import path from 'path'
 import routes from './core/express'
 import conf from './core/config'
 import { log } from './core/logger'
@@ -37,20 +39,22 @@ const swaggerDefinition = {
       email: 'stevenjselcuk@gmail.com'
     }
   },
-  host:'http://localhost:3000',
+  host: 'http://localhost:3000',
   basePath: '/__/',
-    components: {
-      securitySchemes: {
-        bearerAuth: {
-          type: 'http',
-          scheme: 'bearer',
-          bearerFormat: 'JWT',
-        }
+  components: {
+    securitySchemes: {
+      bearerAuth: {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT'
       }
-    },
-    security: [{
+    }
+  },
+  security: [
+    {
       bearerAuth: []
-    }],
+    }
+  ],
   servers: [
     {
       url: 'http://localhost:3000/__/'
@@ -72,6 +76,8 @@ const app = express()
 // Middlewares.
 
 app.use(helmet())
+app.use(favicon(path.join(__dirname, '../public', 'favicon.ico')))
+app.disable('x-powered-by')
 app.use(
   cors({
     origin: '*',

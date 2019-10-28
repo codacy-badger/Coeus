@@ -25,7 +25,7 @@ const server = http.Server(app)
 
 mongoose.Promise = require('bluebird')
 
-export const io = socket(server)
+const io = socket(server)
 
 apolloServer.installSubscriptionHandlers(server)
 apolloServer.applyMiddleware({
@@ -61,7 +61,7 @@ mongoose.connection.once('open', () => {
 })
 
 // I have to refactor it for Mocha-Chai Tests
-export const Application = server.listen(port, () =>
+const Application = server.listen(port, () =>
   log.info(`Server has started at ${port}`)
 )
 
@@ -89,7 +89,10 @@ process.on('unhandledRejection', e => {
 })
 
 // To Mocha-Chai Tests
-export const stop = () => {
+
+const stop = () => {
   mongoose.connection.close()
   server.close()
 }
+
+export { io, Application, stop }

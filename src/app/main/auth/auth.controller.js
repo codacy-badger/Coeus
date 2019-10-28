@@ -14,6 +14,7 @@ import {
 } from '~/middleware/utils'
 import { checkPassword } from '~/middleware/auth'
 import { log } from '~/core/logger'
+import { io } from '~/server'
 
 const { matchedData } = require('express-validator')
 const uuid = require('uuid')
@@ -424,6 +425,27 @@ export const getRefreshToken = async (req, res) => {
     // Removes user info from response
     delete token.user
     res.status(200).json(token)
+  } catch (error) {
+    handleError(res, error)
+  }
+}
+
+/**
+ * Refresh token function called by route
+ * @param {Object} req - request object
+ * @param {Object} res - response object
+ */
+export const qrLogin = async (req, res) => {
+  try {
+    let userId = await verifyTheToken(req.jwt)
+    userId = await isIDGood(userId)
+    const user = await findUserById(userId)
+    const clientId = req.client
+    const loginData = req.data
+    io.on('connection', connSocket => {
+      io.to(`${clientId}`).emit('qrLogin', loginData)
+    })
+    res.status(200).json(user)
   } catch (error) {
     handleError(res, error)
   }

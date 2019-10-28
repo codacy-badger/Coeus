@@ -3,6 +3,7 @@ import passport from 'passport'
 import trimRequest from 'trim-request'
 import {
   login,
+  qrLogin,
   forgotPassword,
   resetPassword,
   getRefreshToken,
@@ -21,7 +22,6 @@ require('~/core/passport')
 const secureIt = passport.authenticate('jwt', {
   session: true
 })
-
 
 /**
  * @swagger
@@ -71,53 +71,45 @@ const secureIt = passport.authenticate('jwt', {
  *     description: Authentication and Authorization Module
  */
 
- /**
-  * @swagger
-  * /auth/login:
-  *   post:
-  *     description: Login to the Coeus
-  *     tags: [Auth]
-  *     produces:
-  *       - application/json
-  *     requestBody:
-  *       required: true
-  *       content:
-  *         application/json:
-  *           schema:
-  *             $ref: '#/components/schemas/User Login Credentials'
-  *     responses:
-  *       200:
-  *         description: Successfully logged
-  *         schema:
-  *           type: object
-  *           $ref: '#/components/schemas/User Login Response'
-  *       401:
-  *         description: Wrong credentials
-  *       402:
-  *         description: Wrong Data
-  */
- 
+/**
+ * @swagger
+ * /auth/login:
+ *   post:
+ *     description: Login to the Coeus for further actions. It gives you back JWT token and user object.
+ *     tags: [Auth]
+ *     produces:
+ *       - application/json
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User Login Credentials'
+ *     responses:
+ *       200:
+ *         description: Successfully logged
+ *         schema:
+ *           type: object
+ *           $ref: '#/components/schemas/User Login Response'
+ *       401:
+ *         description: Wrong credentials
+ *       402:
+ *         description: Wrong Data
+ */
+
 router.post('/login', trimRequest.all, CheckLogin, login)
+
+router.post('/qr-login', trimRequest.all, CheckLogin, qrLogin)
 
 /*
  * Forgot password route
  */
-router.post(
-  '/forgot',
-  trimRequest.all,
-  CheckForgotPassword,
-  forgotPassword
-)
+router.post('/forgot', trimRequest.all, CheckForgotPassword, forgotPassword)
 
 /*
  * Reset password route
  */
-router.post(
-  '/reset',
-  trimRequest.all,
-  CheckResetPassword,
-  resetPassword
-)
+router.post('/reset', trimRequest.all, CheckResetPassword, resetPassword)
 
 /*
  * Get new refresh token
@@ -152,8 +144,7 @@ router.get(
   trimRequest.all,
   (req, res) => {
     console.log(res)
- }
+  }
 )
-
 
 export default router

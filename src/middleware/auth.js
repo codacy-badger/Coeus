@@ -1,5 +1,5 @@
 import conf from '~/core/config'
-import {buildErrObject} from './utils'
+import { buildErrObject } from './utils'
 
 const crypto = require('crypto')
 
