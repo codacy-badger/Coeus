@@ -1,10 +1,13 @@
-import conf from '../../src/core/config'
 import { Seeder } from 'mongo-seeding';
+import conf from '../../src/core/config'
+
+
+const MONGO_URI = conf.get('MONGODB_URI') || 'mongodb://localhost:27017/coeus'
 
 const path = require('path');
 
 const config = {
-  database: 'mongodb://localhost:27017/coeusTest',
+  database: MONGO_URI,
   inputPath: path.resolve(__dirname, './tools/seeder/data'),
   dropDatabase: true
 }

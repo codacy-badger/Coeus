@@ -74,18 +74,26 @@ const RATE_LIMIT = conf.get('RATE_LIMIT') || 0
 const app = express()
 
 // Middlewares.
+// app.use(
+//   cors({
+//     origin: '*',
+//     allowMethods: ['GET', 'HEAD', 'PUT', 'POST', 'DELETE', 'PATCH'],
+//     allowHeaders: ['Content-Type', 'Authorization'],
+//     exposeHeaders: ['Content-Length', 'Date', 'X-Request-Id']
+//   })
+// )
+
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Credentials', true);
+  res.header('Access-Control-Allow-Origin', req.headers.origin);
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,UPDATE,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
+  next();
+});
 
 app.use(helmet())
 app.use(favicon(path.join(__dirname, '../public', 'favicon.ico')))
 app.disable('x-powered-by')
-app.use(
-  cors({
-    origin: '*',
-    allowMethods: ['GET', 'HEAD', 'PUT', 'POST', 'DELETE', 'PATCH'],
-    allowHeaders: ['Content-Type', 'Authorization'],
-    exposeHeaders: ['Content-Length', 'Date', 'X-Request-Id']
-  })
-)
 
 app.use(rateLimit({ max: Number(RATE_LIMIT), windowMs: 15 * 60 * 1000 }))
 app.use(compression())
@@ -115,16 +123,19 @@ app.use(
   })
 )
 
-app.use(
-  ExpeditiousCache({
-    namespace: 'CoeusCache',
-    defaultTtl: '10 minute',
-    engine: eer({
-      host: conf.get('REDIS_HOST'),
-      port: conf.get('REDIS_PORT')
+if(!conf.get('ARE_WE_ON_HEROKU')) {
+  app.use(
+    ExpeditiousCache({
+      namespace: 'CoeusCache',
+      defaultTtl: '10 minute',
+      engine: eer({
+        host: conf.get('REDIS_HOST'),
+        port: conf.get('REDIS_PORT')
+      })
     })
-  })
-)
+  )
+}
+
 
 // for parsing json
 app.use(

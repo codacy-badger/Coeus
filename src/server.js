@@ -30,7 +30,11 @@ const io = socket(server)
 apolloServer.installSubscriptionHandlers(server)
 apolloServer.applyMiddleware({
   app,
-  path: '/graphql'
+  path: '/graphql',
+  cors:  {
+    origin: '*',
+    credentials: true,
+  }
 })
 
 io.origins(['*:*'])
@@ -72,21 +76,32 @@ server.on('error', err => {
 server.on('close', () => {})
 
 process.on('SIGINT', () => {
+  io.close()
   mongoose.connection.close()
   server.close()
+  process.exit(1)
 })
 
+
+process.on('exit', () => {
+  console.log(`About to exit with Control + C`);
+});
+
+
+
 process.on('uncaughtException', e => {
-  console.log(e)
+  log.error(e)
   server.close()
   process.exit(1)
 })
 
 process.on('unhandledRejection', e => {
-  console.log(e)
+  log.error(e)
   server.close()
   process.exit(1)
 })
+
+
 
 // To Mocha-Chai Tests
 
