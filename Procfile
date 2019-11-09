@@ -1,1 +1,1 @@
-web: yarn dev:debug
+web: yarn start
