@@ -8,7 +8,6 @@ mongoose.connect(
   MONGO_URI,
   {
     keepAlive: true,
-    reconnectTries: 10,
     useUnifiedTopology: true,
     useNewUrlParser: true,
     useFindAndModify: true,
