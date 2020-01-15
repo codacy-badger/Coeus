@@ -100,6 +100,7 @@ const secureIt = passport.authenticate('jwt', {
 
 router.post('/login', trimRequest.all, CheckLogin, login)
 
+// TODO: At this time we have any checking method maybe later
 router.post('/qr-login', trimRequest.all, qrLogin)
 
 /*
