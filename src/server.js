@@ -48,7 +48,10 @@ io.on('connection', connSocket => {
     connSocket.emit('connection', { connection: true })
   })
 
-  io.to(`${connSocket.id}`).emit('me?', 'Yes you are')
+  connSocket.join(`${connSocket.id}`);
+
+  io.to(`${connSocket.id}`).emit('me?', `I add you ass ID : ${connSocket.id}`)
+
 
   connSocket.on('subscribeToTimer', interval => {
     console.log('client is subscribing to timer with interval ', interval)

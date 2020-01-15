@@ -21,6 +21,10 @@ const ExpeditiousCache = require('express-expeditious')
 const swStats = require('swagger-stats')
 const swaggerUi = require('swagger-ui-express')
 const swaggerJsdoc = require('swagger-jsdoc')
+const uuidv1 = require('uuid/v1')
+
+console.log(`An ID for ya ${  uuidv1()}`)
+
 
 const swaggerDefinition = {
   openapi: '3.0.2',
@@ -123,15 +127,15 @@ app.use(
   })
 )
 
-app.use(	
-  ExpeditiousCache({	
-    namespace: 'CoeusCache',	
-    defaultTtl: '10 minute',	
-    engine: eer({	
-      host: conf.get('REDIS_HOST'),	
-      port: conf.get('REDIS_PORT')	
-    })	
-  })	
+app.use(
+  ExpeditiousCache({
+    namespace: 'CoeusCache',
+    defaultTtl: '10 minute',
+    engine: eer({
+      host: conf.get('REDIS_HOST'),
+      port: conf.get('REDIS_PORT')
+    })
+  })
 )
 
 

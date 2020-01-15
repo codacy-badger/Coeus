@@ -70,10 +70,6 @@ const saveUserAccessAndReturnToken = async (req, user) => {
       }
       const userInfo = setUserInfo(user)
       log.access(`Signed in:  ${userInfo.name} (${user.email})`)
-      // TODO: We gonna add a session expression right here. id:54
-      // - <https://github.com/stevenselcuk/Coeus/issues/32>
-      // Steven J. Selcuk
-      // stevenjselcuk@gmail.com
       resolve({
         token: generateToken(user._id),
         user: userInfo
@@ -436,17 +432,20 @@ export const getRefreshToken = async (req, res) => {
  * @param {Object} res - response object
  */
 export const qrLogin = async (req, res) => {
+
   try {
-    let userId = await verifyTheToken(req.jwt)
+    let userId = await verifyTheToken(req.body.jwt)
     userId = await isIDGood(userId)
     const user = await findUserById(userId)
-    const clientId = req.client
-    const loginData = req.data
-    io.on('connection', connSocket => {
-      io.to(`${clientId}`).emit('qrLogin', loginData)
-    })
+    const clientId = req.body.client
+    const send = {
+      user,
+      token: req.body.jwt
+    }
+    io.to(`${clientId}`).emit('qrLogin', send)
     res.status(200).json(user)
   } catch (error) {
+   console.log(error)
     handleError(res, error)
   }
 }

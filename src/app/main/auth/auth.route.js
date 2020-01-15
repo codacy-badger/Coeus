@@ -12,6 +12,7 @@ import {
 
 import {
   CheckLogin,
+  CheckQRLogin,
   CheckForgotPassword,
   CheckResetPassword
 } from './auth.validate'
@@ -99,7 +100,7 @@ const secureIt = passport.authenticate('jwt', {
 
 router.post('/login', trimRequest.all, CheckLogin, login)
 
-router.post('/qr-login', trimRequest.all, CheckLogin, qrLogin)
+router.post('/qr-login', trimRequest.all, qrLogin)
 
 /*
  * Forgot password route

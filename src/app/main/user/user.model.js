@@ -3,9 +3,11 @@ const mongooseDelete = require('mongoose-delete')
 const bcrypt = require('bcrypt')
 const validator = require('validator')
 const mongoosePaginate = require('mongoose-paginate-v2')
+const uuidv1 = require('uuid/v1')
 
 const UserSchema = new mongoose.Schema(
   {
+    // Indetity
     name: {
       type: String,
       required: true
@@ -20,6 +22,74 @@ const UserSchema = new mongoose.Schema(
       unique: true,
       required: true
     },
+    // Work releated
+    notifications: [
+      {
+        notificationID: {
+          type: String,
+          default: uuidv1()
+        },
+        notificationType: {
+          type: String
+        },
+        date: {
+          type: Date
+        },
+        readed: {
+          type: Boolean
+        },
+        notificationTitle: {
+          type: String
+        },
+        notificationContent: {
+          type: String
+        }
+      }
+    ],
+    tasks: [
+      {
+        taskID: {
+          type: String,
+          default: uuidv1()
+        },
+        taskType: {
+          type: String
+        },
+        date: {
+          type: Date
+        },
+        done: {
+          type: Boolean
+        },
+        taskTitle: {
+          type: String
+        },
+        taskContent: {
+          type: String
+        }
+      }
+    ],
+    // Detailed Identity
+    details: {
+      photo: {
+        url: {
+          type: String
+        }
+      },
+      phone: {
+        type: String
+      },
+      city: {
+        type: String
+      },
+      country: {
+        type: String
+      },
+      baseStation: {
+        type: String
+      }
+    },
+    // Security
     password: {
       type: String,
       required: true,
@@ -29,14 +99,6 @@ const UserSchema = new mongoose.Schema(
       type: String,
       enum: ['user', 'admin'],
       default: 'user'
-    },
-    photo: {
-      id: {
-        type: String
-      },
-      url: {
-        type: String
-      }
     },
     clerance: [
       {
@@ -50,18 +112,6 @@ const UserSchema = new mongoose.Schema(
     verified: {
       type: Boolean,
       default: false
-    },
-    phone: {
-      type: String
-    },
-    city: {
-      type: String
-    },
-    country: {
-      type: String
-    },
-    baseStation: {
-      type: String
     },
     loginAttempts: {
       type: Number,
