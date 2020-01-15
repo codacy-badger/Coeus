@@ -127,16 +127,19 @@ app.use(
   })
 )
 
-app.use(
-  ExpeditiousCache({
-    namespace: 'CoeusCache',
-    defaultTtl: '10 minute',
-    engine: eer({
-      host: conf.get('REDIS_HOST'),
-      port: conf.get('REDIS_PORT')
+if (! conf.get('ON_HEROKU')) {
+  app.use(
+    ExpeditiousCache({
+      namespace: 'CoeusCache',
+      defaultTtl: '10 minute',
+      engine: eer({
+        host: conf.get('REDIS_HOST'),
+        port: conf.get('REDIS_PORT')
+      })
     })
-  })
-)
+  )
+}
+
 
 
 // for parsing json
