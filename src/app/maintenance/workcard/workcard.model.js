@@ -2,6 +2,8 @@ import mongoose from 'mongoose'
 import { v4 as uuid } from 'uuid'
 import isMongoId from 'validator/lib/isMongoId'
 import mongoosePaginate from 'mongoose-paginate-v2'
+import Populate from 'mongoose-autopopulate'
+
 // import db from '~/middleware/db'
 
 const { Schema } = mongoose
@@ -19,6 +21,7 @@ export const WorkCardType = ['Non-Routine', 'MPD']
 export const CardStatus = ['Open', 'Done', 'Closed', 'Deferred', 'Declined']
 
 export const CardSource = [
+  'MPD',
   'Task Card',
   'Airworthiness Directive',
   'Service Bulletin',
@@ -87,9 +90,12 @@ const stepSchema = new Schema(
       enum: stepTypes,
       default: stepTypes[0]
     },
-    department: {
-      type: String
-    },
+    department: [
+      {
+        type: String,
+        default: undefined
+      }
+    ],
     description: {
       type: String
     },
@@ -183,7 +189,7 @@ const stepSchema = new Schema(
 
 const WorkCardSchema = new mongoose.Schema(
   {
-    WCNumber: {
+    workCardID: {
       type: String,
       required: true
     },
@@ -193,7 +199,8 @@ const WorkCardSchema = new mongoose.Schema(
     },
     aircraft: {
       type: ObjectId,
-      ref: 'Aircraft'
+      ref: 'Aircraft',
+      autopopulate: true
     },
     status: {
       type: String,
@@ -219,6 +226,12 @@ const WorkCardSchema = new mongoose.Schema(
       type: String,
       required: true
     },
+    department: [
+      {
+        type: String,
+        default: undefined
+      }
+    ],
     steps: [stepSchema],
     personals: [
       {
@@ -247,7 +260,8 @@ const WorkCardSchema = new mongoose.Schema(
 )
 
 WorkCardSchema.plugin(mongoosePaginate)
+WorkCardSchema.plugin(Populate)
 
-const WorkCard = mongoose.model('NRWI', WorkCardSchema)
+const WorkCard = mongoose.model('Workcard', WorkCardSchema)
 
 export default WorkCard

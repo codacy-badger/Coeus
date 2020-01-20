@@ -4,6 +4,8 @@ import { makeExecutableSchema } from 'graphql-tools'
 
 import { AircraftTypes, AircraftResolvers } from '~/app/aircraft'
 import { UserTypes, UserResolvers } from '~/app/main/user'
+// Maintenance
+import { WorkcardTypes, WorkcardResolvers } from '~/app/maintenance/workcard'
 
 const Root = /* GraphQL */ `
   type Query {
@@ -25,8 +27,8 @@ const Root = /* GraphQL */ `
 // const resolvers = merge(AircraftResolvers)
 
 const schema = makeExecutableSchema({
-  typeDefs: [Root, AircraftTypes, UserTypes],
-  resolvers: [AircraftResolvers, UserResolvers],
+  typeDefs: [Root, AircraftTypes, UserTypes, WorkcardTypes],
+  resolvers: [AircraftResolvers, UserResolvers, WorkcardResolvers],
 })
 
 export default schema

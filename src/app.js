@@ -23,7 +23,7 @@ const swaggerUi = require('swagger-ui-express')
 const swaggerJsdoc = require('swagger-jsdoc')
 const uuidv1 = require('uuid/v1')
 
-console.log(`An ID for ya ${  uuidv1()}`)
+log.info(`Machine ID:  ${  uuidv1()}`)
 
 
 const swaggerDefinition = {

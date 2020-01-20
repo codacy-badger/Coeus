@@ -156,10 +156,12 @@ const getDeletedItems = async model => {
  */
 const getItem = async (id, model) => {
   return new Promise((resolve, reject) => {
-    model.findById(id, (err, item) => {
-      itemNotFound(err, item, reject, 'NOT_FOUND')
-      resolve(item)
-      log.info(`Item ${id} has successfully founded and returned.`)
+    model.findById(id)
+    .exec((err, result) => {
+      if (err) {
+        reject(buildErrObject(422, err.message))
+      }
+      resolve(result)
     })
   })
 }
