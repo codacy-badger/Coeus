@@ -138,6 +138,7 @@ if (! conf.get('ON_HEROKU')) {
       })
     })
   )
+  console.log('Express cache has been initialized')
 }
 
 

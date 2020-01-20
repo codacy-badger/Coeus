@@ -5,12 +5,15 @@ module.exports = {
       script: './dist/server.js',
       watch: false,
       env: {
-        NODE_ENV: 'production'
+        NODE_ENV: "development",
+      },
+      env_production: {
+        NODE_ENV: "production",
       },
       // to calculate the max memory per process
       // max_memory_restart: '100M',
       // 4 instances
-      instances: 4,
+      instances: 'max',
       // cluster mode to load balance between each instances
       exec_mode: 'cluster',
       error_file: './logs/err.live.log',
