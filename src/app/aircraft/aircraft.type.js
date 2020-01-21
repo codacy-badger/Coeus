@@ -23,7 +23,7 @@ const AircraftTypes = () => `
     message: String!
   }
   extend type Query {
-    getAircraft(id: ID!): Aircraft
+    getAircraft(id: String): Aircraft
     showAllAircrafts: AircraftListType
     test: Success!
   }

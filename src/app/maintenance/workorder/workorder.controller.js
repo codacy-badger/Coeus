@@ -1,5 +1,5 @@
 // import { matchedData } from 'express-validator'
-import Workcard from './workcard.model'
+import Workorder from './workorder.model'
 import {
   handleError,
   buildErrObject,
@@ -24,10 +24,10 @@ import {
  * @param {Object} req - request object
  * @param {Object} res - response object
  */
-export const getWorkcard = async (req, res) => {
+export const getWorkorder = async (req, res) => {
   try {
-    const workcardID = req.body.id
-    res.status(200).json(buildSuccObject(await getItem(workcardID, Workcard, 'aircraft')))
+    const workorderID = req.body.id
+    res.status(200).json(buildSuccObject(await getItem(workorderID, Workorder)))
   } catch (error) {
     handleError(res, error)
   }
@@ -37,14 +37,14 @@ export const getWorkcard = async (req, res) => {
  * Checks if a city already exists in database
  * @param {string} name - name of item
  */
-const workcardIsAlreadyExists = async registration => {
+const workorderIsAlreadyExists = async registration => {
   return new Promise((resolve, reject) => {
-    Workcard.findOne(
+    Workorder.findOne(
       {
         registration
       },
       (err, item) => {
-        itemAlreadyExists(err, item, reject, 'Workcard is already exist!')
+        itemAlreadyExists(err, item, reject, 'Workorder is already exist!')
         resolve(false)
       }
     )
@@ -54,9 +54,9 @@ const workcardIsAlreadyExists = async registration => {
 /**
  * Gets all items from database
  */
-export const getAllWorkcards = async (req, res) => {
+export const getAllWorkorders = async (req, res) => {
   return new Promise((resolve, reject) => {
-    Workcard.find(
+    Workorder.find(
       {},
       '-updatedAt -createdAt',
       {
@@ -74,12 +74,12 @@ export const getAllWorkcards = async (req, res) => {
   })
 }
 
-export const queryWorkcards = async (req, res) => {
+export const queryWorkorders = async (req, res) => {
   try {
     const query = await checkQueryString(req.query)
     res
       .status(200)
-      .json(buildSuccObject(await getAllItems(req, Workcard, query)))
+      .json(buildSuccObject(await getAllItems(req, Workorder, query)))
   } catch (error) {
     handleError(res, error)
   }
@@ -90,11 +90,11 @@ export const queryWorkcards = async (req, res) => {
  * @param {Object} req - request object
  * @param {Object} res - response object
  */
-export const getWorkcards = async (req, res) => {
+export const getWorkorders = async (req, res) => {
   try {
     res
       .status(200)
-      .json(buildSuccObject(await getItems(req, Workcard, req.query)))
+      .json(buildSuccObject(await getItems(req, Workorder, req.query)))
   } catch (error) {
     handleError(res, error)
   }
@@ -102,9 +102,9 @@ export const getWorkcards = async (req, res) => {
 
 
 
-export const getDeletedWorkcards = async (req, res) => {
+export const getDeletedWorkorders = async (req, res) => {
   try {
-    res.status(200).json(buildSuccObject(await getDeletedItems(Workcard)))
+    res.status(200).json(buildSuccObject(await getDeletedItems(Workorder)))
   } catch (error) {
     handleError(res, error)
   }
@@ -115,12 +115,12 @@ export const getDeletedWorkcards = async (req, res) => {
  * @param {Object} req - request object
  * @param {Object} res - response object
  */
-export const updateWorkcard = async (req, res) => {
+export const updateWorkorder = async (req, res) => {
   try {
-    const workcardID = req.body.id
+    const workorderID = req.body.id
     res
       .status(200)
-      .json(buildSuccObject(await updateItem(workcardID, Workcard, req.body)))
+      .json(buildSuccObject(await updateItem(workorderID, Workorder, req.body)))
   } catch (error) {
     handleError(res, error)
   }
@@ -131,11 +131,11 @@ export const updateWorkcard = async (req, res) => {
  * @param {Object} req - request object
  * @param {Object} res - response object
  */
-export const createWorkcard = async (req, res) => {
+export const createWorkorder = async (req, res) => {
   try {
-    const doesWorkcardExists = await workcardIsAlreadyExists(req.body.registration)
-    if (!doesWorkcardExists) {
-      res.status(201).json(buildSuccObject(await createItem(req, Workcard)))
+    const doesWorkorderExists = await workorderIsAlreadyExists(req.body.registration)
+    if (!doesWorkorderExists) {
+      res.status(201).json(buildSuccObject(await createItem(req, Workorder)))
     }
   } catch (error) {
     handleError(res, error)
@@ -147,22 +147,22 @@ export const createWorkcard = async (req, res) => {
  * @param {Object} req - request object
  * @param {Object} res - response object
  */
-export const deleteWorkcard = async (req, res) => {
+export const deleteWorkorder = async (req, res) => {
   try {
-    const workcardID = req.body.id
+    const workorderID = req.body.id
     const DeleterId = await isIDGood(req.user._id)
     res
       .status(200)
-      .json(buildSuccObject(await deleteItem(workcardID, DeleterId, Workcard)))
+      .json(buildSuccObject(await deleteItem(workorderID, DeleterId, Workorder)))
   } catch (error) {
     handleError(res, error)
   }
 }
 
-export const restoreWorkcard = async (req, res) => {
+export const restoreWorkorder = async (req, res) => {
   try {
-    const workcardID = req.body.id
-    res.status(200).json(buildSuccObject(await restoreItem(workcardID, Workcard)))
+    const workorderID = req.body.id
+    res.status(200).json(buildSuccObject(await restoreItem(workorderID, Workorder)))
   } catch (error) {
     handleError(res, error)
   }

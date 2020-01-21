@@ -8,6 +8,7 @@ const WorkcardTypes = () => `
     department: [String]
     description: String
     reference: String
+    subject: String
   }
   input WorkcardInputType {
     registration: String!
@@ -22,7 +23,7 @@ const WorkcardTypes = () => `
     message: String!
   }
   extend type Query {
-    getWorkcard(id: ID!): Workcard
+    getWorkcard(id: String): Workcard
     getWorkcardsByWorkorder: WorkcardListType
     testWorkcardSystem: WorkcardSuccess!
   }

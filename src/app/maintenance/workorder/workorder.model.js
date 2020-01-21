@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'
 import mongoosePaginate from 'mongoose-paginate-v2'
+import Populate from 'mongoose-autopopulate'
 
 const { Schema } = mongoose;
 const { ObjectId } = Schema;
@@ -19,7 +20,8 @@ const WorkOrderSchema = new mongoose.Schema({
 	},
   aircraft: {
     type: ObjectId,
-    ref: 'Aircraft'
+    ref: 'Aircraft',
+    autopopulate: true
   },
   type: {
     type: String,
@@ -27,6 +29,17 @@ const WorkOrderSchema = new mongoose.Schema({
     enum: WorkOrderTypes,
     default: WorkOrderTypes[0]
   },
+  letterCheckID: {
+    type: String,
+    required: false
+  },
+  package: [
+    {
+      type: ObjectId,
+      ref: 'Workcard',
+      autopopulate: true
+    }
+  ],
   customer: {
     type: String,
     required: false
@@ -37,6 +50,7 @@ const WorkOrderSchema = new mongoose.Schema({
 })
 
 WorkOrderSchema.plugin(mongoosePaginate)
+WorkOrderSchema.plugin(Populate)
 
 const WorkOrder = mongoose.model('Workorder', WorkOrderSchema)
 

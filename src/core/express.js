@@ -3,10 +3,12 @@ import { Router } from 'express';
 import Aircraft from '~/app/aircraft/aircraft.route'
 import User from '~/app/main/user/user.route'
 import Auth from '~/app/main/auth/auth.route'
+import Workorder from '~/app/maintenance/workorder/workorder.route'
 import Workcard from '~/app/maintenance/workcard/workcard.route'
 
 const router = Router();
 
+router.use('/workorder', Workorder)
 router.use('/workcard', Workcard)
 router.use('/aircraft', Aircraft)
 router.use('/auth', Auth)

@@ -220,11 +220,19 @@ const WorkCardSchema = new mongoose.Schema(
     },
     model: {
       type: String,
-      required: true
+      required: false
+    },
+    description: {
+      type: String,
+      required: false
     },
     subject: {
       type: String,
-      required: true
+      required: false
+    },
+    reference: {
+      type: String,
+      required: false
     },
     department: [
       {
