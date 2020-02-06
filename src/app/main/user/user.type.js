@@ -14,6 +14,10 @@ const UserTypes = () => `
     name: String!
   }
 
+  type NotificationCount {
+    count: Int
+  }
+
   type Notification {
     notificationID: String
     notificationType: String
@@ -48,6 +52,7 @@ const UserTypes = () => `
   }
   extend type Query {
     getUser(id: ID!): User
+    getUserNotificationCount(id: String): NotificationCount
     getUserUnreadedNotifications(id: String): UserNotification
     getUserUndoneTasks(id: String): UserTask
     getAllUsers: UserListType

@@ -31,9 +31,9 @@ apolloServer.installSubscriptionHandlers(server)
 apolloServer.applyMiddleware({
   app,
   path: '/graphql',
-  cors:  {
+  cors: {
     origin: '*',
-    credentials: true,
+    credentials: true
   }
 })
 
@@ -48,10 +48,9 @@ io.on('connection', connSocket => {
     connSocket.emit('connection', { connection: true })
   })
 
-  connSocket.join(`${connSocket.id}`);
+  connSocket.join(`${connSocket.id}`)
 
   io.to(`${connSocket.id}`).emit('me?', `I add you ass ID : ${connSocket.id}`)
-
 
   connSocket.on('subscribeToTimer', interval => {
     console.log('client is subscribing to timer with interval ', interval)
@@ -85,12 +84,22 @@ process.on('SIGINT', () => {
   process.exit(1)
 })
 
+process.on('SIGTERM', () => {
+  log.info('SIGTERM signal received.')
+  log.info('Closing http server.')
+  server.close(() => {
+    log.info('Http server closed.')
+    mongoose.connection.close(false, () => {
+      log.info('MongoDb connection closed.')
+      io.close()
+      process.exit(0)
+    })
+  })
+})
 
 process.on('exit', () => {
-  console.log(`About to exit with Control + C`);
-});
-
-
+  log.info(`About to exit with Control + C`)
+})
 
 process.on('uncaughtException', e => {
   log.error(e)
@@ -104,9 +113,7 @@ process.on('unhandledRejection', e => {
   process.exit(1)
 })
 
-
-
-// To Mocha-Chai Tests
+// For Mocha-Chai Tests
 
 const stop = () => {
   mongoose.connection.close()

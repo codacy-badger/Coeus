@@ -2,6 +2,7 @@ import { ContextMiddleware } from '~/middleware/utils'
 import {
   userTest,
   getUser,
+  getUserNotificationCount,
   getAllUsers,
   getUserUnreadedNotifications,
   getUserUndoneTasks
@@ -12,7 +13,11 @@ module.exports = {
     ContextMiddleware(context).then(() => userTest(args, context)),
   getUser: (root, args, context) =>
     ContextMiddleware(context, ['canGetUser']).then(() =>
-       context.loaders.user.load(args.id)
+      context.loaders.user.load(args.id)
+    ),
+  getUserNotificationCount: (root, args, context) =>
+    ContextMiddleware(context, ['canGetUser']).then(() =>
+      getUserNotificationCount(args, context)
     ),
   getUserUnreadedNotifications: (root, args, context) =>
     ContextMiddleware(context, ['canGetUser']).then(() =>

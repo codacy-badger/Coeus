@@ -29,11 +29,26 @@ const getUser = async (args, context) => {
   })
 }
 
+const getUserNotificationCount = async (args, context) => {
+  const user = await context.loaders.user.load(args.id)
+  const totalUnreadedNotifications = user.notifications ? user.notifications.length : 0
+
+  return new Promise((resolve, reject) => {
+    try {
+      resolve({ count: totalUnreadedNotifications })
+    } catch (err) {
+      reject(buildErrObject(422, 'Coeus : Notification Service Error. 🤷‍♂️'))
+    }
+  })
+}
+
 const getUserUnreadedNotifications = async (args, context) => {
   const user = await context.loaders.user.load(args.id)
   const unReadednotifications = user.notifications.filter(not => {
     return not.readed === false
   })
+
+  console.log( unReadednotifications)
   return new Promise((resolve, reject) => {
     try {
       resolve({ notifications: unReadednotifications })
@@ -105,6 +120,7 @@ export {
   userTest,
   getAllUsers,
   getUser,
+  getUserNotificationCount,
   getUserUnreadedNotifications,
   getUserUndoneTasks,
   updateAircraft,

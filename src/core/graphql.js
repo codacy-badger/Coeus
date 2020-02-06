@@ -30,17 +30,24 @@ export default new ApolloServer({
     let token = null
     let currentUser = null
 
+
     if (req.headers.authorization) {
       token = req.headers.authorization.replace('Bearer ', '').trim()
     } else if (req.signedCookies) {
-      token = req.signedCookies.COEUS_JWT
+      token = req.signedCookies.jwt
     }
     try {
       currentUser = await giveTokenGetUser(token)
     } catch (e) {
-      throw new AuthenticationError(
-        '🔥 Authentication token is invalid, please log in'
-      )
+  // OOooooh boy. Actually I threw a error just like below.
+  // But connot dedect on Frontend soooo
+  //    throw new AuthenticationError(
+  //      e.message
+  //    )
+  // I pass to like this to the middleware
+  return { logged: false }
+
+  // to see more check middleware/utils
     }
     req.user = currentUser
     const loaders = createLoaders()

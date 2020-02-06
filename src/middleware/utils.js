@@ -187,7 +187,6 @@ export const giveTokenGetUser = async token => {
         log.warn('No user found with this UserID when trying to logging in')
         itemNotFound(err, item, reject, 'NOT_FOUND')
       }
-      console.log(item)
       resolve(item)
     })
   })
