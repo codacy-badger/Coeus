@@ -12,8 +12,6 @@ build
 # Not my logs
 *.log
 # No locks too
-yarn.lock
-# No locks too
 yarn-error.log
 # No nyc
 .nyc_output
