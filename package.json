@@ -119,6 +119,7 @@
 		"winston-mongodb": "^5.0.0"
 	},
 	"devDependencies": {
+		"@architect/sandbox": "^1.7.1",
 		"@babel/cli": "7.6.3",
 		"@babel/core": "7.6.3",
 		"@babel/node": "7.6.3",
