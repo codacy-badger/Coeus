@@ -87,13 +87,13 @@ const app = express()
 //   })
 // )
 
-app.use(function(req, res, next) {
-  res.header('Access-Control-Allow-Credentials', true);
-  res.header('Access-Control-Allow-Origin', req.headers.origin);
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,UPDATE,OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
-  next();
-});
+// app.use(function(req, res, next) {
+//  res.header('Access-Control-Allow-Credentials', true);
+//  res.header('Access-Control-Allow-Origin', req.headers.origin);
+//  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,UPDATE,OPTIONS');
+//  res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
+//  next();
+// });
 
 app.use(helmet())
 app.use(favicon(path.join(__dirname, '../public', 'favicon.ico')))
@@ -199,6 +199,10 @@ app.get('/clear_cookie', (req, res) => {
   res.clearCookie('jwt')
   res.clearCookie('COEUS')
   res.send('COEUS_JWT removed').status(200)
+})
+
+app.get('/', (req, res) => {
+  res.send('INIT').status(200)
 })
 
 app.use('/__', routes)
