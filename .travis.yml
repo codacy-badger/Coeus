@@ -31,5 +31,4 @@ env:
 
 script:
   - yarn
-  - yarn build
-  - yarn test
+  - yarn report-coverage
