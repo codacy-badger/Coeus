@@ -21,6 +21,8 @@ import { log } from './core/logger'
 
 const port =  process.env.PORT || 3000
 
+log.info(process.env.PORT)
+
 const server = http.Server(app)
 
 mongoose.Promise = require('bluebird')
