@@ -68,7 +68,7 @@ mongoose.connection.once('open', () => {
 
 // I have to refactor it for Mocha-Chai Tests
 const Application = server.listen(port, () =>
-  log.info(`Server has started at ${port}`)
+  log.info(`Server has started  ${port}`)
 )
 
 server.on('error', err => {
