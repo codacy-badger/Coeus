@@ -19,7 +19,7 @@ import { log } from './core/logger'
 // record a generic message and send it to Rollbar
 // rollbar.log('Hello world!')
 
-const port = conf.get('PORT') || 3000
+const port =  process.env.PORT || 3000
 
 const server = http.Server(app)
 
