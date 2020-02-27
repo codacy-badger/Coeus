@@ -1,5 +1,5 @@
 module.exports = {
-	entry: ["./src"],
+	entry: ["./src/server.js"],
 	target: "node",
 	mode: 'production',
 	watch: false,
