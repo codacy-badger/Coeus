@@ -13,7 +13,7 @@
 		"deploy": "NODE_ENV=production webpack --config ./webpack.config.production.babel.js && pm2 start pm2.config.js",
 		"start": "NODE_ENV=production node build/server.js",
 		"seed": "NODE_ENV=development babel-node tools/seeder/seeder.js",
-		"test": "NODE_ENV=test nyc --reporter=html --reporter=text mocha --timeout 20000 --exit --recursive ./test/**/*.js ",
+		"test": "NODE_ENV=test nyc --reporter=html --reporter=text mocha --timeout 20000 --exit --recursive ./test/**/*.js && codecov -t c76b1eb3-ebac-415e-b58f-1bfdb7500f99",
 		"doc": "./node_modules/.bin/jsdoc -c jsdoc.json",
 		"swag": "swagger-jsdoc -d swaggerDef.js",
 		"apidoc": "gulp apidoc",

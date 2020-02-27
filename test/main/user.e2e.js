@@ -17,7 +17,7 @@ let theToken = ''
 let verificationToken = ''
 
 const userCredentials = {
-  email: 'admin@admin.com', 
+  email: 'admin@admin.com',
   password: '12345'
 }
 
@@ -77,7 +77,7 @@ describe('User tests', () => {
         })
     })
   })
-	
+
 	// ROUTE: [POST] /__/users
 	// MODEL: USER
 	// CONTROLLER: USER
@@ -103,7 +103,7 @@ describe('User tests', () => {
         })
     })
   })
-	
+
 	// ROUTE: [POST] /__/users/verify
 	// MODEL: USER
 	// CONTROLLER: USER
@@ -125,7 +125,7 @@ describe('User tests', () => {
         })
     })
   })
-	
+
 	// ROUTE: [POST] /__/users
 	// MODEL: USER
 	// CONTROLLER: USER
@@ -148,7 +148,7 @@ describe('User tests', () => {
         })
     })
   })
-	
+
 	// ROUTE: [DELETE] /__/users/:id
 	// MODEL: USER
 	// CONTROLLER: USER
@@ -183,5 +183,6 @@ describe('User tests', () => {
     //			}
     //		})
     //	})
+    stop()
   })
 })
