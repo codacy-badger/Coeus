@@ -1,6 +1,6 @@
-name: Shed And Breakfast 
+name: Shed And Breakfast
 
-on: 
+on:
   push:
     branches:
     - master
@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x]
+        node-version: [13.x]
 
     steps:
     - uses: actions/checkout@v1
@@ -23,7 +23,8 @@ jobs:
     - name: Install deps build and test
       run: |
         npm install
-        npm run build --if-present
-        npm run mocha
+        npm run build
+        npm install --global mocha
+        npm test
       env:
         CI: true
