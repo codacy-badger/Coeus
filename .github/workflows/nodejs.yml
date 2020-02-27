@@ -22,6 +22,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
       env: # Or as an environment variable
         MONGODB_URI: ${{ secrets.MONGODB_URI }}  
+        ON_HEROKU: true
     - name: Install deps build and test
       run: |
         npm install
