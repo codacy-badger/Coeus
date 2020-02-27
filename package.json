@@ -9,7 +9,7 @@
 	"scripts": {
 		"dev": "NODE_ENV=development webpack --config ./webpack.config.dev.babel.js",
 		"dev:debug": "NODE_ENV=development nodemon src/server.js --exec babel-node",
-		"build": "yarn clean && babel -d ./build ./src -s && NODE_ENV=development PORT=$PORT node ./index.js",
+		"build": "yarn clean && babel -d ./build ./src -s",
 		"deploy": "NODE_ENV=production webpack --config ./webpack.config.production.babel.js && pm2 start pm2.config.js",
 		"start": "NODE_ENV=production node build/server.js",
 		"seed": "NODE_ENV=development babel-node tools/seeder/seeder.js",
