@@ -27,7 +27,7 @@ jobs:
         npm install
         npm run build
         npm install --global mocha
-        npm run seed
+        npm run seed MONGODB_URI=${{ secrets.MONGODB_URI }}  
         npm test
       env:
         CI: true
