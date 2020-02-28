@@ -9,8 +9,8 @@
 	"scripts": {
     "dev": "NODE_ENV=development nodemon src/server.js --exec babel-node",
     "dev:webpack": "NODE_ENV=development webpack --config ./webpack.config.dev.babel.js",
-    "build": "yarn clean && babel -d ./build ./src -s",
-		"build:webpack": "NODE_ENV=production webpack --config ./webpack.config.production.babel.js",
+    "build:babel": "yarn clean && babel -d ./build ./src -s",
+		"build": "NODE_ENV=production webpack --config ./webpack.config.production.babel.js",
 		"start": "NODE_ENV=production node build/bundle.prod.js",
     "start:pm2": "NODE_ENV=production node index.js",
     "deploy": "yarn build:webpack && pm2 start pm2.config.js",
