@@ -7,11 +7,13 @@
 	"author": "Steven J. Selcuk",
 	"license": "MIT",
 	"scripts": {
-		"dev": "NODE_ENV=development webpack --config ./webpack.config.dev.babel.js",
-		"dev:debug": "NODE_ENV=development nodemon src/server.js --exec babel-node",
-		"build": "yarn clean && babel -d ./build ./src -s",
-		"deploy": "NODE_ENV=production webpack --config ./webpack.config.production.babel.js && pm2 start pm2.config.js",
-		"start": "NODE_ENV=production node build/server.js",
+    "dev": "NODE_ENV=development nodemon src/server.js --exec babel-node",
+    "dev:webpack": "NODE_ENV=development webpack --config ./webpack.config.dev.babel.js",
+    "build": "yarn clean && babel -d ./build ./src -s",
+		"build:webpack": "NODE_ENV=production webpack --config ./webpack.config.production.babel.js",
+		"start": "NODE_ENV=production node build/bundle.prod.js",
+    "start:pm2": "NODE_ENV=production node index.js",
+    "deploy": "yarn build:webpack && pm2 start pm2.config.js",
 		"seed": "NODE_ENV=development babel-node tools/seeder/seeder.js",
 		"test": "NODE_ENV=test nyc --reporter=html --reporter=text mocha --timeout 20000 --exit --recursive ./test/**/*.js && codecov -t c76b1eb3-ebac-415e-b58f-1bfdb7500f99",
 		"doc": "./node_modules/.bin/jsdoc -c jsdoc.json",
@@ -23,7 +25,10 @@
 		"unit": "jest \"src/.*\\.js$\" --coverage --forceExit",
 		"e2e": "cross-env JEST_ENV=e2e jest \"src/.*\\.js$\" --forceExit",
 		"clean": "rm -rf build && mkdir build && pm2 kill && pm2 flush",
-		"_codecov": "codecov"
+		"_codecov": "codecov",
+		"lint": "eslint ./src/ --ignore-path .gitignore --ignore-pattern internals/scripts",
+		"lint:fix": "yarn lint --fix",
+		"lint:watch": "yarn lint --watch"
 	},
 	"dependencies": {
 		"@entria/graphql-mongoose-loader": "^4.2.0",
@@ -141,7 +146,6 @@
 		"@babel/preset-env": "7.6.3",
 		"@babel/preset-flow": "7.0.0",
 		"@babel/register": "7.6.2",
-		"ava": "^2.4.0",
 		"babel-eslint": "10.0.3",
 		"babel-jest": "24.9.0",
 		"babel-loader": "^8.0.6",
@@ -150,6 +154,7 @@
 		"babel-plugin-root-import": "6.4.1",
 		"chai": "4.2.0",
 		"chai-http": "4.3.0",
+		"clean-webpack-plugin": "^3.0.0",
 		"core-js": "3",
 		"docdash": "1.1.1",
 		"eslint": "6.5.1",
@@ -175,44 +180,42 @@
 		"nyc": "14.1.1",
 		"prettier": "1.18.2",
 		"resnap": "^1.0.1",
+		"terser-webpack-plugin": "^2.3.5",
 		"webpack": "^4.41.0",
 		"webpack-cli": "^3.3.9",
 		"webpack-node-externals": "^1.7.2",
-		"webpack-shell-plugin": "^0.5.0"
+		"webpack-shell-plugin": "^0.5.0",
+		"webpackbar": "^4.0.0"
 	},
-	"ava": {
-		"files": [
-			"test/**/*",
-			"!test/exclude-files-in-this-directory",
-			"!**/exclude-files-with-this-name.*"
-		],
-		"helpers": [
-			"**/helpers/**/*"
-		],
-		"sources": [
-			"src/**/*"
-		],
-		"cache": true,
-		"concurrency": 5,
-		"failFast": true,
-		"failWithoutAssertions": false,
-		"environmentVariables": {
-			"MY_ENVIRONMENT_VARIABLE": "some value"
-		},
-		"tap": false,
-		"verbose": true,
-		"compileEnhancements": false,
-		"require": [
-			"@babel/register"
-		],
-		"babel": {
-			"extensions": [
-				"js",
-				"jsx"
-			],
-			"testOptions": {
-				"babelrc": false
-			}
-		}
-	}
+  "engines": {
+    "node": "^13.7.0",
+    "npm": "^6.13.6",
+    "yarn": "^1.21.1"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "src"
+    ],
+    "ext": "js",
+    "ignore": [
+      "*.test.js"
+    ],
+    "delay": "3",
+    "execMap": {
+      "js": "babel-node"
+    }
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "yarn test",
+      "pre-commit": "lint-staged"
+    }
+  },
+ "lint-staged": {
+  "*.js": [
+    "prettier --write",
+    "eslint --fix",
+    "git add"
+  ]
+ }
 }

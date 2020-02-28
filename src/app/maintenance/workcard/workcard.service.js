@@ -65,4 +65,36 @@ const test = async args => {
   })
 }
 
-export { test, getWorkcardsByWorkorder, getWorkcard }
+const addAircraft = async args => {
+  return new Promise((resolve, reject) => {
+    try {
+      console.log(args)
+      resolve({ ok: true, message: 'Yup, seems good 🙌🏻' })
+    } catch (err) {
+      reject(buildErrObject(422, 'ERROR_WITH_FILTER'))
+    }
+  })
+}
+
+const updateAircraft = async args => {
+  return new Promise((resolve, reject) => {
+    try {
+      console.log(args)
+      resolve({ ok: true, message: 'Yup, seems good 🙌🏻' })
+    } catch (err) {
+      reject(buildErrObject(422, 'ERROR_WITH_FILTER'))
+    }
+  })
+}
+const deleteAircraft = async args => {
+  return new Promise((resolve, reject) => {
+    try {
+      console.log(args)
+      resolve({ ok: true, message: 'Yup, seems good 🙌🏻' })
+    } catch (err) {
+      reject(buildErrObject(422, 'ERROR_WITH_FILTER'))
+    }
+  })
+}
+
+export { test, getWorkcardsByWorkorder, getWorkcard, addAircraft, updateAircraft, deleteAircraft }

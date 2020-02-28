@@ -31,7 +31,9 @@ const getUser = async (args, context) => {
 
 const getUserNotificationCount = async (args, context) => {
   const user = await context.loaders.user.load(args.id)
-  const totalUnreadedNotifications = user.notifications ? user.notifications.length : 0
+  const totalUnreadedNotifications = user.notifications
+    ? user.notifications.length
+    : 0
 
   return new Promise((resolve, reject) => {
     try {
@@ -48,7 +50,7 @@ const getUserUnreadedNotifications = async (args, context) => {
     return not.readed === false
   })
 
-  console.log( unReadednotifications)
+  console.log(unReadednotifications)
   return new Promise((resolve, reject) => {
     try {
       resolve({ notifications: unReadednotifications })
@@ -105,6 +107,41 @@ const deleteAircraft = async args => {
   })
 }
 
+const addUser = async args => {
+  return new Promise((resolve, reject) => {
+    try {
+      console.log(args)
+      resolve({ ok: true, message: 'Yup, seems good 🙌🏻 You are on user line' })
+    } catch (err) {
+      reject(buildErrObject(422, 'ERROR_WITH_SOMETHING'))
+    }
+  })
+}
+
+const updateUser = async args => {
+  return new Promise((resolve, reject) => {
+    try {
+      console.log(args)
+      resolve({ ok: true, message: 'Yup, seems good 🙌🏻 You are on user line' })
+    } catch (err) {
+      reject(buildErrObject(422, 'ERROR_WITH_SOMETHING'))
+    }
+  })
+}
+
+
+const deleteUser = async args => {
+  return new Promise((resolve, reject) => {
+    try {
+      console.log(args)
+      resolve({ ok: true, message: 'Yup, seems good 🙌🏻 You are on user line' })
+    } catch (err) {
+      reject(buildErrObject(422, 'ERROR_WITH_SOMETHING'))
+    }
+  })
+}
+
+
 const userTest = async args => {
   return new Promise((resolve, reject) => {
     try {
@@ -124,5 +161,8 @@ export {
   getUserUnreadedNotifications,
   getUserUndoneTasks,
   updateAircraft,
-  deleteAircraft
+  deleteAircraft,
+  addUser,
+  updateUser,
+  deleteUser
 }

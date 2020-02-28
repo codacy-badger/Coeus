@@ -1,73 +1,69 @@
-const LodashModuleReplacementPlugin = require('lodash-webpack-plugin')
-const NodemonPlugin = require('nodemon-webpack-plugin')
 const path = require('path')
+const webpack = require('webpack')
+const NodemonPlugin = require('nodemon-webpack-plugin')
 const nodeExternals = require('webpack-node-externals')
+const WebpackBar = require('webpackbar')
 
 module.exports = {
-	entry: ["./src/server.js"],
-	target: "node",
-	mode: 'development',
-	watch: true,
-	externals: [nodeExternals()],
-	optimization: {
-	  minimize: false
+  mode: 'development',
+  watch: true,
+  watchOptions: {
+    aggregateTimeout: 100
   },
-  performance: {
-	  hints: false
+  devtool: 'eval',
+  entry: ['./src/server.js'],
+  target: 'node',
+  node: {
+    // Need this when working with express, otherwise the build fails
+    __dirname: false, // if you don't put this is, __dirname
+    __filename: false // and __filename return blank or /
   },
-	devtool: 'source-map',
-	resolve: {
-		extensions: ['.js', '.json'],
-		alias: {
-			app: path.resolve(__dirname, 'src')
-		},
-	},
-	module: {
-		rules: [
-			{
-				test: /\.(js)$/,
-				exclude: /node_modules/,
-				loader: 'babel-loader',
-				options: {
-	        plugins: ['lodash'],
-	        presets: [['@babel/preset-env', { modules: false, targets: { node: 'current' } }]]
-       },
-			},
-			{
-				test: /\.js$/,
-				exclude: /node_modules/,
-				use: ["eslint-loader"]
-			}
-		]
-	},
-	output: {
-		path: `${__dirname}/dist`,
-		publicPath: "/",
-		filename: "server.js"
-	},
-	plugins: [
-		new NodemonPlugin({
-    // args: ['demo'],
-
-    // What to watch.
-    watch: path.resolve('./dist'),
-
-    // Files to ignore.
-    ignore: ['*.js.map'],
-
-    // Detailed log.
-    verbose: true,
-
-    // Node arguments.
-    //  nodeArgs: ['--debug=9222'],
-
-    // If using more than one entry, you can specify
-    // which output file will be restarted.
-    script: './dist/server.js',
-
-    // Extensions to watch
-    ext: 'js,njk,json',
-}),
-		 new LodashModuleReplacementPlugin
-	]
-};
+  externals: [nodeExternals()],
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              [
+                '@babel/preset-env',
+                {
+                  modules: 'commonjs',
+                  targets: {
+                    node: 'current'
+                  },
+                  useBuiltIns: 'usage',
+                  corejs: {
+                    version: 3,
+                    proposals: true
+                  }
+                }
+              ]
+            ]
+          }
+        }
+      },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: ['eslint-loader']
+      }
+    ]
+  },
+  plugins: [
+    new WebpackBar(),
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify('production')
+      }
+    }),
+    new NodemonPlugin()
+  ],
+  output: {
+    path: path.resolve(__dirname, 'build'),
+    filename: 'bundle.dev.js'
+  }
+}

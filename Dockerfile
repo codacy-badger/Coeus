@@ -1,13 +1,22 @@
-FROM node:12
-
-ENV HOME /Coeus
-
-WORKDIR ${HOME}
-COPY . $HOME
-
-RUN yarn install
-
+FROM node:13
 ENV NODE_ENV development
+
+COPY ./ ./
+
+COPY package.json yarn.lock ./
+
+RUN yarn install --frozen-lockfile
+
+EXPOSE 3000
+
+CMD yarn test
+
+CMD yarn build
+
+CMD yarn start
+
+
+
 
 # envs --
 #ENV SECRET jbmpHPLoaV8N0nEpuLxlpT95FYakMPiu
@@ -19,7 +28,3 @@ ENV NODE_ENV development
 # processes --
 #ENV WEB_CONCURRENCY 1
 # -- processes
-
-EXPOSE 3000
-
-CMD yarn dev
