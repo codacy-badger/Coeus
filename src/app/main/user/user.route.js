@@ -20,9 +20,9 @@ import {
    checkDeleteUser,
    checkRestoreUser,
  } from './user.validate'
- 
+
 import { onlyCanUse } from '../auth/auth.controller'
-import uploader from '~/core/multer'
+// import uploader from '~/core/multer'
 
 const router = express.Router()
 require('~/core/passport')
@@ -65,7 +65,7 @@ router.post(
   '/photo',
   secureIt,
   onlyCanUse(['admin']),
-  uploader.single('image'),
+ // uploader.single('image'),
 //  checkUserPhoto,
   addUserPhoto
 )
