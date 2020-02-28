@@ -23,8 +23,7 @@ const swaggerUi = require('swagger-ui-express')
 const swaggerJsdoc = require('swagger-jsdoc')
 const uuidv1 = require('uuid/v1')
 
-log.info(`Machine ID:  ${  uuidv1()}`)
-
+log.info(`Machine ID:  ${uuidv1()}`)
 
 const swaggerDefinition = {
   openapi: '3.0.2',
@@ -87,23 +86,26 @@ const app = express()
 //   })
 // )
 
- app.use(function(req, res, next) {
-// Website you wish to allow to connect
-res.setHeader('Access-Control-Allow-Origin', '*');
+app.use(function(req, res, next) {
+  // Website you wish to allow to connect
+  res.setHeader('Access-Control-Allow-Origin', '*')
 
-// Request methods you wish to allow
-res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  // Request methods you wish to allow
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'GET, POST, OPTIONS, PUT, PATCH, DELETE'
+  )
 
-// Request headers you wish to allow
-res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+  // Request headers you wish to allow
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type')
 
-// Set to true if you need the website to include cookies in the requests sent
-// to the API (e.g. in case you use sessions)
-res.setHeader('Access-Control-Allow-Credentials', true);
+  // Set to true if you need the website to include cookies in the requests sent
+  // to the API (e.g. in case you use sessions)
+  res.setHeader('Access-Control-Allow-Credentials', true)
 
-// Pass to next layer of middleware
-next();
- });
+  // Pass to next layer of middleware
+  next()
+})
 
 app.use(helmet())
 app.use(favicon(path.join(__dirname, '../public', 'favicon.ico')))
@@ -137,7 +139,7 @@ app.use(
   })
 )
 
-if (! conf.get('ON_HEROKU')) {
+if (!conf.get('ON_HEROKU')) {
   app.use(
     ExpeditiousCache({
       namespace: 'CoeusCache',
@@ -148,10 +150,7 @@ if (! conf.get('ON_HEROKU')) {
       })
     })
   )
-  console.log('Express cache has been initialized')
 }
-
-
 
 // for parsing json
 app.use(
@@ -170,9 +169,9 @@ app.use(
 app.use(cookieParser(conf.get('COOKIE_SECRET')))
 
 morgan.token('user', req => {
-  console.log(req)
+  //  console.log(req)
   if (req.user) {
-    console.log(req)
+    //    console.log(req)
     return req.user.name
   }
   return 'Anonymous request'
