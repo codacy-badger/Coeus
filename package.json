@@ -2,7 +2,7 @@
 	"name": "coeus",
 	"version": "1.0.0",
 	"description": "The God of Intelligence",
-	"main": "build/bundle.prod.js",
+	"main": "index.js",
 	"repository": "https://github.com/stevenselcuk/Coeus.git",
 	"author": "Steven J. Selcuk",
 	"license": "MIT",
