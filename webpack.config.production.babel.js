@@ -26,9 +26,9 @@ module.exports = {
               [
                 '@babel/preset-env',
                 {
+                  modules: 'commonjs',
                   targets: {
-                    node: 13,
-                    esmodules: true
+                    node: 13
                   },
                   useBuiltIns: 'usage',
                   corejs: {
@@ -37,8 +37,8 @@ module.exports = {
                   }
                 }
               ]
-            ],
-            plugins: ['@babel/plugin-proposal-export-default-from']
+            ]
+            //       plugins: ['add-module-exports']
           }
         }
       },
@@ -51,7 +51,8 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'build'),
-    filename: 'bundle.prod.js'
+    filename: 'bundle.prod.js',
+    libraryTarget: 'commonjs2'
   },
   plugins: [
     new WebpackBar(),
