@@ -26,7 +26,6 @@ module.exports = {
               [
                 '@babel/preset-env',
                 {
-                  modules: 'amd',
                   targets: {
                     node: 13,
                     esmodules: true
@@ -39,7 +38,7 @@ module.exports = {
                 }
               ]
             ],
-            plugins: ['@babel/plugin-syntax-dynamic-import']
+            plugins: ['@babel/plugin-proposal-export-default-from']
           }
         }
       },
