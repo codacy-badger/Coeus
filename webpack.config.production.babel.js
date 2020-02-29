@@ -60,7 +60,8 @@ module.exports = {
     new WebpackBar(),
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify('production')
+        NODE_ENV: JSON.stringify('production'),
+        PORT: JSON.stringify('process.env.PORT')
       }
     })
   ]
