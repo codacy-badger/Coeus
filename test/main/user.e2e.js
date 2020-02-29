@@ -5,6 +5,8 @@ import chaiHttp from 'chai-http'
 import { Application, stop } from '~/server'
 import User from '~/app/main/user/user.model'
 
+process.env.NODE_ENV = 'test'
+
 const request = require('supertest')(Application)
 // Configure chai
 chai.use(chaiHttp)
@@ -21,7 +23,6 @@ const userCredentials = {
   password: '12345'
 }
 
-
 // This is seperated cuz We have a test about that.
 const email = faker.internet.email()
 
@@ -29,19 +30,13 @@ const newUser = {
   name: faker.name.firstName(),
   email,
   password: faker.internet.password(),
-  role: faker.random.arrayElement([
-    'admin',
-    'user'
-  ]),
+  role: faker.random.arrayElement(['admin', 'user']),
   phone: faker.phone.phoneNumber(),
   city: faker.address.city(),
   country: faker.address.country()
 }
 
-
-
 describe('User tests', () => {
-
   describe('Login for token for further test', () => {
     it('Must gives back token', done => {
       chai
@@ -56,13 +51,12 @@ describe('User tests', () => {
     })
   })
 
-	// ROUTE: [GET] /__/users
-	// MODEL: USER
-	// CONTROLLER: USER
-	// Must gives back all of users list in JSON
-	// See the function getUsers under controllers/user
-	// Must be auth
-
+  // ROUTE: [GET] /__/users
+  // MODEL: USER
+  // CONTROLLER: USER
+  // Must gives back all of users list in JSON
+  // See the function getUsers under controllers/user
+  // Must be auth
 
   describe('[GET] /__/user/ Get Users List', () => {
     it('must give users list', done => {
@@ -78,13 +72,13 @@ describe('User tests', () => {
     })
   })
 
-	// ROUTE: [POST] /__/users
-	// MODEL: USER
-	// CONTROLLER: USER
-	// Must verify user with given verification token
-	// See the function createNewUser under controllers/user
-	// Must be auth
-	// Must have correct credentials (see for details controllers/users.validate)
+  // ROUTE: [POST] /__/users
+  // MODEL: USER
+  // CONTROLLER: USER
+  // Must verify user with given verification token
+  // See the function createNewUser under controllers/user
+  // Must be auth
+  // Must have correct credentials (see for details controllers/users.validate)
 
   describe('[POST] /__/user/ Create a new user', () => {
     it('must give back the new users credentials', done => {
@@ -104,13 +98,13 @@ describe('User tests', () => {
     })
   })
 
-	// ROUTE: [POST] /__/users/verify
-	// MODEL: USER
-	// CONTROLLER: USER
-	// Must verify user with given verification token
-	// See the function verifyUser under controllers/user
-	// Auth does not necessary
-	// Must have verification token
+  // ROUTE: [POST] /__/users/verify
+  // MODEL: USER
+  // CONTROLLER: USER
+  // Must verify user with given verification token
+  // See the function verifyUser under controllers/user
+  // Auth does not necessary
+  // Must have verification token
 
   describe('[POST] /__/user/verify Verify the user with given verification token', () => {
     it('must give back a positive vibe 😐', done => {
@@ -126,13 +120,13 @@ describe('User tests', () => {
     })
   })
 
-	// ROUTE: [POST] /__/users
-	// MODEL: USER
-	// CONTROLLER: USER
-	// Must deny to creating new user with same e-mail
-	// See the function createNewUser under controllers/user
-	// Must be auth
-	// Must have new user credentials on body
+  // ROUTE: [POST] /__/users
+  // MODEL: USER
+  // CONTROLLER: USER
+  // Must deny to creating new user with same e-mail
+  // See the function createNewUser under controllers/user
+  // Must be auth
+  // Must have new user credentials on body
 
   describe('[POST] /__/user Try to create new user with same e-mail', () => {
     it('must intercept this shitty situation', done => {
@@ -143,33 +137,33 @@ describe('User tests', () => {
         .send(newUser)
         .end((error, response) => {
           response.should.have.status(422)
-					response.body.success.should.equal(false)
+          response.body.success.should.equal(false)
           done()
         })
     })
   })
 
-	// ROUTE: [DELETE] /__/users/:id
-	// MODEL: USER
-	// CONTROLLER: USER
-	// Deletes user with given user id on params
-	// See the function deleteUser under controllers/user
-	// Must be auth.
-	// Must have id on param
+  // ROUTE: [DELETE] /__/users/:id
+  // MODEL: USER
+  // CONTROLLER: USER
+  // Deletes user with given user id on params
+  // See the function deleteUser under controllers/user
+  // Must be auth.
+  // Must have id on param
 
   describe('[DELETE] /__/user Try to delete user with given user ID', () => {
     it('must be delete the user successfully', done => {
       chai
         .request(Application)
         .post(`/__/user/delete`)
-				.set('Authorization', `Bearer ${theToken}`)
-        .send({id: userID})
-				.end((error, response) => {
-					response.should.have.status(200)
-					response.body.success.should.equal(true)
-					response.body.data.deleted.should.equal(true)
-					done()
-				})
+        .set('Authorization', `Bearer ${theToken}`)
+        .send({ id: userID })
+        .end((error, response) => {
+          response.should.have.status(200)
+          response.body.success.should.equal(true)
+          response.body.data.deleted.should.equal(true)
+          done()
+        })
     })
   })
 

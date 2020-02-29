@@ -3,20 +3,20 @@ import chai, { expect } from 'chai'
 import chaiHttp from 'chai-http'
 import { Application, stop } from '~/server'
 
+process.env.NODE_ENV = 'test'
 // Configure chai
 chai.use(chaiHttp)
 chai.should()
 
 const userCredentials = {
-  email: 'admin@admin.com', 
+  email: 'admin@admin.com',
   password: '12345'
 }
 
 const wrongUserCredentials = {
-  email: 'sponge@bob.com', 
+  email: 'sponge@bob.com',
   password: 'garyTheSnail'
 }
-
 
 describe('Auth tests', () => {
   describe('Login Check', () => {
@@ -33,7 +33,7 @@ describe('Auth tests', () => {
         })
     })
   })
-  
+
   describe('Denied Login Check', () => {
     it('must return an object which includes USER_DOES_NOT_EXIST msg', done => {
       chai
