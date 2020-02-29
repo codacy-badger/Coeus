@@ -19,8 +19,6 @@ import { log } from './core/logger'
 // record a generic message and send it to Rollbar
 // rollbar.log('Hello world!')
 
-console.log(process.env)
-
 const server = http.Server(app)
 
 mongoose.Promise = require('bluebird')
@@ -68,8 +66,7 @@ mongoose.connection.once('open', () => {
 
 // I have to refactor it for Mocha-Chai Tests
 const Application = server.listen(process.env.PORT || 3000, () =>
-console.log(`Server has started  ${port}`)
-
+  console.log(`Server has started  ${process.env.PORT || 3000}`)
 )
 
 server.on('error', err => {
