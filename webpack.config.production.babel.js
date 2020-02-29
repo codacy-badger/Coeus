@@ -28,7 +28,7 @@ module.exports = {
                 {
                   modules: 'commonjs',
                   targets: {
-                    node: 'current'
+                    node: 13
                   },
                   useBuiltIns: 'usage',
                   corejs: {
