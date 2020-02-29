@@ -26,9 +26,10 @@ module.exports = {
               [
                 '@babel/preset-env',
                 {
-                  modules: 'commonjs',
+                  modules: 'amd',
                   targets: {
-                    node: 13
+                    node: 13,
+                    esmodules: true
                   },
                   useBuiltIns: 'usage',
                   corejs: {
@@ -37,7 +38,8 @@ module.exports = {
                   }
                 }
               ]
-            ]
+            ],
+            plugins: ['@babel/plugin-syntax-dynamic-import']
           }
         }
       },
