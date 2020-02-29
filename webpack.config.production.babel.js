@@ -52,7 +52,9 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'build'),
     filename: 'bundle.prod.js',
-    libraryTarget: 'commonjs2'
+    library: 'coeus',
+    libraryExport: 'default',
+    libraryTarget: 'umd'
   },
   plugins: [
     new WebpackBar(),
