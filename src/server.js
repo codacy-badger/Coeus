@@ -19,9 +19,7 @@ import { log } from './core/logger'
 // record a generic message and send it to Rollbar
 // rollbar.log('Hello world!')
 
-const port = process.env.PORT || 3000
-
-console.log(process.env.PORT)
+console.log(process.env)
 
 const server = http.Server(app)
 
@@ -69,8 +67,9 @@ mongoose.connection.once('open', () => {
 })
 
 // I have to refactor it for Mocha-Chai Tests
-const Application = server.listen(port, () =>
-  log.info(`Server has started  ${port}`)
+const Application = server.listen(process.env.PORT || 3000, () =>
+console.log(`Server has started  ${port}`)
+
 )
 
 server.on('error', err => {
