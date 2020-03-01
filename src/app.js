@@ -142,7 +142,8 @@ app.use(
 
 const redisOptions = {
   host: conf.get('REDIS_HOST'),
-  port: conf.get('REDIS_PORT')
+  port: conf.get('REDIS_PORT'),
+  password: conf.get('REDIS_PASS')
 }
 
 if (!conf.get('ON_HEROKU')) {
