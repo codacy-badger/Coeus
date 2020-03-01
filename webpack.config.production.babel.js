@@ -55,8 +55,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'build'),
-    filename: 'bundle.prod.js',
-    libraryTarget: 'commonjs'
+    filename: 'bundle.prod.js'
   },
   plugins: [
     new WebpackBar(),
@@ -64,8 +63,8 @@ module.exports = {
       'process.env': {
         NODE_ENV: JSON.stringify('production'),
         PORT: JSON.stringify(process.env.PORT),
-        REDIS_HOST: process.env.REDIS_HOST,
-        REDIS_PORT: process.env.REDIS_PORT
+        REDIS_HOST: JSON.stringify(process.env.REDIS_HOST),
+        REDIS_PORT: JSON.stringify(process.env.REDIS_PORT)
       }
     })
   ]
