@@ -110,11 +110,9 @@ export default new ApolloServer({
     // Cache everything for at least a minute since we only cache public responses
     defaultMaxAge: 240000
   },
-  cache: conf.get('ON_HEROKU')
-    ? null
-    : new RedisCache({
-        host: conf.get('REDIS_HOST'),
-        port: conf.get('REDIS_PORT'),
-        password: conf.get('REDIS_PASS')
-      })
+  cache: new RedisCache({
+    host: conf.get('REDIS_HOST'),
+    port: conf.get('REDIS_PORT'),
+    password: conf.get('REDIS_PASS')
+  })
 })

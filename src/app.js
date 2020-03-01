@@ -146,16 +146,13 @@ const redisOptions = {
   password: conf.get('REDIS_PASS')
 }
 
-if (!conf.get('ON_HEROKU')) {
-  app.use(
-    ExpeditiousCache({
-      namespace: 'CoeusCache',
-      defaultTtl: '10 minute',
-      // eslint-disable-next-line global-require
-      engine: require('expeditious-engine-redis')({ redis: redisOptions })
-    })
-  )
-}
+app.use(
+  ExpeditiousCache({
+    namespace: 'CoeusCache',
+    defaultTtl: '10 minute',
+    engine: eer({ redis: redisOptions })
+  })
+)
 
 // for parsing json
 app.use(
