@@ -1,5 +1,4 @@
 FROM node:13
-ENV NODE_ENV development
 
 COPY ./ ./
 
@@ -9,7 +8,7 @@ RUN yarn install --frozen-lockfile
 
 EXPOSE 3000
 
-CMD yarn test
+CMD yarn seed
 
 CMD yarn build
 

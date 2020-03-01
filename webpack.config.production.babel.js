@@ -58,7 +58,9 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('production'),
-        PORT: JSON.stringify(process.env.PORT)
+        PORT: JSON.stringify(process.env.PORT),
+        REDIS_HOST: process.env.REDIS_HOST,
+        REDIS_PORT: process.env.REDIS_PORT
       }
     })
   ]

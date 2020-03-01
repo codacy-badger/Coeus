@@ -4,7 +4,7 @@ services:
   coeus:
     container_name: coeus
     restart: always
-    image: api
+    image: api:latest
     build:
       context: .
       dockerfile: Dockerfile
@@ -12,6 +12,11 @@ services:
       - "3000:3000"
     environment:
       - MONGODB_URI=mongodb://mongo/coeus
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASS=
+      - NODE_ENV=production
+      - PORT=3000
     links:
       - redis
       - mongo
@@ -22,29 +27,14 @@ services:
     restart: always
     ports:
       - "${MONGO_PORT:-27017}:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER:-admin}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-passwd}
-      MONGO_INITDB_DATABASE: ${MONGO_DATABASE:-database}
     volumes:
       - mongo:/data/db
-    networks:
-      - mongo
-
   redis:
     image: redis
-    container_name: coeus-redis
-    restart: always
-    ports:
-      - "6379"
-    networks:
-      - redis
+    container_name: cache
+    expose:
+      - 6379
 
 volumes:
   mongo:
-
-networks:
-  mongo:
-    driver: bridge
   redis:
-    driver: bridge

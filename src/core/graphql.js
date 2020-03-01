@@ -30,7 +30,6 @@ export default new ApolloServer({
     let token = null
     let currentUser = null
 
-
     if (req.headers.authorization) {
       token = req.headers.authorization.replace('Bearer ', '').trim()
     } else if (req.signedCookies) {
@@ -39,15 +38,15 @@ export default new ApolloServer({
     try {
       currentUser = await giveTokenGetUser(token)
     } catch (e) {
-  // OOooooh boy. Actually I threw a error just like below.
-  // But connot dedect on Frontend soooo
-  //    throw new AuthenticationError(
-  //      e.message
-  //    )
-  // I pass to like this to the middleware
-  return { logged: false }
+      // OOooooh boy. Actually I threw a error just like below.
+      // But connot dedect on Frontend soooo
+      //    throw new AuthenticationError(
+      //      e.message
+      //    )
+      // I pass to like this to the middleware
+      return { logged: false }
 
-  // to see more check middleware/utils
+      // to see more check middleware/utils
     }
     req.user = currentUser
     const loaders = createLoaders()
@@ -111,9 +110,11 @@ export default new ApolloServer({
     // Cache everything for at least a minute since we only cache public responses
     defaultMaxAge: 240000
   },
-  cache: conf.get('ON_HEROKU') ? null : new RedisCache({
-    host: conf.get('REDIS_HOST'),
-    port: conf.get('REDIS_PORT'),
-    prefix: 'apollo-cache'
-  })
+  cache: conf.get('ON_HEROKU')
+    ? null
+    : new RedisCache({
+        host: conf.get('REDIS_HOST'),
+        port: conf.get('REDIS_PORT'),
+        password: conf.get('REDIS_PASS')
+      })
 })

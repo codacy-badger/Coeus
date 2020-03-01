@@ -13,6 +13,7 @@ import favicon from 'serve-favicon'
 import path from 'path'
 import routes from './core/express'
 import conf from './core/config'
+import redis from './core/redis'
 import { log } from './core/logger'
 
 const MongoStore = require('connect-mongo')(session)
@@ -139,15 +140,18 @@ app.use(
   })
 )
 
+const redisOptions = {
+  host: conf.get('REDIS_HOST'),
+  port: conf.get('REDIS_PORT')
+}
+
 if (!conf.get('ON_HEROKU')) {
   app.use(
     ExpeditiousCache({
       namespace: 'CoeusCache',
       defaultTtl: '10 minute',
-      engine: eer({
-        host: conf.get('REDIS_HOST'),
-        port: conf.get('REDIS_PORT')
-      })
+      // eslint-disable-next-line global-require
+      engine: require('expeditious-engine-redis')({ redis: redisOptions })
     })
   )
 }
