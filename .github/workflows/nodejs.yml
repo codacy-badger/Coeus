@@ -1,9 +1,6 @@
-name: Shed And Breakfast
+name: Node.js CI
 
-on:
-  push:
-    branches:
-    - master
+on: [push]
 
 jobs:
   build:
@@ -15,22 +12,12 @@ jobs:
         node-version: [13.x]
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-      env: # Or as an environment variable
-        JWT_SECRET: "r69+T3ExQgCbWzHF8u+SJetNPGMBDe30"
-        COOKIE_SECRET: "C6369AD13051EB8986C6EE3F9617F5199"
-        EXPRESS_SESSION_SECRET: "C6369AD13051EB8986C6EE3F9617F31D9"
-        COOKIE_EXPIRATION_IN_DAYS: "7"
-        JWT_EXPIRATION_IN_DAYS: "7"
-        MONGODB_URI: ${{ secrets.MONGODB_URI }}  
-        ON_HEROKU: true
-    - name: Install deps build and test
-      run: |
-        npm install
-        npm run test
+    - run: npm install
+    - run: npm run build --if-present
       env:
         CI: true
