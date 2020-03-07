@@ -4,9 +4,14 @@ import { buildErrObject } from './utils'
 const crypto = require('crypto')
 
 const algorithm = 'aes-256-cbc'
-const secret = conf.get('JWT_SECRET') // Must be 256 bits (32 characters)
-const iv = crypto.randomBytes(16) // Initialization vector.
+// Must be 256 bits (32 characters)
 
+const secret = crypto
+  .createHash('sha256')
+  .update(String(conf.get('JWT_SECRET')))
+  .digest('base64')
+  .substr(0, 32)
+const iv = crypto.randomBytes(16) // Initialization vector.
 
 /**
  * Checks is password matches
