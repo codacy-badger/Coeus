@@ -15,7 +15,7 @@ mongoose.connect(
   },
   err => {
     if (err) {
-      log.error(err)
+      log.error(`🔥 Mongoose Error: ${err}`)
     }
   }
 )

@@ -63,19 +63,21 @@ io.on('connection', connSocket => {
 })
 
 mongoose.connection.once('open', () => {
-  log.info(`Mongoose has connected`)
+  log.info(`🔌 Mongoose has connected `)
 })
 
 // I have to refactor it for Mocha-Chai Tests
 const Application = server.listen(PORT, () =>
-  console.log(`Server has started  ${PORT}`)
+  log.info(`⚡ Express Server has started at ${PORT} `)
 )
 
 server.on('error', err => {
   log.error(err)
 })
 
-server.on('close', () => {})
+server.on('close', () => {
+  log.info(`⚡ Express server has closed `)
+})
 
 process.on('SIGINT', () => {
   io.close()
@@ -90,7 +92,7 @@ process.on('SIGTERM', () => {
   server.close(() => {
     log.info('Http server closed.')
     mongoose.connection.close(false, () => {
-      log.info('MongoDb connection closed.')
+      log.info('MongoDb connection closed. 🔌')
       io.close()
       process.exit(0)
     })

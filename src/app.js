@@ -143,7 +143,8 @@ app.use(
 const redisOptions = {
   host: conf.get('REDIS_HOST'),
   port: conf.get('REDIS_PORT'),
-  password: conf.get('REDIS_PASS')
+  // @TODO: I need really good solution for handle this.
+  password: conf.get('REDIS_PASS') ? conf.get('REDIS_PASS') : ''
 }
 
 app.use(

@@ -113,6 +113,6 @@ export default new ApolloServer({
   cache: new RedisCache({
     host: conf.get('REDIS_HOST'),
     port: conf.get('REDIS_PORT'),
-    password: conf.get('REDIS_PASS')
+    password: conf.get('REDIS_PASS') ? conf.get('REDIS_PASS') : null
   })
 })
