@@ -10,7 +10,7 @@ node_js:
 
 services:
   - mongodb
-  - redis
+  - redis-server
 
 git:
   depth: 3
