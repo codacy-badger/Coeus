@@ -6,8 +6,6 @@ cache:
     - "node_modules"
 
 node_js:
-  - '8'
-  - '10'
   - '12'
 
 services:
@@ -26,9 +24,16 @@ env:
     - PORT=3000
     - JWT_SECRET=bA2xcjpf8y5aSUFsNB2qN5yymUBSs6es3qHoFpGkec75RCeBb8cpKauGefw5qy5
     - JWT_EXPIRATION_MINUTES=15
-    - MONGODB_URI=mongodb://localhost/coeus
-    - MONGODB_TEST_URI=mongodb://localhost/coeusTest
+    - MONGODB_URI=mongodb://heroku_pv17jr3v:5rjigrlmtfgpqnp9q1svlj60ko@ds011883.mlab.com:11883/heroku_pv17jr3v
+    - REDIS_HOST=redis-15047.c89.us-east-1-3.ec2.cloud.redislabs.com
+    - REDIS_PASS=1234
+    - REDIS_PORT=15047
+    - EXPRESS_SESSION_SECRET=C6369AD13051EB8986C6EE3F9617F31D9
+    - COOKIE_SECRET=C6369AD13051EB8986C6EE3F9617F5199
+    - COOKIE_EXPIRATION_IN_DAYS=7
+    - JWT_EXPIRATION_IN_DAYS=7
 
 script:
   - yarn
+  - yarn test
   - yarn report-coverage
