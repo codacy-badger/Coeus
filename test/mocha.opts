@@ -1,5 +1,5 @@
 --colors
---reporter spec
+--reporter lcov
 --timeout 12000
 --check-leaks
 --globals io
