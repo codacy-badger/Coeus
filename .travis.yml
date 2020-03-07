@@ -31,5 +31,5 @@ env:
 
 script:
   - yarn
-  - yarn build
+  - yarn seed
   - yarn test
