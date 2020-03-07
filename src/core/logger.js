@@ -69,7 +69,7 @@ export const log = createLogger({
   ]
 })
 
-if (conf.get('IS_DEV') && !conf.get('IS_TEST')) {
+if (conf.get('IS_DEV') || conf.get('IS_TEST')) {
   log.add(
     new transports.Console({
       level: 'info',
